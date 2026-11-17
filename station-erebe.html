@@ -1,0 +1,331 @@
+<title>Station Érèbe</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout : une console de bord étroite, HUD collé en haut, récit en colonne de lecture. Thème sombre unique, choisi. */
+:root{
+  --bg:#0a0d12; --panel:#121821; --line:#243040; --fg:#d5dce3; --dim:#7d8b9a;
+  --alert:#e2503c; --cold:#7fb3c4; --amber:#d9a441;
+  --display:"Oxanium","Segoe UI",sans-serif; --body:"Source Serif 4",Georgia,serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px;min-height:100%;
+  background-image:radial-gradient(ellipse at 50% -10%,rgba(226,80,60,.14),transparent 60%)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:680px;margin:0 auto}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 12px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--dim)}
+header .brand{font-family:var(--display);font-weight:700;letter-spacing:.18em;color:var(--fg);font-size:13px;margin-right:auto}
+.stat{display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.08em}
+.pips{display:flex;gap:3px}.pip{width:10px;height:10px;border:1px solid var(--alert);border-radius:2px}.pip.on{background:var(--alert)}
+.timer{color:var(--amber);font-variant-numeric:tabular-nums;font-weight:500}
+.timer.low{color:var(--alert);animation:blink 1s steps(2) infinite}
+.meter{width:60px;height:6px;background:var(--panel);border:1px solid var(--line);position:relative;overflow:hidden}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--cold);transition:width .4s}
+.inv{display:flex;flex-wrap:wrap;gap:6px;padding-block:10px;min-height:20px;font-family:var(--mono);font-size:11px}
+.chip{border:1px solid var(--line);padding:3px 8px;border-radius:3px;color:var(--cold)}
+.inv .empty{color:var(--dim)}
+main{padding-top:20px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--alert)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,6vw,38px);line-height:1.1;margin:6px 0 18px;text-wrap:balance;letter-spacing:.02em}
+.story p{font-size:18px;line-height:1.65;margin:0 0 1em}
+.story em{color:var(--cold)}
+.story .voice{font-family:var(--mono);font-size:15px;color:var(--cold);border-left:2px solid var(--cold);padding:4px 0 4px 14px;margin:0 0 1em;font-style:normal}
+.story .scratch{font-family:var(--display);color:var(--alert);letter-spacing:.2em;font-size:20px;text-align:center;margin:0 0 1em}
+.note{font-family:var(--mono);font-size:12px;color:var(--amber);margin:0 0 18px;display:flex;flex-direction:column;gap:4px}
+.choices{display:flex;flex-direction:column;gap:10px;margin-top:24px}
+.choices button{font:inherit;font-family:var(--body);font-size:17px;text-align:left;color:var(--fg);background:var(--panel);border:1px solid var(--line);padding:14px 16px;border-radius:4px;cursor:pointer;display:flex;gap:12px;align-items:baseline;transition:border-color .15s,transform .15s}
+.choices button:hover:not(:disabled){border-color:var(--alert);transform:translateX(3px)}
+.choices button:focus-visible{outline:2px solid var(--cold);outline-offset:2px}
+.choices button:disabled{opacity:.45;cursor:not-allowed}
+.choices .k{font-family:var(--mono);font-size:12px;color:var(--alert);flex:none}
+.choices .req{display:block;font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:4px}
+.ending{border:1px solid var(--line);background:var(--panel);padding:18px;border-radius:4px;margin-top:24px}
+.ending .tag{font-family:var(--display);letter-spacing:.2em;text-transform:uppercase;font-size:13px;color:var(--amber)}
+.ending .found{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:8px}
+.fade{animation:fade .45s ease}
+@keyframes fade{from{opacity:.2;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes blink{50%{opacity:.4}}
+.glitch h1{animation:glitch .5s steps(3) 2}
+@keyframes glitch{0%{transform:translate(2px,0);text-shadow:-2px 0 var(--alert)}50%{transform:translate(-2px,1px);text-shadow:2px 0 var(--cold)}100%{transform:none;text-shadow:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="brand">ÉRÈBE // SURVIE</span>
+    <span class="stat">Vie <span class="pips" id="hp"></span></span>
+    <span class="stat">Orbite <span class="timer" id="timer"></span></span>
+    <span class="stat">Interférence <span class="meter"><i id="voice"></i></span></span>
+  </header>
+  <div class="inv" id="inv"></div>
+  <main id="scene" class="fade"></main>
+</div>
+
+<script>
+const ITEMS={lampe:"Lampe torche",cle:"Badge d'accès",chalumeau:"Chalumeau plasma",sedatif:"Sédatif neural",journal:"Journal du capitaine",preuve:"Enregistrements d'Ana"};
+const ENDINGS={mort:"Fin : Silence",orbite:"Fin : Chute libre",folie:"Fin : Le Chœur",fuite:"Fin : Seul dans le noir",terre:"Fin : Le cheval de Troie",sacrifice:"Fin : Sacrifice",heros:"Fin : Héroïque",secret:"Fin secrète : Les Douze"};
+let S;
+function fresh(){return{hp:3,min:360,voice:0,inv:[],flags:{},seen:new Set()}}
+const has=k=>S.inv.includes(k), flag=k=>!!S.flags[k];
+function give(k){if(!has(k))S.inv.push(k)}
+
+// Chaque scène : title, text (fonction -> html), choices [{t,to,need?,needLabel?,if?,fx?}], enter?(fx à l'arrivée), ending?
+const SC={
+s1:{eye:"Dortoir cryogénique",title:"Le réveil",text:()=>`
+<p>L'alarme te tire d'un sommeil artificiel. Ton caisson s'ouvre dans un sifflement de gaz glacé.</p>
+<p>Tu t'appelles <strong>George Marlow</strong>, ingénieur aéronautique. On t'a envoyé sur la station Érèbe, en orbite autour d'une géante gazeuse, pour réparer les propulseurs d'orbite. Le voyage devait durer six mois.</p>
+<p>L'horloge du caisson affiche <em>3 ans, 2 mois et 11 jours</em>.</p>
+<p>Les lumières de secours baignent le dortoir d'un rouge sang. Les onze autres caissons sont ouverts et vides. Sur la vitre de l'un d'eux, quelqu'un a gravé avec ses ongles :</p>
+<p class="scratch">NE L'ÉCOUTE PAS</p>
+<p>À travers les cloisons, un bruit métallique résonne. Lent. Régulier. Comme si quelque chose frappait la coque <em>de l'extérieur</em>.</p>`,
+choices:[{t:"Fouiller le dortoir pour trouver de l'équipement",to:"s2"},{t:"Te diriger vers la passerelle de commandement",to:"s3"},{t:"Foncer vers la salle des propulseurs : c'est ton métier",to:"s4"}]},
+
+s2:{eye:"Dortoir cryogénique",title:"Ce qu'ils ont laissé",enter:()=>give("lampe"),text:()=>`
+<p>Les casiers ont été vidés à la hâte. Des vêtements, des photos de famille, une brosse à dents encore humide. <em>Humide, après trois ans.</em></p>
+<p>Sous une couchette, tu trouves une <strong>lampe torche</strong> qui fonctionne. À côté, un carnet relié de cuir : le journal du capitaine Okafor. Les dernières pages sont couvertes d'une écriture de plus en plus serrée.</p>
+<p>Dans le haut-parleur du plafond, un grésillement. Puis rien.</p>`,
+choices:[{t:"Lire le journal du capitaine",to:"s5"},{t:"Prendre la lampe et partir vers la passerelle",to:"s3"},{t:"Partir vers les propulseurs",to:"s4"}]},
+
+s5:{eye:"Journal du capitaine Okafor",title:"Les dernières pages",enter:()=>{give("journal");S.flags.lore=1},text:()=>`
+<p class="voice">Jour 41. Le signal venu de la géante n'est pas naturel. Il se répète. Il a une grammaire.</p>
+<p class="voice">Jour 58. Les hommes entendent des voix dans les conduits. Leurs mères. Leurs enfants morts. Il ne parle pas avec des ondes. Il parle <u>dans</u> nos têtes, et il imite ceux qu'on aime.</p>
+<p class="voice">Jour 63. Il veut un véhicule. Il veut la Terre. Reyes dit qu'on peut négocier. Je ne fais plus confiance à Reyes.</p>
+<p class="voice">Jour 64. Ne réparez pas les propulseurs avant d'avoir vérifié le cap.</p>
+<p>La dernière ligne est tachée d'un brun sombre que tu préfères ne pas identifier.</p>`,
+choices:[{t:"Ranger le journal et rejoindre la passerelle",to:"s3"}]},
+
+s3:{eye:"Couloir anneau B",title:"Le couloir noir",text:()=> has("lampe")?`
+<p>Le faisceau de ta lampe découpe le couloir. Les murs sont couverts de mots tracés au marqueur, au sang, à la graisse : <em>ELLE ÉTAIT DÉJÀ LÀ. ELLE ÉTAIT DÉJÀ LÀ.</em></p>
+<p>Au bout, la porte de la passerelle. Sur ta gauche, une grille de ventilation arrachée, assez large pour un homme.</p>`:`
+<p>Le couloir est plongé dans le noir total. Tu avances à tâtons, une main contre la paroi froide.</p>
+<p>Quelque chose respire, juste derrière toi. Tu te retournes : rien. Mais ta main est poisseuse.</p>
+<p>Au bout, une faible lueur : la passerelle. Sur ta gauche, un courant d'air sort d'un conduit de ventilation ouvert.</p>`,
+choices:[{t:"Ramper dans la ventilation",to:"s6"},{t:"Continuer par le couloir principal",to:"s7"}]},
+
+s4:{eye:"Pont technique",title:"Porte scellée",text:()=>`
+<p>Le pont technique est glacial. La porte de la salle des propulseurs est scellée : un lecteur de badge clignote en rouge, et des soudures grossières courent le long du chambranle.</p>
+<p>Quelqu'un a voulu empêcher quiconque d'entrer. Ou de sortir.</p>
+<p>À côté, l'atelier de maintenance est entrouvert.</p>`,
+choices:[{t:"Fouiller l'atelier",to:"s8"},{t:"Rebrousser chemin vers la passerelle",to:"s3"}]},
+
+s6:{eye:"Conduit de ventilation",title:"Ce qui bloquait le conduit",enter:()=>give("cle"),text:()=>`
+<p>Tu rampes dans le conduit étroit. Après une dizaine de mètres, ta main touche du tissu. Une combinaison. Avec quelqu'un dedans.</p>
+<p>Le lieutenant Kovač. Desséché, les yeux grands ouverts, les mains plaquées sur ses oreilles. Il est mort en essayant de ne pas entendre.</p>
+<p>À sa ceinture, un <strong>badge d'accès</strong> de niveau technique. Tu le prends en murmurant une excuse.</p>`,
+choices:[{t:"Ressortir près de la passerelle",to:"s9"}]},
+
+s7:{eye:"Couloir anneau B",title:"Les reflets",enter:()=>{if(!has("lampe"))hurt()},text:()=>`
+<p>Dans les panneaux métalliques, ton reflet bouge avec un léger retard.</p>
+${has("lampe")?`<p>Tu braques la lampe dessus : le reflet redevient normal. Tu presses le pas.</p>`:`<p>Dans le noir, ton reflet sourit. Une douleur fulgurante te traverse le crâne et tu t'effondres contre la paroi. <em>(-1 vie)</em></p>`}
+<p>Tu atteins enfin la porte de la passerelle.</p>`,
+choices:[{t:"Entrer",to:"s9"}]},
+
+s8:{eye:"Atelier de maintenance",title:"Outils de l'ingénieur",enter:()=>give("chalumeau"),text:()=>`
+<p>Enfin un endroit que tu comprends. Établis, clés dynamométriques, pièces de rechange. Sur un râtelier, un <strong>chalumeau plasma</strong> chargé à 80 %. Ça coupe la tôle. Ça coupe aussi d'autres choses.</p>
+<p>Sur le tableau blanc, quelqu'un a calculé une trajectoire. Tu reconnais les paramètres : une manœuvre de sortie d'orbite. Direction : système solaire intérieur.</p>`,
+choices:[{t:"Remonter vers la passerelle",to:"s9"}]},
+
+s9:{eye:"Interphone général",title:"La voix",glitch:1,text:()=>`
+<p>Tous les haut-parleurs de la station s'allument en même temps.</p>
+<p class="voice">« George ? George, mon chéri, c'est maman. Tu as froid ? Je suis à la serre. Viens, j'ai fait de la soupe. »</p>
+<p>Ta mère est morte il y a neuf ans.</p>
+<p>La voix est parfaite. L'intonation, le petit rire à la fin. Une partie de toi, la plus ancienne, veut y aller.</p>`,
+choices:[{t:"Suivre la voix jusqu'à la serre",to:"s10",fx:()=>S.voice++},{t:"L'ignorer et entrer sur la passerelle",to:"s11"},{t:"Arracher les câbles du haut-parleur au chalumeau",to:"s11",need:"chalumeau",fx:()=>S.flags.cut=1}]},
+
+s10:{eye:"Serre hydroponique",title:"Le jardin",text:()=>`
+<p>La serre a poussé de travers. Les plants de tomates se sont enroulés en spirales parfaites, toutes orientées vers la même cloison, celle qui fait face à la géante.</p>
+<p>Il n'y a pas de soupe. Pas de mère. Mais il y a une femme, assise entre les bacs, une tablette sur les genoux. Elle sursaute en te voyant.</p>
+<p class="voice">« Un survivant… Je suis le docteur Ana Reyes, biologiste. Je croyais être la dernière. »</p>`,
+choices:[{t:"L'écouter",to:"s12"}]},
+
+s11:{eye:"Passerelle de commandement",title:"Les journaux de bord",text:()=>`
+<p>La passerelle est intacte, presque propre. Les écrans affichent l'orbite qui se dégrade, et un signal qui pulse depuis la géante, à intervalles réguliers. Comme un cœur.</p>
+<p>Le dernier journal de bord est signé du docteur Ana Reyes : <em>« Équipage perdu. Je reste à bord. Tout va bien. »</em> Il date de 800 jours.</p>
+<p>La porte coulisse derrière toi.</p>
+<p class="voice">« Ne bougez pas ! … Oh, mon Dieu. Un vivant. Je suis Ana Reyes. »</p>`,
+choices:[{t:"L'écouter",to:"s12"}]},
+
+s12:{eye:"Ana Reyes",title:"La survivante",text:()=>`
+<p>Elle est maigre, les yeux cernés, mais étrangement calme. Trop calme pour quelqu'un qui a passé trois ans seule avec des cadavres.</p>
+<p class="voice">« Ça s'appelle le Chœur. Ça vit dans le signal et ça entre dans les têtes. Il a pris les autres un par un. Mais j'ai un plan : si on amplifie le relais radio, on peut appeler les secours sur Terre. Vous m'aidez ? »</p>
+${flag("lore")?`<p>Tu repenses au journal d'Okafor : <em>« Je ne fais plus confiance à Reyes. »</em></p>`:""}`,
+choices:[{t:"La suivre au relais radio",to:"s13"},{t:"Exiger des preuves de ce qu'elle avance",to:"s14"},{t:"La confronter avec le journal du capitaine",to:"s14",need:"journal",fx:()=>S.flags.confront=1}]},
+
+s13:{eye:"Relais radio",title:"Amplifier",text:()=>`
+<p>Le relais est une forêt d'antennes et de câbles. Ana te tend un schéma : il faut ponter l'alimentation des propulseurs vers l'émetteur.</p>
+<p>Tu regardes le schéma avec tes yeux d'ingénieur. Ce montage n'émet pas vers la Terre. Il <em>reçoit</em>. Il ouvrirait la station au signal en grand.</p>
+<p class="voice">« Pourquoi vous hésitez, George ? »</p>`,
+choices:[{t:"Faire le montage malgré tout",to:"s16",fx:()=>{S.voice+=2;hurt();S.flags.amplified=1}},{t:"Refuser et l'accuser de mentir",to:"s14"}]},
+
+s14:{eye:"Quartiers d'Ana",title:"Ce qu'elle cache",enter:()=>give("preuve"),text:()=>`
+<p>${flag("confront")?"Face au journal, son sourire se fige. Elle prétexte d'aller chercher des documents. Tu la suis en silence jusqu'à ses quartiers.":"Tu prétextes une pause. Pendant qu'elle s'absente, tu forces la porte de ses quartiers."}</p>
+<p>Les murs sont tapissés de spirales identiques à celles de la serre. Sur son ordinateur, des centaines d'heures d'enregistrements : Ana parlant au signal. Riant avec lui. Et le dernier fichier :</p>
+<p class="voice">« Il me reste un ingénieur en cryo. Quand il réparera les propulseurs, je mettrai le cap sur la Terre. Tu auras ton véhicule. Et moi, je ne serai plus jamais seule. »</p>
+<p>Derrière toi, un déclic. Ana est dans l'embrasure, une clé à molette à la main.</p>`,
+choices:[{t:"Te battre",to:"s15"},{t:"Fuir par l'autre porte",to:"s16"},{t:"Mentir : lui dire que tu veux rejoindre le Chœur toi aussi",to:"s17"}]},
+
+s15:{eye:"Quartiers d'Ana",title:"Lutte",enter:()=>{if(!has("chalumeau"))hurt()},text:()=> has("chalumeau")?`
+<p>Elle se jette sur toi. Tu allumes le chalumeau : la flamme bleue siffle entre vous. Elle recule, se brûle le bras, hurle, et s'enfuit dans le couloir.</p>
+<p>Elle reviendra. Mais pour l'instant, tu as l'avantage.</p>`:`
+<p>La clé à molette t'atteint à l'épaule. Tu la repousses de toutes tes forces ; sa tête heurte le chambranle et elle s'enfuit en titubant. <em>(-1 vie)</em></p>`,
+choices:[{t:"Aller panser tes blessures à l'infirmerie",to:"s16"}]},
+
+s16:{eye:"Infirmerie",title:"Respirer",enter:()=>{give("sedatif");if(S.hp<3)S.hp++},text:()=>`
+<p>L'infirmerie est le seul endroit calme de la station. Tu te soignes sommairement. <em>(+1 vie)</em></p>
+<p>Dans l'armoire de la pharmacie, une boîte étiquetée de la main d'Okafor : <em>« Inhibiteur neural. Bloque les voix 20 minutes. Dernière dose. »</em> Tu empoches le <strong>sédatif</strong>.</p>
+${S.voice>=2?`<p class="voice">« Tu ne pourras pas me faire taire éternellement, George. »</p>`:""}
+<p>Le martèlement sur la coque se rapproche. Il vient du hall central.</p>`,
+choices:[{t:"Aller voir dans le hall central",to:"s18"}]},
+
+s17:{eye:"Quartiers d'Ana",title:"Le pacte",enter:()=>{S.flags.trap=1;S.voice++},text:()=>`
+<p>Tu baisses les mains. Tu dis que tu l'entends toi aussi. Que tu es fatigué d'être seul.</p>
+<p>Ana pleure de joie. Elle te serre dans ses bras et elle parle, elle parle trop :</p>
+<p class="voice">« Le cap est déjà programmé dans la navigation, verrouillé sur la Terre. Tu n'as qu'à rallumer les propulseurs. Il entrera dans huit milliards de têtes, George. Plus personne ne sera jamais seul. »</p>
+<p>Maintenant tu sais : réparer les propulseurs sans toucher à la navigation, c'est livrer la Terre.</p>
+<p>Elle te laisse partir « préparer la réparation ».</p>`,
+choices:[{t:"Aller vers le hall central",to:"s18"}]},
+
+s18:{eye:"Hall central",title:"Ceux qui frappent",glitch:1,text:()=>`
+<p>Le hall a une grande baie vitrée. Et derrière la vitre, dans le vide, il y a l'équipage.</p>
+<p>Onze silhouettes en combinaison spatiale, agrippées à la coque. Elles frappent le métal avec leurs poings, en rythme. Le même rythme que le signal. Leurs visières sont opaques de givre.</p>
+<p>L'une d'elles tourne lentement la tête vers toi.</p>
+${S.voice>=2?`<p class="voice">« Ils t'attendent dehors, George. Il y a de la place. »</p>`:""}`,
+choices:[{t:"Courir vers la salle des propulseurs",to:"s19"},{t:"Aller vérifier la navigation",to:"s20"},{t:"Fuir vers les capsules de sauvetage",to:"s21"}]},
+
+s19:{eye:"Pont technique",title:"Forcer le passage",enter:()=>{if(!has("cle")&&!has("chalumeau"))hurt()},text:()=> has("cle")?`
+<p>Tu passes le badge de Kovač. Le voyant passe au vert et les soudures craquent sous la pression des vérins. La porte s'ouvre.</p>`: has("chalumeau")?`
+<p>Tu découpes les soudures au chalumeau. Le métal rougit, coule, cède. La porte s'ouvre.</p>`:`
+<p>Pas de badge, pas d'outil. Tu dois passer par le sas de maintenance extérieur, à quelques mètres des silhouettes. L'une d'elles t'effleure le bras. Un froid mental te transperce. <em>(-1 vie)</em></p>`,
+choices:[{t:"Entrer dans la salle des propulseurs",to:"s22"}]},
+
+s20:{eye:"Navigation",title:"Le cap",text:()=>`
+<p>La console de navigation affiche une trajectoire déjà calculée : sortie d'orbite, puis cap direct sur la <em>Terre</em>. Signée « A. Reyes ».</p>
+<p>Si tu répares les propulseurs maintenant, la station emportera le Chœur chez toi.</p>`,
+choices:[{t:"Reprogrammer le cap vers l'espace profond",to:"s22",fx:()=>{S.flags.navFixed=1}},{t:"Verrouiller le cap sur la géante gazeuse (aller simple)",to:"s22",fx:()=>{S.flags.navFixed=1;S.flags.dive=1}},{t:"Laisser tomber et fuir vers les capsules",to:"s21"}]},
+
+s21:{eye:"Baie des capsules",title:"La dernière capsule",text:()=>`
+<p>Il reste une seule capsule de sauvetage. Les autres ont été lancées ou arrachées. Le hublot donne sur la géante, immense, striée de tempêtes.</p>
+<p>Tu pourrais partir. Maintenant. Laisser la station tomber, avec le Chœur, avec Ana, avec l'équipage.</p>
+${flag("trap")&&!flag("navFixed")?`<p>Mais si Ana rallume les propulseurs elle-même ?</p>`:""}`,
+choices:[{t:"Monter dans la capsule et partir",to:"e_fuite"},{t:"Retourner aux propulseurs",to:"s22"}]},
+
+s22:{eye:"Salle des propulseurs",title:"Le cœur de la machine",glitch:1,text:()=>`
+<p>Les quatre propulseurs d'orbite. Ton domaine. Tu reconnais immédiatement la panne : un injecteur grillé, une vanne bloquée. Une heure de travail.</p>
+<p>Puis la lumière change. Le Chœur est là, partout, dans le ronronnement des pompes.</p>
+<p class="voice">« Pose tes outils, George. Ton père est là. Il voulait te dire qu'il est fier de toi. »</p>
+<p>Et ton père est là. Debout près de la console, en bleu de travail, comme dans tes souvenirs.</p>`,
+choices:[{t:"Avaler le sédatif",to:"s24",need:"sedatif",fx:()=>{S.inv=S.inv.filter(x=>x!=="sedatif");S.flags.clear=1}},{t:"Aller vers ton père",to:"s23",fx:()=>S.voice++},{t:"Serrer les dents et résister",to:"s24",fx:()=>{if(S.voice>=2)hurt()}}]},
+
+s23:{eye:"???",title:"La maison",text:()=> S.voice>=4?``:`
+<p>Tu es dans la cuisine de ton enfance. Ça sent le café. Ton père te sourit… et son sourire s'élargit, trop, beaucoup trop.</p>
+<p>Tu hurles. Tu te retrouves à genoux sur le sol de la salle des propulseurs, le nez en sang. <em>(-1 vie)</em></p>`,
+enter:()=>{if(S.voice<4)hurt()},redirect:()=>S.voice>=4?"e_folie":null,
+choices:[{t:"Te relever",to:"s24"}]},
+
+s24:{eye:"Salle des propulseurs",title:"Réparation",text:()=>`
+<p>${flag("clear")?"Le sédatif fait effet. Le silence dans ta tête est délicieux. Tes mains ne tremblent plus.":"Tu travailles avec le Chœur qui hurle dans ton crâne. Tes mains tremblent mais elles savent quoi faire."}</p>
+<p>Injecteur remplacé. Vanne débloquée. Les quatre propulseurs sont prêts à l'allumage.</p>
+<p>Un bruit de pas. Ana entre, un pistolet d'abordage pointé sur toi. ${flag("amplified")?"Ses yeux brillent de la même lueur que le signal.":""}</p>
+<p class="voice">« Merci, George. Écarte-toi de la console. »</p>`,
+choices:[{t:"Tenter de la raisonner",to:"s25"}]},
+
+s25:{eye:"Salle des propulseurs",title:"Ana",text:()=>`
+<p>Elle tremble. Le pistolet aussi.</p>
+<p class="voice">« Tu ne comprends pas. Trois ans seule. Il est le seul qui m'ait parlé. Il m'a promis que je ne serais plus jamais seule. »</p>`,
+choices:[{t:"Lui faire écouter ses propres enregistrements : le Chœur a dit la même chose à tout l'équipage avant de les jeter dehors",to:"s26",need:"preuve"},{t:"Te jeter sur elle",to:"s27",fx:()=>{if(!has("chalumeau"))hurt()}},{t:"Lui céder la console",to:"e_terre"}]},
+
+s26:{eye:"Salle des propulseurs",title:"La fissure",enter:()=>{S.flags.anaBroken=1},text:()=>`
+<p>Les voix de l'équipage sortent de la tablette. Kovač. Okafor. Tous, la même promesse : <em>« Tu ne seras plus jamais seul. »</em> Puis le bruit des sas qui s'ouvrent.</p>
+<p>Ana baisse son arme. Elle sanglote.</p>
+<p class="voice">« Il a menti… Le relais. Si tu envoies la puissance des propulseurs dans le relais radio, ça brûlera le lien. Il ne pourra plus nous toucher. »</p>
+<p>Puis elle te tend son badge et sort du côté du sas. Tu n'as pas le temps de la retenir.</p>`,
+choices:[{t:"Passer aux commandes",to:"s28"}]},
+
+s27:{eye:"Salle des propulseurs",title:"Corps à corps",text:()=>`
+<p>${has("chalumeau")?"Tu lui projettes le chalumeau allumé à la figure. Elle lâche l'arme en reculant.":"Le coup part et t'érafle le flanc. (-1 vie) Mais tu l'atteins, tu la plaques au sol."}</p>
+<p>Ana heurte la console et s'effondre, inconsciente. Le pistolet glisse sous une conduite.</p>
+<p>La console est à toi.</p>`,
+choices:[{t:"Passer aux commandes",to:"s28"}]},
+
+s28:{eye:"Console d'allumage",title:"Allumage",text:()=>`
+<p>La station gémit. L'orbite ne tiendra plus longtemps. Tes doigts au-dessus des commandes.</p>
+<p>${flag("navFixed")?(flag("dive")?"Le cap est verrouillé sur la géante gazeuse.":"Le cap est réglé vers l'espace profond, loin de la Terre."):"<em>Le cap n'a pas été vérifié.</em>"}</p>
+${flag("anaBroken")?`<p>Grâce à Ana, tu sais qu'il est possible de dériver la puissance dans le relais radio pour brûler le lien du Chœur.</p>`:""}
+<p class="voice">« George… ne fais pas ça… je peux te rendre tout ce que tu as perdu… »</p>`,
+choices:[
+ {t:"Allumer les propulseurs",to:"s29",if:()=>!flag("dive")},
+ {t:"Plonger dans la géante avec la station, et le Chœur avec toi",to:"e_sacrifice"},
+ {t:"Surcharger le relais radio avec la puissance des propulseurs",to:"s30",if:()=>flag("anaBroken")}]},
+
+s29:{eye:"Console d'allumage",title:"Poussée",redirect:()=>!flag("navFixed")?"e_terre":null,text:()=>`
+<p>Les quatre propulseurs rugissent. La station s'arrache à la géante. Les silhouettes sur la coque lâchent prise, une à une, et tombent vers les nuages.</p>
+<p>Cap sur l'espace profond. Le Chœur hurle, de plus en plus faible. Puis plus rien.</p>
+<p>Tu es seul. Vraiment seul. Mais libre.</p>`,
+choices:[{t:"Lancer la balise de détresse",to:"e_heros"}]},
+
+s30:{eye:"Relais radio",title:"Le grand silence",redirect:()=>(S.hp===3&&S.voice<=1&&["lampe","cle","chalumeau","journal"].every(has))?"e_secret":null,text:()=>`
+<p>Tu ponts les conduits de puissance vers le relais. Les antennes s'illuminent, puis fondent dans une gerbe d'étincelles.</p>
+<p>Le Chœur pousse un cri qui n'a rien d'humain, et se tait. Pour de bon.</p>
+<p>Les propulseurs, libérés, stabilisent l'orbite. La station tiendra.</p>`,
+choices:[{t:"Lancer la balise de détresse",to:"e_heros"}]},
+
+e_mort:{ending:"mort",title:"Silence",text:()=>`<p>Tes jambes cèdent. Le sol est froid. La dernière chose que tu entends, c'est le Chœur qui chante doucement ton nom, et tu ne trouves plus la force de lui dire non.</p><p>Dehors, une douzième silhouette rejoint les autres sur la coque.</p>`},
+e_orbite:{ending:"orbite",title:"Chute libre",text:()=>`<p>Le temps est écoulé. L'orbite cède. Érèbe s'enfonce dans les nuages de la géante, la coque hurle, puis se tait.</p><p>Le Chœur, lui, attendra le prochain vaisseau.</p>`},
+e_folie:{ending:"folie",title:"Le Chœur",text:()=>`<p>La cuisine est chaude. Ton père et ta mère sont là. Tu n'as plus jamais froid.</p><p>Sur la coque d'Érèbe, une silhouette de plus frappe en rythme. Elle sourit sous son casque. Elle n'est plus jamais seule.</p>`},
+e_fuite:{ending:"fuite",title:"Seul dans le noir",text:()=>`<p>La capsule se détache. Par le hublot, tu regardes Érèbe s'éloigner${flag("trap")&&!flag("navFixed")?" puis, soudain, ses propulseurs s'allumer. Ana a réussi. La station file vers la Terre":" et sombrer lentement vers la géante"}.</p><p>Ta balise émet dans le vide. Il faudra des mois pour qu'on te trouve. Parfois, dans le silence de la capsule, tu crois entendre ta mère t'appeler.</p>`},
+e_terre:{ending:"terre",title:"Le cheval de Troie",text:()=>`<p>Les propulseurs s'allument. La station quitte l'orbite… sur le cap qu'Ana avait programmé. Direction la Terre.</p><p>Quatorze mois plus tard, les antennes terrestres captent un signal venu d'Érèbe. Il se répète. Il a une grammaire.</p><p>Et huit milliards de personnes entendent la voix de leur mère.</p>`},
+e_sacrifice:{ending:"sacrifice",title:"Sacrifice",text:()=>`<p>Tu envoies la station droit dans la géante, propulseurs à fond. Le Chœur supplie, menace, pleure avec la voix de tous ceux que tu as aimés.</p><p>Tu ne l'écoutes pas.</p><p>La coque s'embrase dans les nuages. Le signal s'éteint avec toi. Sur Terre, personne ne saura jamais ce que tu as sauvé.</p>`},
+e_heros:{ending:"heros",title:"Héroïque",text:()=>`<p>Quatre mois plus tard, un cargo de la Compagnie répond à ta balise. Ils trouvent un homme amaigri, barbu, qui refuse qu'on allume la radio.</p><p>Tu as sauvé la Terre. Ton rapport sera classé secret. Mais chaque nuit, tu dors avec la lumière allumée, et tu n'as plus jamais entendu la voix.</p>`},
+e_secret:{ending:"secret",title:"Les Douze",text:()=>`<p>Le relais fond. Et à travers la baie vitrée, quelque chose d'incroyable se produit : les onze silhouettes sur la coque s'arrêtent de frapper.</p><p>L'une d'elles lève la main. Lentement. Un geste humain.</p><p>Leurs combinaisons ont maintenu leurs corps en hibernation pendant trois ans. Le Chœur les gardait comme des marionnettes. Il n'est plus là pour tenir les fils.</p><p>Tu ouvres le sas. Un par un, tu les fais rentrer. Okafor est le dernier. Il retire son casque, te regarde, et murmure : <em>« Tu ne l'as pas écouté. »</em></p><p>Douze survivants. Une station sauvée. Et un ingénieur qui avait juste été envoyé réparer des propulseurs.</p>`}
+};
+
+function hurt(){S.hp=Math.max(0,S.hp-1)}
+
+function go(id){
+  const sc=SC[id];
+  if(sc.enter && !sc.ending) sc.enter();
+  if(!sc.ending && id!=="s1") S.min-=15;
+  let next=null;
+  if(sc.redirect) next=sc.redirect();
+  if(!next && !sc.ending){ if(S.hp<=0) next="e_mort"; else if(S.min<=0) next="e_orbite"; else if(S.voice>=5) next="e_folie"; }
+  if(next) return go(next);
+  render(id);
+}
+
+function render(id){
+  const sc=SC[id], el=document.getElementById("scene");
+  S.seen.add(id);
+  let html=`<div class="eyebrow">${sc.ending?"Fin":sc.eye}</div><h1>${sc.title}</h1><div class="story">${sc.text()}</div>`;
+  if(sc.ending){
+    let got=[];try{got=JSON.parse(localStorage.getItem("erebe-endings")||"[]")}catch(e){}
+    if(!got.includes(sc.ending)){got.push(sc.ending);try{localStorage.setItem("erebe-endings",JSON.stringify(got))}catch(e){}}
+    html+=`<div class="ending"><div class="tag">${ENDINGS[sc.ending]}</div><div class="found">Fins découvertes : ${got.length} / ${Object.keys(ENDINGS).length}</div></div>
+    <div class="choices"><button id="restart"><span class="k">↺</span><span>Recommencer depuis le réveil</span></button></div>`;
+  } else {
+    html+=`<div class="choices">`+sc.choices.filter(c=>!c.if||c.if()).map((c,i)=>{
+      const ok=!c.need||has(c.need);
+      return `<button data-i="${i}" ${ok?"":"disabled"}><span class="k">${String.fromCharCode(65+i)}</span><span>${c.t}${ok?"":`<span class="req">Nécessite : ${ITEMS[c.need]}</span>`}</span></button>`
+    }).join("")+`</div>`;
+  }
+  el.className=""; void el.offsetWidth; el.className="fade"+(sc.glitch?" glitch":"");
+  el.innerHTML=html;
+  if(sc.ending){document.getElementById("restart").onclick=start}
+  else{
+    const vis=sc.choices.filter(c=>!c.if||c.if());
+    el.querySelectorAll("button[data-i]").forEach(b=>b.onclick=()=>{const c=vis[+b.dataset.i];if(c.fx)c.fx();go(c.to)});
+  }
+  hud(); window.scrollTo({top:0});
+}
+
+function hud(){
+  document.getElementById("hp").innerHTML=[0,1,2].map(i=>`<span class="pip ${i<S.hp?"on":""}"></span>`).join("");
+  const t=document.getElementById("timer"),h=Math.floor(S.min/60),m=S.min%60;
+  t.textContent=`${h}h${String(m).padStart(2,"0")}`; t.classList.toggle("low",S.min<=90);
+  document.getElementById("voice").style.width=Math.min(100,S.voice*20)+"%";
+  document.getElementById("inv").innerHTML=S.inv.length?S.inv.map(k=>`<span class="chip">${ITEMS[k]}</span>`).join(""):`<span class="empty">Inventaire vide</span>`;
+}
+
+function start(){S=fresh();go("s1")}
+start();
+</script>
