@@ -48,7 +48,7 @@ reconfirmer par `build-engineer` au démarrage de T-011.
 | ADR-08 | Rendu : Lumen, Nanite, Virtual Shadow Maps, TSR ; Lumen matériel ou logiciel **selon la mesure** par plateforme et par mode ; Substrate **conditionné à un test en M1** | 7 |
 | ADR-09 | **La Xbox Series S est le plancher de contenu.** Le profil Steam Deck dérive du profil Series S | 7, BUDGETS |
 | ADR-10 | Le code propre à une plateforme n'existe que dans `PrjPlatform`, `Config/` et `Platforms/` (dépôt séparé à accès restreint pour le code sous NDA) | 10 |
-| ADR-11 | Les modes Qualité et Performance d'une console **partagent le même budget CPU** : la simulation est identique, seul le rendu change | BUDGETS §3 |
+| ADR-11 | Les modes Qualité et Performance d'une console **partagent le même budget CPU** : la simulation est identique, seul le rendu change | BUDGETS §1 et §3 |
 | ADR-12 | Plugins tiers : **liste blanche** tenue par le TD ; solution native d'UE5 par défaut | 6.3 |
 
 ---
@@ -271,7 +271,8 @@ par défaut). Règles détaillées dans `NORMES_CODE.md` §4 et §6.
 
 ### 6.1 Tableau des systèmes
 
-Statut indiqué selon les sources consultées ; à revérifier dans les notes de version de la version retenue.
+Statut indiqué tel que connu du TD ou trouvé dans les sources consultées ; il est **à revérifier
+systématiquement** dans les notes de version de la version retenue (au démarrage de T-011).
 **Règle** : une fonctionnalité **expérimentale** est interdite dans le jeu livré sans dérogation écrite du TD ;
 une fonctionnalité en **bêta** est autorisée avec une entrée au registre des risques.
 
@@ -279,8 +280,8 @@ une fonctionnalité en **bêta** est autorisée avec une entrée au registre des
 |---|---|---|---|---|
 | **Gameplay Ability System** | Capacités, effets, attributs, cooldowns, Gameplay Cues. Même en solo : structure pilotée par les données, réplication prête si besoin | Production (utilisé par Fortnite et Lyra) | Retenu | gameplay-programmer |
 | **Enhanced Input** | Toutes les entrées, contextes de mapping par situation, remappage manette et clavier/souris | Production (l'ancien système d'entrées est déprécié) | Retenu, obligatoire | gameplay-programmer, ui-ux-designer |
-| **CommonUI** | Navigation manette et souris, routage des entrées dans les menus, glyphes de boutons par plateforme | Production | Retenu | ui-ux-designer, gameplay-programmer |
-| **StateTree** + **Smart Objects** | IA et machines à états du gameplay ; Behavior Trees seulement pour un besoin précis | Production | Retenu | gameplay-programmer |
+| **CommonUI** | Navigation manette et souris, routage des entrées dans les menus, glyphes de boutons par plateforme | Utilisé en production par Epic (Lyra, Fortnite) ; statut officiel à vérifier | Retenu | ui-ux-designer, gameplay-programmer |
+| **StateTree** + **Smart Objects** | IA et machines à états du gameplay ; Behavior Trees seulement pour un besoin précis | Production (à vérifier pour Smart Objects) | Retenu | gameplay-programmer |
 | **World Partition** (One File Per Actor, Data Layers, HLOD, Level Instances) | Organisation de **tous** les niveaux, même en linéaire : un fichier par acteur réduit les conflits entre personnes | Production | Retenu | level-designer, TD |
 | **PCG** | Habillage procédural (végétation, débris, dispersion), généré à l'édition par défaut. Génération à l'exécution seulement si mesurée | Production depuis 5.7 [Secondaire] | Retenu | environment-artist, technical-artist |
 | **MetaSounds** | Audio procédural et mixage | Production | Retenu par défaut ; Wwise seulement si validé par la Boss (T-009) | audio-director |
@@ -466,7 +467,8 @@ transition pour l'équipe. On importe un instantané ; l'historique Git reste co
 
 **Règle (ADR-10)** : rien de spécifique à une plateforme en dehors de `PrjPlatform`, des fichiers `Config/`
 (dont les Device Profiles) et du dossier `Platforms/`. Les macros de plateforme (`PLATFORM_*`) sont interdites
-partout ailleurs, vérification automatique en CI.
+partout ailleurs dans le code du projet, vérification automatique en CI. Les gardes de configuration de build
+(`WITH_EDITOR`, `UE_BUILD_SHIPPING`) ne sont pas concernées.
 
 | Service | Interface (dans `PrjPlatform`, ou `PrjCore` si appelée par le gameplay) | Implémentation |
 |---|---|---|
@@ -525,7 +527,7 @@ gameplay ne doit donc être impossible sur Series S (par exemple un écran parta
 
 | Élément | Orientation | Responsable |
 |---|---|---|
-| CI | Pipeline par pull request (compilation éditeur et jeu, tests, validation des données) et pipeline nocturne (cook, packaging, tests de performance). Outil choisi par `build-engineer` (par exemple GitHub Actions avec des machines auto-hébergées, TeamCity ou Jenkins). Horde est optionnel avec Git | build-engineer |
+| CI | Pipeline par pull request (compilation éditeur et jeu, tests, validation des données) et pipeline nocturne (cook, packaging, tests de performance). Outil choisi par `build-engineer` (par exemple GitHub Actions avec des machines auto-hébergées, TeamCity ou Jenkins). Horde, conçu autour de Perforce, n'est pas retenu par défaut | build-engineer |
 | Machines de build | Au moins 2 machines dédiées : 32 cœurs ou plus, 128 Go de RAM, SSD NVMe de 4 To ou plus, GPU compatible ray tracing pour les tests de rendu [Estimation TD] | build-engineer, humain (achat) |
 | DDC | Zen Server partagé sur le réseau du studio, cache local sur chaque poste | build-engineer |
 | Poste de développement | 16 cœurs, 64 Go de RAM (128 Go pour l'environnement et l'éclairage), GPU de la classe RTX 4080 / 5080 ou équivalent, 2 To NVMe [Estimation TD] | humain (achat) |

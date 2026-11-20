@@ -45,7 +45,7 @@ Performance » mais des préréglages.
 |---|---|---|---|---|---|
 | PS5 / Xbox Series X | Qualité | 30 fps verrouillés (33,3 ms) | 1440p (plancher 1200p) | 4K, HDR | TSR |
 | PS5 / Xbox Series X | **Performance** | **60 fps (16,7 ms)** | 1080p (plancher 864p) | 4K, HDR | TSR |
-| PS5 Pro (optionnel, après M4) | Performance « Pro » | 60 fps | 1440p ou plus | 4K, HDR | PSSR [NDA] |
+| PS5 Pro (optionnel, décision à M4) | Performance « Pro » | 60 fps | 1440p ou plus | 4K, HDR | PSSR [NDA] |
 | Xbox Series S | Qualité | 30 fps verrouillés | 900p (plancher 720p) | **1440p** | TSR |
 | Xbox Series S | **Performance** | **60 fps** | 720p (plancher 540p) | **1080p** | TSR |
 | Steam Deck | Unique | 30 fps (option 40 fps si la marge le permet) | 853×533, soit 67 % de 800p (plancher 50 %) | 1280×800 | TSR ou FSR |

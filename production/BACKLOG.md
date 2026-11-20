@@ -10,7 +10,7 @@
 | T-001 | Trois concepts de jeu et pitch | game-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | EN COURS |
-| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015 | À FAIRE |
+| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023 | À FAIRE |
 | T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
 | T-006 | GDD v1 | game-designer | T-005 | À FAIRE |
 | T-007 | Bible artistique | art-director | T-005 | À FAIRE |
@@ -29,8 +29,8 @@
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | À FAIRE |
 | T-022 | Données de marché par région et par langue | marketing-publishing | aucune | EN REVUE BOSS |
-| T-023 | Révision v1.1 des trois concepts | game-director | aucune | À FAIRE |
-| T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
+| T-023 | Révision v1.1 des trois concepts | game-director | aucune | EN COURS |
+| T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | EN COURS |
 
 ---
 
@@ -64,7 +64,7 @@
   - [ ] Liste des risques techniques (stutter de shaders, mémoire Series S...) avec mitigations
 
 ### T-004 : Choix du concept (Go / No-Go)
-- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015 · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015, T-023 · **Jalon** : M0 · **Statut** : À FAIRE
 - **Livrables** : `production/validations/T-004.md`
 - **Critères d'acceptation** :
   - [ ] Un concept retenu, avec sa justification (marché, faisabilité technique, budget, vision)
@@ -242,7 +242,7 @@
 - **Contexte / références** : réserve de T-002 (retour 11). Prérequis de T-017.
 
 ### T-023 : Révision v1.1 des trois concepts
-- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
 - **Livrables** : `docs/vision/CONCEPTS.md` (version 1.1, avec un journal des modifications)
 - **Critères d'acceptation** :
   - [ ] Synthèse des risques (section 0 « Risque global », section 5 « Risque de production ») recalculée à partir des tableaux X.11, selon une règle d'agrégation écrite (probabilité × impact)
@@ -256,7 +256,7 @@
 - **Contexte / références** : réserves de la validation de T-001, retours 1 à 11 (`production/validations/T-001.md`). À valider avant T-004. Les effectifs et les durées des sections X.10, sur lesquels T-015 s'appuie, ne changent pas, sauf erreur à signaler à `business-affairs`.
 
 ### T-024 : Registre des licences et règles d'usage de l'IA générative
-- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
 - **Livrables** : `docs/legal/LICENCES.md`
 - **Critères d'acceptation** :
   - [ ] Registre au format défini (asset ou outil, origine, licence et version des conditions, date de consultation, usage commercial autorisé, plateformes, attribution, obligations, preuve d'acquisition), prêt à recevoir chaque asset tiers comme l'exige `CLAUDE.md`
