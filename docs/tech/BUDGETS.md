@@ -4,7 +4,7 @@
 |---|---|
 | **Tâche** | T-003 : Choix techniques, architecture et budgets |
 | **Auteur** | `technical-director` |
-| **Version** | 1.0 du 2026-11-20 (budgets d'allocation initiaux) |
+| **Version** | 1.1 du 2026-11-20 (budgets initiaux + cas pires ESTRAN et AVEUX) |
 | **Statut** | Soumis à la validation de la Boss |
 | **Documents liés** | [`ARCHITECTURE.md`](ARCHITECTURE.md) · [`NORMES_CODE.md`](NORMES_CODE.md) |
 | **Utilisé par** | Bible artistique (T-007), direction audio (T-009), UX (T-014), plan plateformes (T-012), tests (T-013), chiffrage (T-015) |
@@ -453,6 +453,145 @@ personne). Le **total ne change pas** : un concept plus coûteux doit **reprendr
 | Première personne | Inchangé | Personnages −0,5 ms (bras à la place du corps), rendu des bras +0,3 ms | Animation −0,05 Go | Inchangé | Légèrement plus faible | Inchangés |
 | Troisième personne | Base | Base (personnage principal : 1 à 1,5 ms, inclus dans « Personnages ») | Base | Base | Base | Base |
 
+### 14.1 Cas pires imposés par les concepts validés (retours de la Boss, T-001)
+
+La Boss a validé les trois concepts en demandant que les deux scènes les plus coûteuses soient budgétées dès
+maintenant. **Tous les chiffres de cette section sont des [Estimations TD] non mesurées** : aucun kit, aucun
+Unreal Engine 5 n'est disponible dans l'environnement actuel. Elles servent à fixer des leviers et un protocole,
+et seront remplacées par les mesures de S-9 et S-10 (`ARCHITECTURE.md` §16). Ces cas pires sont **ajoutés** au
+parcours « Panorama » et au parcours « Situation chargée » du §13.1.
+
+#### 14.1.1 ESTRAN : pire cas nocturne
+
+**Scène** : nuit, pleine mer (eau partout dans le champ), faisceau du phare en mouvement **et** lampe du joueur
+visibles ensemble (deux sources locales ombrées et mobiles), brouillard volumétrique, reflets sur l'eau, un à
+deux monstres dans le champ. Mode Performance, base 16,6 ms.
+
+**Estimation du coût GPU avant optimisation** (PS5 et Series X, 1080p vers 4K, hors résolution dynamique) :
+
+| Poste | Budget du §3.3 | Estimation du pire cas | Raison de l'écart |
+|---|---|---|---|
+| Géométrie Nanite et base pass | 3,0 ms | 3,0 ms | Île et rochers, peu de feuillage |
+| Personnages | 1,0 ms | 1,0 ms | Joueur et monstres |
+| Ombres (VSM) | 2,0 ms | 3,0 ms | Deux lumières locales mobiles : leurs pages d'ombre sont invalidées à chaque frame, le faisceau couvre une grande portée |
+| Lumen (GI et reflets) | 3,2 ms | 3,5 ms | Peu de GI en pleine nuit, mais reflets sur une grande surface d'eau |
+| Éclairage direct | 1,0 ms | 1,5 ms | Deux lumières locales plein écran possible |
+| Brouillard volumétrique (injection des deux lumières, ciel nocturne simple) | 0,6 ms | 1,8 ms | L'injection de lumières ombrées dans le brouillard domine le coût |
+| Eau (translucidité, single layer water) et effets | 1,0 ms | 1,5 ms | Surface d'eau plein champ, écume, pluie éventuelle |
+| Post-traitement | 0,8 ms | 0,8 ms | |
+| Upscaling (TSR) | 1,2 ms | 1,2 ms | |
+| UI et divers | 0,2 ms | 0,2 ms | |
+| **Total estimé, sans marge** | 14,0 ms | **17,5 ms** | **3,0 ms au-dessus des 14,5 ms** de la cible (qui garde 0,5 ms de marge) |
+
+Fourchette d'incertitude : ±25 % sur les postes VSM, brouillard et eau, qui sont ceux dont le coût varie le plus
+avec le contenu. L'estimation signale un risque réel, pas une certitude.
+
+**Stratégie pour tenir 16,6 ms** (PS5, Series X et Series S), par ordre d'application. Gains [Estimation TD] :
+
+| # | Levier | Gain estimé | Touche une information de jeu ? |
+|---|---|---|---|
+| 1 | Résolution des pages VSM des deux lumières locales ajustée (biais de résolution, pas de désactivation) ; pages de la lampe et du faisceau limitées à leur cône | 0,7 ms | Non, les ombres existent partout, plus ou moins nettes |
+| 2 | Brouillard volumétrique : résolution de la grille (froxels) et nombre de pas réduits, distance de calcul limitée ; densité et portée d'extinction **inchangées** | 0,6 ms | Non, voir règle de parité ci-dessous |
+| 3 | Reflets de l'eau : Lumen vers réflexions d'écran et cubemap à distance, hors du champ proche | 0,8 ms | Non (les reflets sont décoratifs ; aucune information de jeu ne doit passer uniquement par eux) |
+| 4 | Autres lumières et ombres non liées au gameplay (ciel, lumière d'appoint) | 0,5 ms | Non |
+| 5 | Éclairage direct : lampe et faisceau en lumières à rayon d'atténuation borné | 0,4 ms | Non |
+| 6 | Résolution dynamique, plancher fixé par plateforme | 0,8 ms | Non |
+| **Total** | | **3,8 ms** | Ramène 17,5 ms à environ 13,7 ms, soit 0,8 ms de marge au-dessus du plancher |
+
+Ordre de repli si la mesure est pire que l'estimation : leviers 1 à 6, puis passage de Lumen matériel à Lumen
+logiciel (PS5, Series X), puis réduction du plancher de résolution (Series S). **Interdits** comme leviers :
+désactiver l'ombre du faisceau ou de la lampe sur une plateforme, réduire la portée visible du faisceau, changer
+la densité du brouillard, retirer un monstre ou un élément de décor utile au jeu.
+
+**Series S** (720p vers 1080p, mêmes 16,6 ms) : le budget GPU total est le même (14,5 ms, §3.3) mais la
+puissance de calcul est inférieure à celle de la Series X ; on part donc du principe que **les leviers 1 à 6 sont
+tous appliqués dès le départ**, avec Lumen logiciel, une grille de brouillard plus grossière et des VSM plus
+petites. Si S-9 montre que 60 fps ne tient pas sur Series S malgré cela, la décision revient à la Boss : baisser
+le plancher de résolution, ou autoriser un mode 30 fps sur cette plateforme (le mode Performance de la Series S
+n'est un engagement de 60 fps que pour les scènes hors cas pire, tant que S-9 n'a pas été mesurée).
+
+**Règle de parité appliquée** (`ARCHITECTURE.md` §10.1) : la visibilité des monstres dans le brouillard, la
+position et la portée du faisceau, les zones d'ombre sûres et le bruit sont calculés par la logique de jeu, pas
+lus dans le rendu. Le rendu du brouillard sur Series S doit produire la même portée de visibilité que sur PS5 ;
+seule sa finesse change. Vérification : test de lisibilité de la procédure ci-dessous.
+
+**Protocole de mesure (S-9)** :
+1. Scène fixe « ESTRAN nuit » construite par `level-designer` (T-011), caméra et faisceau sur un parcours
+   rejoué par Gauntlet, 3 minutes, faisceau balayant le champ de vision du joueur, lampe allumée, au moins un
+   monstre dans le brouillard.
+2. Mesure sur kit PS5, Series X et Series S (puis sur PC de référence et Steam Deck, à titre indicatif), build
+   Test (pas Editor), résolution dynamique **verrouillée** à la résolution plancher, puis une passe libre.
+3. Relevés : `stat unit`, `ProfileGPU` et Unreal Insights (GPU) par poste ; moyenne, 99e centile, maximum ; 3 passes,
+   médiane retenue ; mémoire via LLM.
+4. Attribution par ablation : mesure avec chaque élément retiré tour à tour (ombre de la lampe, ombre du faisceau,
+   brouillard, reflets de l'eau), pour chiffrer le coût réel de chacun.
+5. Critères : 99 % des frames sous 16,9 ms (§3.4) ; chaque poste comparé à la colonne « Estimation » ci-dessus ;
+   tout poste dont l'écart dépasse 25 % déclenche la procédure du §13.4.
+6. Test de lisibilité de parité : captures aux profils PS5 et Series S d'une même scène, avec un monstre placé à
+   plusieurs distances dans le brouillard ; la distance à laquelle il devient visible doit être identique à
+   la tolérance près fixée par le `art-director`.
+
+#### 14.1.2 AVEUX : deux visages MetaHuman en gros plan simultanés
+
+**Scène** : interrogatoire, plan serré sur deux personnages parlant ou réagissant en même temps, intérieur
+fermé. Cette scène est **statique et contrôlée** : le décor peut être allégé et le coût repris sur le reste
+de l'image (le plan serré ne montre pas le décor lointain).
+
+**Estimations par personnage en gros plan** [Estimation TD, non mesurée ; à recaler par S-10] :
+
+| Mesure | PS5 (et Series X) | Series S |
+|---|---|---|
+| Niveau de détail du visage | LOD0 ou LOD1 le plus fin, textures 4K | LOD1 ou LOD2, textures 2K à 4K selon la distance |
+| Cheveux | Cheveux en brins (groom) pour le héros, cartes pour les figurants | Cheveux en cartes pour les deux, brins seulement si S-10 le permet |
+| Coût GPU par personnage (peau, yeux, cheveux, vêtements, hors éclairage de la scène) | 1,0 à 1,5 ms | 0,7 à 1,0 ms |
+| **Coût GPU des deux** | **2,0 à 3,0 ms** | **1,4 à 2,0 ms** |
+| Animation faciale (évaluation du rig RigLogic et de l'animation, sur threads de travail) | 0,5 à 1,0 ms par personnage | 0,3 à 0,6 ms par personnage (LOD de rig réduit) |
+| Part sur le game thread | environ 0,1 ms par personnage | environ 0,1 ms par personnage |
+| Mémoire textures (visage, corps, yeux, dents ; mip résident) | 150 à 250 Mo par personnage | 60 à 120 Mo par personnage |
+| Mémoire groom (brins) ou cartes | Brins : 40 à 80 Mo par personnage | Cartes : 5 à 15 Mo par personnage |
+| Mémoire maillages, rig et animation | 30 à 60 Mo par personnage | 20 à 40 Mo par personnage |
+| **Mémoire des deux** | **environ 0,45 à 0,8 Go** | **environ 0,2 à 0,35 Go** |
+
+**Intégration dans les budgets** : le poste « Personnages » du §3.3 (1,0 ms) vaut pour une scène de jeu. En
+scène de dialogue rapproché, il est **porté à 2,0 ms (Series S) et 3,0 ms (PS5, Series X)**, repris sur
+la géométrie (la scène est un intérieur simple, environ 1,5 ms de gain), les ombres (réduites, environ 0,5 à 1,0 ms)
+et Lumen (volume plus petit, environ 0,5 ms). La mémoire est prise sur le pool de textures du §6.1 en
+déchargeant le niveau précédent avant l'entrée de la scène ; elle ne s'ajoute pas au budget total. Sur
+Series S, ces 0,2 à 0,35 Go tiennent dans le pool de 1,8 Go et dans la ligne Animation de 0,35 Go seulement si le
+reste du niveau est déchargé, ce que le streaming de scène doit garantir.
+
+**Compromis de niveau de détail** (ordre de repli) : (1) distance de bascule des LOD de visage ajustée à la
+taille réelle à l'écran, jamais en dessous du LOD1 en gros plan sur PS5 ; (2) niveau de détail du rig facial
+(RigLogic) réduit sur le personnage non parlant ; (3) cheveux en cartes pour le personnage secondaire ;
+(4) textures à 2K sur Series S pour le vêtement et le corps, le visage restant en 4K si la mémoire le permet ;
+(5) cheveux en cartes pour les deux sur Series S. Le visage du personnage qui parle ne descend jamais
+sous le LOD1 : la lecture des émotions est l'objet du concept.
+
+**Parité** : les deux plateformes jouent la même scène avec les mêmes expressions, les mêmes animations et
+le même cadrage ; seule la finesse (LOD, textures, cheveux) change. Aucune expression ou micro-expression
+utile à l'enquête (indices de mensonge) ne doit être absente ou atténuée sur Series S : le rig facial réduit doit
+conserver tous les gestes listés par `narrative-designer` et `animation-director` comme porteurs d'information.
+Cette liste est un prérequis de T-011 ; le LOD de rig de la Series S est validé contre elle.
+
+**Protocole de mesure (S-10)** :
+1. Scène de test « interrogatoire » avec deux MetaHumans définitifs (même groom, mêmes vêtements que le jeu),
+   plan serré fixe puis contre-champ, 2 minutes de lecture d'animation faciale réelle (capture ou animation
+   typique), éclairage final.
+2. Mesure sur kit PS5 et Series S (Series X et PC à titre indicatif), build Test, résolution fixée.
+3. Relevés : GPU par poste (`ProfileGPU`, Insights), CPU par thread (Insights : game thread, threads de travail
+   d'animation), mémoire par tag LLM (textures, groom, animation, maillages) et mémoire de streaming de
+   textures résidente avec `stat streaming`.
+4. Variantes mesurées : LOD0, LOD1, LOD2 ; cheveux en brins et en cartes ; textures 4K et 2K ; avec et sans
+   évaluation du rig du personnage non parlant. Un tableau « coût par variante » remplace l'estimation ci-dessus.
+5. Critères : GPU total de la scène dans le budget du §3.3 après reprise ; threads d'animation sans dépassement
+   de la frame ; mémoire dans le §6.1 ; 99 % des frames sous 16,9 ms (60 fps) ou 33,3 ms (30 fps si le mode
+   dialogue est en 30 fps, décision de la Boss, voir ci-dessous).
+6. Comparaison visuelle des expressions clés entre PS5 et Series S, validée par `animation-director` et
+   `art-director`.
+
+**Décision éventuelle** : si S-10 montre que deux visages en brins ne tiennent pas sur Series S à 60 fps,
+les cheveux en cartes sont retenus sur cette plateforme (différence de rendu seulement, conforme à la parité).
+
 ---
 
 ## 15. Sources (consultées le 2026-11-20)
@@ -480,3 +619,4 @@ personne). Le **total ne change pas** : un concept plus coûteux doit **reprendr
 | Version | Date | Changement |
 |---|---|---|
 | 1.0 | 2026-11-20 | Budgets d'allocation initiaux (T-003) |
+| 1.1 | 2026-11-20 | Ajout du §14.1 : cas pires ESTRAN (nuit) et AVEUX (deux visages), retours de la Boss sur T-001 |

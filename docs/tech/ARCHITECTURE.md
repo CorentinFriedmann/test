@@ -4,7 +4,7 @@
 |---|---|
 | **Tâche** | T-003 : Choix techniques, architecture et budgets |
 | **Auteur** | `technical-director` |
-| **Version** | 1.0 du 2026-11-20 |
+| **Version** | 1.1 du 2026-11-20 (parité §10.1, risques R-23 et R-24, tests S-9 et S-10) |
 | **Statut** | Soumis à la validation de la Boss |
 | **Documents liés** | [`BUDGETS.md`](BUDGETS.md) (budgets chiffrés) · [`NORMES_CODE.md`](NORMES_CODE.md) (normes de code) |
 | **Documents aval** | `docs/tech/BUILD.md` (T-011), `docs/tech/PLATEFORMES.md` (T-012), `docs/tech/ONLINE.md` (T-018), `docs/tech/RENDU.md` (graphics-programmer, tâche à créer) |
@@ -488,6 +488,42 @@ En éditeur et sur PC sans boutique, une **implémentation nulle** permet de tou
 certification (TRC de Sony, XR de Microsoft) sont sous NDA : `platform-engineer` en tire une checklist
 générique dans T-012, sans en reproduire le contenu.
 
+### 10.1 Règle de parité (Series S, Steam Deck et toutes les plateformes)
+
+**Règle (ADR-10 bis)** : les plateformes et leurs profils (Series S, Steam Deck, Series X, PS5, PC) **ne
+peuvent différer que par le rendu** (résolution, qualité des effets, niveau de détail, résolution des textures et
+des ombres, technique de reflets, mode de cheveux, fréquence d'image). Elles ne diffèrent **jamais par une
+information utile au jeu** : ce que le joueur peut voir, entendre ou en déduire pour décider.
+
+**Conséquence : la logique de jeu ne dépend jamais des réglages de rendu.** Visibilité et détection des ennemis,
+position, portée et zones d'ombre du faisceau, bruit, brouillard qui masque, éclairage de la lampe comme
+condition de jeu : tout cela est calculé à partir de **données de jeu** (volumes, tracés de collision, paramètres
+d'un Data Asset, état de la simulation), jamais lu dans le résultat du rendu (pas de lecture du tampon de
+brouillard, des cartes d'ombre ni de la luminosité d'un pixel). Le rendu **illustre** l'état de jeu ; il ne le
+**décide** pas.
+
+Application :
+1. **Interdits dans le code de jeu** : lire un niveau de scalabilité, une variable de console de rendu,
+   un Device Profile, ou tester la plateforme (déjà interdit hors `PrjPlatform`, ci-dessus). Vérification
+   automatique en CI (recherche de ces appels dans `PrjGameplay`, `PrjCore`, `PrjOnline`).
+2. **Un levier de budget (`BUDGETS.md`) n'a le droit de toucher que du rendu pur.** Un levier qui masque,
+   atténue ou retire un élément utile au jeu (ombre d'un obstacle qui protège le joueur, monstre dans le
+   brouillard, faisceau, expression de visage porteuse d'information) s'applique à toutes les plateformes ou à
+   aucune. Les profils bas ne peuvent réduire que la **finesse** (grille du brouillard, résolution d'ombre, LOD),
+   pas la **portée** ni la **densité** équivalentes en jeu.
+3. **Aucune information ne passe uniquement par un effet facultatif** (reflet, particule décorative, flou de
+   mouvement) : si elle est utile, un second canal (son, interface, silhouette) existe.
+4. **La logique ne dépend pas de la fréquence d'image ni de la résolution dynamique** : pas de pas de temps
+   variable non borné pour la logique, pas de test de visibilité à l'écran.
+5. **Tests** : (a) test automatisé qui rejoue la même graine de simulation à deux niveaux de scalabilité
+   (profil Series S et profil PC haut) et exige un journal d'état de jeu identique (détections, zones sûres,
+   événements de bruit) ; (b) test de lisibilité visuel : captures comparées au profil le plus bas, où chaque
+   élément utile doit rester visible à la même distance (à une tolérance fixée par le `art-director`) ;
+   (c) revue de parité à chaque levier ajouté dans les Device Profiles.
+6. **Cas particulier de la Series X et S** : mêmes modes de jeu, mêmes fonctionnalités (voir plus bas, R-18).
+
+Les budgets des cas pires (`BUDGETS.md` §14.1) appliquent cette règle levier par levier.
+
 **Parité Xbox Series X et S** : Microsoft demande, dans sa documentation développeur, des modes de jeu
 identiques sur les deux consoles [Public, via la presse ; texte exact à vérifier]. Aucune fonctionnalité de
 gameplay ne doit donc être impossible sur Series S (par exemple un écran partagé à quatre joueurs). Risque R-18.
@@ -614,8 +650,10 @@ sera consolidé par `producer` dans `production/RISQUES.md` (T-010).
 | R-20 | **Compétences rares** dans une petite équipe (rendu, consoles) | 3 | 4 | 12 | Recrutement ciblé ou partenaire de portage budgété dans T-015 ; documentation ; formation | Postes clés pourvus | producer, TD | M1 |
 | R-21 | **Fin de support des pilotes ou des OS** sur PC (Pascal, Windows 10) | 3 | 2 | 6 | Configuration minimale revue à chaque jalon ; matrice de test matérielle | Matrice à jour | qa-lead, TD | Chaque jalon |
 | R-22 | **Substrate** : adopté puis intenable sur Series S et Deck, ou écarté puis regretté | 3 | 4 | 12 | Test en M1 et décision avant la production des matériaux définitifs | Décision écrite | graphics-programmer, technical-artist | Fin M1 |
+| R-23 | **Pire cas nocturne d'ESTRAN** (nuit, pleine mer, faisceau et lampe ombrés, brouillard volumétrique, reflets sur l'eau) au-dessus de 16,6 ms, surtout sur Series S | 3 | 5 | **15** | Estimation 17,5 ms avant levier (`BUDGETS.md` §14.1.1) ; six leviers chiffrés (3,8 ms) qui ne touchent jamais l'information de jeu (règle §10.1) ; test S-9 dès M1 ; repli Lumen logiciel puis plancher de résolution ; décision de la Boss si 60 fps impossible sur Series S | Temps GPU au 99e centile sur la scène S-9 | graphics-programmer, TD | M1 (S-9), levée à M2 |
+| R-24 | **Deux visages MetaHuman en gros plan** (AVEUX) : GPU, animation faciale et mémoire sur Series S | 3 | 4 | 12 | Estimation 2 à 3 ms GPU et 0,45 à 0,8 Go (`BUDGETS.md` §14.1.2) ; LOD et cheveux en cartes sur Series S ; décor allégé et reprise du budget ; test S-10 ; rig facial réduit validé contre la liste des expressions utiles | Mesures de S-10 par variante | graphics-programmer, animation-director | M1 (S-10), levée à M2 |
 
-**Risques critiques (C ≥ 15)** : R-01, R-02, R-03, R-05, R-16, R-17 et R-19 (si multijoueur).
+**Risques critiques (C ≥ 15)** : R-01, R-02, R-03, R-05, R-16, R-17, R-23 et R-19 (si multijoueur).
 
 ---
 
@@ -633,6 +671,8 @@ Ces tests sont des **propositions** que `producer` peut transformer en tâches a
 | S-6 Sauvegarde | Écriture atomique, migration, coupure simulée | Tests automatisés au vert | R-14 |
 | S-7 Prototype réseau | Seulement si le concept est multijoueur | Coopératif jouable en ligne | R-19 |
 | S-8 Monde ouvert | Seulement si le concept est en monde ouvert : World Partition et PCG à l'échelle | Budgets de streaming tenus | R-02 |
+| S-9 Pire cas nocturne ESTRAN | Nuit, pleine mer, faisceau mobile et lampe ombrés, brouillard volumétrique, reflets de l'eau ; protocole du `BUDGETS.md` §14.1.1, avec test de lisibilité de parité | Coût par poste, validation des leviers, décision Series S | R-23, R-03 |
+| S-10 Deux visages MetaHuman (AVEUX) | Deux MetaHumans définitifs en gros plan ; protocole du `BUDGETS.md` §14.1.2 ; variantes de LOD, cheveux, textures | Tableau de coût par variante (GPU, CPU, mémoire) | R-24, R-02 |
 
 Une tâche dédiée à `docs/tech/RENDU.md` (`graphics-programmer`) est également à créer : elle n'existe pas
 encore dans le backlog.
