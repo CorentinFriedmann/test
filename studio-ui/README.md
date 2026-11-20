@@ -52,6 +52,17 @@ Dans **Réglages d'exécution**, choisissez ce que les agents ont le droit de fa
 
 Un **budget maximum** en dollars peut être fixé pour chaque exécution.
 
+## Vue de consultation (page autonome)
+
+```bash
+node studio-ui/exporter.js                      # écrit studio-ui/export/studio.html
+node studio-ui/exporter.js --sortie vue.html    # ou un autre fichier
+```
+
+Génère une page **en lecture seule**, identique à l'interface, avec l'équipe, le backlog, les documents
+livrés et les rapports de la Boss intégrés. Elle s'ouvre sans serveur et se partage facilement. C'est elle
+que Claude publie pour vous permettre de suivre le studio depuis l'application Claude.
+
 ## Sécurité
 
 Le serveur n'écoute que sur `127.0.0.1`, vérifie l'en-tête `Host` (protection contre le DNS rebinding)

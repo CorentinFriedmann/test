@@ -8,7 +8,7 @@
 | ID | Tâche | Assigné à | Dépend de | Statut |
 |---|---|---|---|---|
 | T-001 | Trois concepts de jeu et pitch | game-director | aucune | EN COURS |
-| T-002 | Étude de marché et positionnement | marketing-publishing | aucune | EN COURS |
+| T-002 | Étude de marché et positionnement | marketing-publishing | aucune | EN REVUE BOSS |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | EN COURS |
 | T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015 | À FAIRE |
 | T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
@@ -38,7 +38,7 @@
   - [ ] Une recommandation argumentée
 
 ### T-002 : Étude de marché et positionnement
-- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN REVUE BOSS
 - **Livrables** : `docs/business/ETUDE_MARCHE.md`
 - **Critères d'acceptation** :
   - [ ] Tendances 2025-2026 sur PC, PS5 et Xbox (genres porteurs, saturation)

@@ -378,6 +378,10 @@ const serveur = http.createServer(async (req, res) => {
   }
 });
 
+module.exports = { etat, lireEquipe, correspondances, cheminSur, P, ROOT };
+
+if (require.main !== module) return;
+
 serveur.listen(PORT, HOST, () => {
   const adresse = `http://${HOST.includes(':') ? `[${HOST}]` : HOST}:${PORT}`;
   console.log(`\n  🎮 Studio IA : interface prête sur ${adresse}`);

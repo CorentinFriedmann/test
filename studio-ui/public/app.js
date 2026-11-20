@@ -34,7 +34,35 @@
     return ['tableau', 'equipe', 'backlog', 'validations', 'executions'].includes(v) ? v : 'tableau';
   }
 
+  // Vue de consultation (page exportée par exporter.js) : les données sont intégrées à la page.
+  const STATIQUE = window.STUDIO_STATIQUE || null;
+  if (STATIQUE) document.body.classList.add('statique');
+
+  function apiStatique(methode, url) {
+    if (methode !== 'GET') throw new Error("Vue de consultation : pour agir, utilisez l'interface locale ou demandez-le à Claude dans la conversation.");
+    const u = new URL(url, 'http://studio.local');
+    const [, , a, b] = u.pathname.split('/').map(decodeURIComponent);
+    const D = STATIQUE;
+    if (a === 'etat') return JSON.parse(JSON.stringify(D.etat));
+    if (a === 'agents' && D.agents[b]) return D.agents[b];
+    if (a === 'validations' && D.validations[b]) return D.validations[b];
+    if (a === 'runs' && D.runs[b]) {
+      const depuis = Number(u.searchParams.get('depuis')) || 0;
+      return { ...D.runs[b], depuis, entrees: D.runs[b].entrees.slice(depuis) };
+    }
+    if (a === 'fichier') {
+      const c = (u.searchParams.get('chemin') || '').replace(/\/+$/, '');
+      if (D.fichiers[c] != null) return { chemin: c, contenu: D.fichiers[c] };
+      const re = c.includes('*') ? new RegExp(`^${c.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '[^/]*')}$`) : null;
+      const liste = Object.keys(D.fichiers).filter((k) => (re ? re.test(k) : k.startsWith(`${c}/`))).sort();
+      if (liste.length) return { chemin: c, liste };
+      throw new Error("Ce livrable n'existe pas encore");
+    }
+    throw new Error('Introuvable dans cette vue de consultation');
+  }
+
   async function api(methode, url, corps) {
+    if (STATIQUE) return apiStatique(methode, url);
     const res = await fetch(url, {
       method: methode,
       headers: { 'Content-Type': 'application/json', 'X-Studio-Token': TOKEN },
@@ -106,6 +134,12 @@
     pastille('#nb-revue', etat.taches.filter((t) => t.statut === 'EN REVUE BOSS').length);
     pastille('#nb-runs', etat.runs.filter((r) => r.statut === 'en cours').length);
     document.querySelectorAll('.nav a').forEach((a) => a.classList.toggle('actif', a.dataset.vue === S.vue));
+    if (STATIQUE) {
+      const quand = new Date(STATIQUE.genere).toLocaleString('fr-FR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+      $('#cli').innerHTML = `<span class="vert">●</span> Mis à jour le ${e(quand)}`;
+      $('#bandeau').innerHTML = `<div class="info-bandeau">👀 <span><strong>Vue de consultation</strong> · état du studio au ${e(quand)}. Claude la republie à chaque étape du sprint. Pour lancer des agents, demandez-le dans la conversation ou utilisez l'interface locale (<code>node studio-ui/server.js</code>).</span></div>`;
+      return;
+    }
     $('#bandeau').innerHTML = etat.claude.disponible ? '' : `<div class="alerte-bandeau">⚠️ La commande <code>claude</code> est introuvable : vous pouvez gérer l'équipe et le backlog, mais pas lancer les agents. Installez Claude Code puis relancez <code>node studio-ui/server.js</code>.</div>`;
   }
 
@@ -397,8 +431,9 @@
       </div>
       <footer class="m-pied">
         ${!nouveau && a.nom !== 'boss' ? `<button type="button" class="btn danger" data-action="supprimer-agent" data-nom="${e(a.nom)}">Licencier</button>` : '<span></span>'}
-        <div><button type="button" class="btn" data-action="fermer">Annuler</button><button class="btn primaire" type="submit">${nouveau ? 'Recruter' : 'Enregistrer'}</button></div>
+        <div><button type="button" class="btn" data-action="fermer">${STATIQUE ? 'Fermer' : 'Annuler'}</button><button class="btn primaire" type="submit">${nouveau ? 'Recruter' : 'Enregistrer'}</button></div>
       </footer></form>`, 'large');
+    if (STATIQUE) $('#form-agent').querySelectorAll('input, textarea, select').forEach((el) => { el.readOnly = true; if (el.tagName === 'SELECT') el.disabled = true; });
   }
 
   function modelePrompt() {
