@@ -7,8 +7,8 @@
 
 | ID | Tâche | Assigné à | Dépend de | Statut |
 |---|---|---|---|---|
-| T-001 | Trois concepts de jeu et pitch | game-director | aucune | EN COURS |
-| T-002 | Étude de marché et positionnement | marketing-publishing | aucune | EN REVUE BOSS |
+| T-001 | Trois concepts de jeu et pitch | game-director | aucune | EN REVUE BOSS |
+| T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | EN COURS |
 | T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015 | À FAIRE |
 | T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
@@ -21,15 +21,19 @@
 | T-012 | Plan de portage et de certification | platform-engineer | T-003 | À FAIRE |
 | T-013 | Stratégie de test et de qualité | qa-lead | T-003, T-006 | À FAIRE |
 | T-014 | Principes UX/UI et accessibilité | ui-ux-designer | T-006 | À FAIRE |
-| T-015 | Chiffrage des 3 concepts et pistes de financement | business-affairs | T-001, T-002, T-003 | À FAIRE |
+| T-015 | Chiffrage des 3 concepts et pistes de financement | business-affairs | T-001, T-002, T-003, T-019, T-021 | À FAIRE |
 | T-016 | Moodboards et key art du concept retenu | concept-artist | T-005 | À FAIRE |
-| T-017 | Plan de localisation | localization-manager | T-002, T-008 | À FAIRE |
+| T-017 | Plan de localisation | localization-manager | T-002, T-008, T-022 | À FAIRE |
 | T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | À FAIRE |
+| T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | À FAIRE |
+| T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
+| T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | À FAIRE |
+| T-022 | Données de marché par région et par langue | marketing-publishing | aucune | À FAIRE |
 
 ---
 
 ### T-001 : Trois concepts de jeu et pitch
-- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
+- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN REVUE BOSS
 - **Livrables** : `docs/vision/CONCEPTS.md`
 - **Critères d'acceptation** :
   - [ ] 3 concepts nettement différents (genre, univers, boucle de gameplay, USP)
@@ -38,13 +42,14 @@
   - [ ] Une recommandation argumentée
 
 ### T-002 : Étude de marché et positionnement
-- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** : `docs/business/ETUDE_MARCHE.md`
 - **Critères d'acceptation** :
-  - [ ] Tendances 2025-2026 sur PC, PS5 et Xbox (genres porteurs, saturation)
-  - [ ] Fourchettes de prix et modèle économique recommandé (premium, deluxe, DLC)
-  - [ ] Analyse de 5 concurrents ou plus (ventes estimées, notes, points forts et faibles)
-  - [ ] Sources citées pour chaque chiffre ; les estimations sont signalées comme telles
+  - [x] Tendances 2025-2026 sur PC, PS5 et Xbox (genres porteurs, saturation)
+  - [x] Fourchettes de prix et modèle économique recommandé (premium, deluxe, DLC)
+  - [x] Analyse de 5 concurrents ou plus (ventes estimées, notes, points forts et faibles)
+  - [x] Sources citées pour chaque chiffre ; les estimations sont signalées comme telles
+- **Validation** : `production/validations/T-002.md` (cycle 1, 2026-11-20) · **Réserves** : T-019, T-020, T-021, T-022
 
 ### T-003 : Choix techniques, architecture et budgets
 - **Assigné à** : `technical-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
