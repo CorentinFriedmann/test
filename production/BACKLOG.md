@@ -28,7 +28,7 @@
 | T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | EN REVUE BOSS |
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | À FAIRE |
-| T-022 | Données de marché par région et par langue | marketing-publishing | aucune | EN REVUE BOSS |
+| T-022 | Données de marché par région et par langue | marketing-publishing | aucune | EN COURS |
 | T-023 | Révision v1.1 des trois concepts | game-director | aucune | EN COURS |
 | T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | EN COURS |
 
@@ -232,14 +232,15 @@
 - **Contexte / références** : réserve de T-002 (retour 10). Alimente T-015 (scénarios par concept) et T-004.
 
 ### T-022 : Données de marché par région et par langue
-- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : EN COURS
 - **Livrables** : `docs/business/MARCHE_REGIONS.md`
 - **Critères d'acceptation** :
   - [ ] Répartition des joueurs Steam par langue (enquête matériel Steam) et poids des grandes régions sur PC et consoles, avec la source et le niveau de confiance de chaque chiffre
   - [ ] Pour au moins 3 jeux de référence de l'étude, répartition des avis ou des ventes par langue ou par région quand elle est disponible, signalée comme estimation
-  - [ ] Recommandation de langues en 3 paliers (texte, sous-titres, doublage), transmise à `localization-manager` pour T-017
-  - [ ] Points d'attention par région (classification, conditions de distribution) signalés sans conclusion juridique, pour relecture par un juriste
+  - [x] Recommandation de langues en 3 paliers (texte, sous-titres, doublage), transmise à `localization-manager` pour T-017
+  - [x] Points d'attention par région (classification, conditions de distribution) signalés sans conclusion juridique, pour relecture par un juriste
 - **Contexte / références** : réserve de T-002 (retour 11). Prérequis de T-017.
+- **Validation** : `production/validations/T-022.md` (cycle 1, 2026-11-20 : REFUSÉ, retours 1 à 8 et seuil d'acceptation du cycle 2)
 
 ### T-023 : Révision v1.1 des trois concepts
 - **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
