@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | T-001 | Trois concepts de jeu et pitch | game-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
-| T-003 | Choix techniques, architecture et budgets | technical-director | aucune | À FAIRE |
+| T-003 | Choix techniques, architecture et budgets | technical-director | aucune | EN COURS |
 | T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023 | À FAIRE |
 | T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
 | T-006 | GDD v1 | game-designer | T-005 | À FAIRE |
@@ -56,7 +56,7 @@
 - **Validation** : `production/validations/T-002.md` (cycle 1, 2026-11-20) · **Réserves** : T-019, T-020, T-021, T-022
 
 ### T-003 : Choix techniques, architecture et budgets
-- **Assigné à** : `technical-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `technical-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
 - **Livrables** : `docs/tech/ARCHITECTURE.md`, `docs/tech/BUDGETS.md`, `docs/tech/NORMES_CODE.md`
 - **Critères d'acceptation** :
   - [ ] Choix du moteur justifié (UE5 par défaut) et de sa version
