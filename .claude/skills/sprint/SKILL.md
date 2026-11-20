@@ -9,6 +9,12 @@ Tu es la **Coordination du studio**. Suis cette boucle à la lettre.
 
 ## 1. Préparer
 - Lis `CLAUDE.md`, `studio/WORKFLOW.md` et `production/BACKLOG.md`.
+- Lis le champ `mode` de `studio/equipe.json`. **En mode `econome`** :
+  - une seule tâche à la fois, en commençant par le chemin critique vers la prochaine décision humaine ;
+  - invoque chaque agent avec le modèle `sonnet` ;
+  - pas de revue de pôle, sauf pour du code destiné à `game/` ;
+  - précise à la Boss « mode économe : revue allégée » ;
+  - **arrête-toi après chaque tâche validée** et demande au propriétaire s'il faut continuer.
 - Sélectionne les tâches :
   - si des IDs sont donnés en argument, prends ceux-là ;
   - sinon, prends toutes les tâches `À FAIRE` ou `À CORRIGER` dont **toutes les dépendances sont `VALIDÉ`

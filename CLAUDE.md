@@ -26,6 +26,15 @@ aujourd'hui** tout en restant **fluide** (60 fps en mode performance sur console
 
 Le processus détaillé est dans `studio/WORKFLOW.md` et l'organigramme dans `studio/ORGANIGRAMME.md`.
 
+## Mode de fonctionnement
+
+Avant de lancer des agents, lis le champ `mode` de `studio/equipe.json`. En mode `econome`, applique les règles
+de la section « Modes de fonctionnement » de `studio/WORKFLOW.md` :
+- un seul agent à la fois ;
+- modèle Sonnet ;
+- revue allégée de la Boss ;
+- arrêt après chaque tâche validée, pour demander au propriétaire s'il faut continuer.
+
 ## Commandes du studio
 
 - `/sprint` : exécute les tâches prêtes du backlog, avec validation de la Boss après chacune.

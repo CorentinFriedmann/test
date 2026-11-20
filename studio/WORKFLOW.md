@@ -34,6 +34,23 @@
 6. **Itération** : si la tâche est refusée, elle retourne à l'agent avec les retours. Au bout de
    3 refus, le `producer` redécoupe la tâche ou la Boss revoit le périmètre.
 
+## Modes de fonctionnement
+
+Le mode actuel est indiqué dans `studio/equipe.json` (champ `mode`). Il se change avec
+`node studio-ui/mode.js normal` ou `node studio-ui/mode.js econome`.
+
+| | Mode **normal** | Mode **économe** |
+|---|---|---|
+| Modèles | Chaque agent a son modèle (Opus pour la direction et les leads) | Tous les agents sur **Sonnet** |
+| Parallélisme | Les tâches indépendantes sont lancées ensemble | **Un seul agent à la fois** |
+| Revue de pôle | Recommandée | **Supprimée**, sauf pour du code destiné à `game/` |
+| Revue de la Boss | Complète | **Allégée** (voir `.claude/agents/boss.md`), mais toujours obligatoire |
+| Tâches de suivi | Toutes les réserves deviennent des tâches | Seulement les réserves **bloquantes** ; les autres sont notées dans le rapport |
+| Rythme | Le sprint enchaîne les tâches | **Arrêt après chaque tâche validée** : la Coordination demande au propriétaire s'il faut continuer |
+| Priorité | Tout le backlog prêt | Le **chemin critique** vers la prochaine décision humaine d'abord |
+
+La règle n°1 (validation par la Boss) s'applique dans les deux modes.
+
 ## Jalons du projet
 
 | Jalon | Contenu | Validation |

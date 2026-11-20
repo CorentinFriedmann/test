@@ -111,7 +111,7 @@ async function correspondances(livrable) {
 async function lireEquipe() {
   try {
     const j = JSON.parse(await fsp.readFile(P.equipe, 'utf8'));
-    return { poles: j.poles || [], agents: j.agents || {} };
+    return { ...j, poles: j.poles || [], agents: j.agents || {} };
   } catch { return { poles: [], agents: {} }; }
 }
 
@@ -171,7 +171,8 @@ async function listerValidations() {
 async function etat() {
   const [{ agents, poles }, taches, validations, pitch] = await Promise.all([listerAgents(), lireTaches(), listerValidations(), lireTexte(P.pitch)]);
   const projet = (/^#\s+(.+)$/m.exec(pitch) || [])[1] || null;
-  return { projet, claude, statuts: backlog.STATUTS, reservesBoss: backlog.RESERVES_BOSS, agents, poles, taches, validations, runs: runs.list() };
+  const mode = (await lireEquipe()).mode || 'normal';
+  return { projet, mode, claude, statuts: backlog.STATUTS, reservesBoss: backlog.RESERVES_BOSS, agents, poles, taches, validations, runs: runs.list() };
 }
 
 // ---------------------------------------------------------------- actions

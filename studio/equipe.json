@@ -1,37 +1,193 @@
 {
   "poles": [
-    { "id": "direction", "nom": "Direction", "emoji": "👑", "couleur": "#f5b301" },
-    { "id": "design", "nom": "Design", "emoji": "🎲", "couleur": "#a78bfa" },
-    { "id": "programmation", "nom": "Programmation", "emoji": "💻", "couleur": "#38bdf8" },
-    { "id": "art", "nom": "Art", "emoji": "🎨", "couleur": "#f472b6" },
-    { "id": "audio", "nom": "Audio", "emoji": "🔊", "couleur": "#2dd4bf" },
-    { "id": "qa", "nom": "Qualité", "emoji": "🧪", "couleur": "#fb923c" },
-    { "id": "business", "nom": "Business et édition", "emoji": "💰", "couleur": "#4ade80" }
+    {
+      "id": "direction",
+      "nom": "Direction",
+      "emoji": "👑",
+      "couleur": "#f5b301"
+    },
+    {
+      "id": "design",
+      "nom": "Design",
+      "emoji": "🎲",
+      "couleur": "#a78bfa"
+    },
+    {
+      "id": "programmation",
+      "nom": "Programmation",
+      "emoji": "💻",
+      "couleur": "#38bdf8"
+    },
+    {
+      "id": "art",
+      "nom": "Art",
+      "emoji": "🎨",
+      "couleur": "#f472b6"
+    },
+    {
+      "id": "audio",
+      "nom": "Audio",
+      "emoji": "🔊",
+      "couleur": "#2dd4bf"
+    },
+    {
+      "id": "qa",
+      "nom": "Qualité",
+      "emoji": "🧪",
+      "couleur": "#fb923c"
+    },
+    {
+      "id": "business",
+      "nom": "Business et édition",
+      "emoji": "💰",
+      "couleur": "#4ade80"
+    }
   ],
   "agents": {
-    "boss": { "pole": "direction", "emoji": "👑", "titre": "Directrice exécutive · valide tout" },
-    "producer": { "pole": "direction", "emoji": "📅", "titre": "Producteur · chef de projet" },
-    "game-director": { "pole": "direction", "emoji": "🎬", "titre": "Directeur créatif" },
-    "game-designer": { "pole": "design", "emoji": "🎲", "titre": "Lead game designer · systèmes" },
-    "level-designer": { "pole": "design", "emoji": "🗺️", "titre": "Lead level designer" },
-    "narrative-designer": { "pole": "design", "emoji": "📖", "titre": "Lead narrative designer" },
-    "ui-ux-designer": { "pole": "design", "emoji": "🖱️", "titre": "Lead UX/UI designer" },
-    "technical-director": { "pole": "programmation", "emoji": "🧠", "titre": "Directeur technique" },
-    "gameplay-programmer": { "pole": "programmation", "emoji": "🕹️", "titre": "Programmeur gameplay C++" },
-    "graphics-programmer": { "pole": "programmation", "emoji": "✨", "titre": "Ingénieur rendu photoréaliste" },
-    "platform-engineer": { "pole": "programmation", "emoji": "🎮", "titre": "Ingénieur plateformes · PS5 / Xbox / PC" },
-    "online-engineer": { "pole": "programmation", "emoji": "🌐", "titre": "Ingénieur services en ligne" },
-    "build-engineer": { "pole": "programmation", "emoji": "🏗️", "titre": "Ingénieur build et DevOps" },
-    "art-director": { "pole": "art", "emoji": "🖼️", "titre": "Directeur artistique" },
-    "concept-artist": { "pole": "art", "emoji": "✏️", "titre": "Concept artist · key art" },
-    "environment-artist": { "pole": "art", "emoji": "🏔️", "titre": "Artiste environnement" },
-    "character-artist": { "pole": "art", "emoji": "🧑‍🎤", "titre": "Artiste personnages · MetaHuman" },
-    "technical-artist": { "pole": "art", "emoji": "🧪", "titre": "Artiste technique · shaders et VFX" },
-    "animator": { "pole": "art", "emoji": "🏃", "titre": "Lead animateur · cinématiques" },
-    "audio-director": { "pole": "audio", "emoji": "🎧", "titre": "Directeur audio" },
-    "qa-lead": { "pole": "qa", "emoji": "🐞", "titre": "Responsable qualité" },
-    "localization-manager": { "pole": "qa", "emoji": "🌍", "titre": "Responsable localisation" },
-    "marketing-publishing": { "pole": "business", "emoji": "📣", "titre": "Marketing et publishing" },
-    "business-affairs": { "pole": "business", "emoji": "💼", "titre": "Budget, financement et juridique" }
-  }
+    "boss": {
+      "pole": "direction",
+      "emoji": "👑",
+      "titre": "Directrice exécutive · valide tout",
+      "modeleNormal": "opus"
+    },
+    "producer": {
+      "pole": "direction",
+      "emoji": "📅",
+      "titre": "Producteur · chef de projet",
+      "modeleNormal": "sonnet"
+    },
+    "game-director": {
+      "pole": "direction",
+      "emoji": "🎬",
+      "titre": "Directeur créatif",
+      "modeleNormal": "opus"
+    },
+    "game-designer": {
+      "pole": "design",
+      "emoji": "🎲",
+      "titre": "Lead game designer · systèmes",
+      "modeleNormal": "sonnet"
+    },
+    "level-designer": {
+      "pole": "design",
+      "emoji": "🗺️",
+      "titre": "Lead level designer",
+      "modeleNormal": "sonnet"
+    },
+    "narrative-designer": {
+      "pole": "design",
+      "emoji": "📖",
+      "titre": "Lead narrative designer",
+      "modeleNormal": "sonnet"
+    },
+    "ui-ux-designer": {
+      "pole": "design",
+      "emoji": "🖱️",
+      "titre": "Lead UX/UI designer",
+      "modeleNormal": "sonnet"
+    },
+    "technical-director": {
+      "pole": "programmation",
+      "emoji": "🧠",
+      "titre": "Directeur technique",
+      "modeleNormal": "opus"
+    },
+    "gameplay-programmer": {
+      "pole": "programmation",
+      "emoji": "🕹️",
+      "titre": "Programmeur gameplay C++",
+      "modeleNormal": "sonnet"
+    },
+    "graphics-programmer": {
+      "pole": "programmation",
+      "emoji": "✨",
+      "titre": "Ingénieur rendu photoréaliste",
+      "modeleNormal": "opus"
+    },
+    "platform-engineer": {
+      "pole": "programmation",
+      "emoji": "🎮",
+      "titre": "Ingénieur plateformes · PS5 / Xbox / PC",
+      "modeleNormal": "sonnet"
+    },
+    "online-engineer": {
+      "pole": "programmation",
+      "emoji": "🌐",
+      "titre": "Ingénieur services en ligne",
+      "modeleNormal": "sonnet"
+    },
+    "build-engineer": {
+      "pole": "programmation",
+      "emoji": "🏗️",
+      "titre": "Ingénieur build et DevOps",
+      "modeleNormal": "sonnet"
+    },
+    "art-director": {
+      "pole": "art",
+      "emoji": "🖼️",
+      "titre": "Directeur artistique",
+      "modeleNormal": "opus"
+    },
+    "concept-artist": {
+      "pole": "art",
+      "emoji": "✏️",
+      "titre": "Concept artist · key art",
+      "modeleNormal": "sonnet"
+    },
+    "environment-artist": {
+      "pole": "art",
+      "emoji": "🏔️",
+      "titre": "Artiste environnement",
+      "modeleNormal": "sonnet"
+    },
+    "character-artist": {
+      "pole": "art",
+      "emoji": "🧑‍🎤",
+      "titre": "Artiste personnages · MetaHuman",
+      "modeleNormal": "sonnet"
+    },
+    "technical-artist": {
+      "pole": "art",
+      "emoji": "🧪",
+      "titre": "Artiste technique · shaders et VFX",
+      "modeleNormal": "sonnet"
+    },
+    "animator": {
+      "pole": "art",
+      "emoji": "🏃",
+      "titre": "Lead animateur · cinématiques",
+      "modeleNormal": "sonnet"
+    },
+    "audio-director": {
+      "pole": "audio",
+      "emoji": "🎧",
+      "titre": "Directeur audio",
+      "modeleNormal": "sonnet"
+    },
+    "qa-lead": {
+      "pole": "qa",
+      "emoji": "🐞",
+      "titre": "Responsable qualité",
+      "modeleNormal": "sonnet"
+    },
+    "localization-manager": {
+      "pole": "qa",
+      "emoji": "🌍",
+      "titre": "Responsable localisation",
+      "modeleNormal": "sonnet"
+    },
+    "marketing-publishing": {
+      "pole": "business",
+      "emoji": "📣",
+      "titre": "Marketing et publishing",
+      "modeleNormal": "sonnet"
+    },
+    "business-affairs": {
+      "pole": "business",
+      "emoji": "💼",
+      "titre": "Budget, financement et juridique",
+      "modeleNormal": "opus"
+    }
+  },
+  "mode": "econome"
 }

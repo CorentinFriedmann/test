@@ -126,6 +126,7 @@
   function rendreChrome() {
     const { etat } = S;
     $('#projet').textContent = etat.projet || 'Projet sans nom';
+    $('#mode').hidden = etat.mode !== 'econome';
     $('#cli').innerHTML = etat.claude.disponible
       ? `<span class="vert">●</span> ${e(etat.claude.version)}`
       : '<span class="rouge">●</span> CLI claude introuvable';
