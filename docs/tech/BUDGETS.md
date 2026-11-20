@@ -31,6 +31,10 @@ défini dans `ARCHITECTURE.md` §0.
 5. **La frame generation ne compte jamais** dans l'atteinte d'une fréquence cible.
 6. **On mesure avant d'optimiser**, sur des parcours de référence automatisés (§13).
 7. **Chaque ligne de budget a un responsable** (§13.3). Un dépassement suit la procédure du §13.4.
+8. **Les plateformes ne diffèrent que par le rendu, jamais par une information utile au jeu** (règle de
+   parité, `ARCHITECTURE.md` §10.1). Un budget ne peut donc jamais être tenu en réduisant, sur une seule
+   plateforme, ce que le joueur a besoin de voir ou d'entendre : quand un levier touche une information de
+   jeu, il s'applique à toutes les plateformes ou pas du tout.
 
 ---
 
@@ -195,6 +199,7 @@ marge de 1 Go sous la valeur publique approximative.
 | Appels de dessin hors Nanite | 2 000 | 1 500 | 1 200 |
 | Lumières locales projetant des ombres, visibles en même temps, sans MegaLights | 8 | 4 | 2 |
 | Lumières locales projetant des ombres avec MegaLights | 64 [À mesurer] | 16 [À mesurer] | Selon mesure |
+| Lumières ombrées **mobiles** (leur cache de VSM est invalidé à chaque frame), visibles en même temps | 2, dont une seule à longue portée | 2, dont une seule à longue portée, résolution d'ombre réduite | 2, selon mesure (§15.1) |
 | Lumières locales sans ombre | 64 | 32 | 16 |
 | Personnages squelettiques animés à pleine fréquence (au-delà : Animation Budget Allocator et mise à jour réduite) | 12 | 8 | 6 |
 | MetaHumans en LOD 0 ou 1 en jeu | 3 | 2 | 1 |

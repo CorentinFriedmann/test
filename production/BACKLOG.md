@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | T-001 | Trois concepts de jeu et pitch | game-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
-| T-003 | Choix techniques, architecture et budgets | technical-director | aucune | EN COURS |
+| T-003 | Choix techniques, architecture et budgets | technical-director | aucune | À FAIRE |
 | T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023 | À FAIRE |
 | T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
 | T-006 | GDD v1 | game-designer | T-005 | À FAIRE |
@@ -25,12 +25,13 @@
 | T-016 | Moodboards et key art du concept retenu | concept-artist | T-005 | À FAIRE |
 | T-017 | Plan de localisation | localization-manager | T-002, T-008, T-022 | À FAIRE |
 | T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | À FAIRE |
-| T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | EN REVUE BOSS |
+| T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | À FAIRE |
-| T-022 | Données de marché par région et par langue | marketing-publishing | aucune | EN COURS |
-| T-023 | Révision v1.1 des trois concepts | game-director | aucune | EN COURS |
-| T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | EN COURS |
+| T-022 | Données de marché par région et par langue | marketing-publishing | aucune | À CORRIGER |
+| T-023 | Révision v1.1 des trois concepts | game-director | aucune | À FAIRE |
+| T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
+| T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
 
 ---
 
@@ -55,7 +56,7 @@
 - **Validation** : `production/validations/T-002.md` (cycle 1, 2026-11-20) · **Réserves** : T-019, T-020, T-021, T-022
 
 ### T-003 : Choix techniques, architecture et budgets
-- **Assigné à** : `technical-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
+- **Assigné à** : `technical-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
 - **Livrables** : `docs/tech/ARCHITECTURE.md`, `docs/tech/BUDGETS.md`, `docs/tech/NORMES_CODE.md`
 - **Critères d'acceptation** :
   - [ ] Choix du moteur justifié (UE5 par défaut) et de sa version
@@ -194,19 +195,20 @@
   - [ ] Stratégie de patchs et de mises à jour
 
 ### T-019 : Corrections et compléments de l'étude de marché
-- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** : `docs/business/ETUDE_MARCHE.md` (mise à jour, avec un journal des modifications)
 - **Critères d'acceptation** :
-  - [ ] Incohérence sur les 2,4 Md$ résolue (section 1 point 3 et section 2.2) : période, périmètre et base de chaque pourcentage indiqués
-  - [ ] Contradiction sur la conversion des wishlists du Next Fest corrigée (section 9)
-  - [ ] Aucune donnée non relue à la source présentée comme vérifiée (intitulé de la section 8) ; toutes les étiquettes utilisées figurent dans la légende de la section 0
-  - [ ] Prix de référence exprimé dans la devise de base de Steam, avec la méthode de déclinaison régionale ; équivalence 39,99 € / 44,99 $ justifiée ou retirée
-  - [ ] Scénarios de la section 6.3 nommés de façon neutre, avec au moins un scénario sous 50 000 unités, un passage explicite des wishlists aux ventes de lancement puis à la longue traîne, et une recette nette estimée par unité, le tout signalé [Estimation]
-  - [ ] Effet des sorties day-one sur Game Pass (Hellblade II, Clair Obscur, Stalker 2, Atomfall) et de l'exclusivité Epic d'Alan Wake 2 analysé ; leçon 5.3.1 et ligne « Abonnements » de la section 6.2 revues
-  - [ ] Au moins 3 références photoréalistes de 2024-2025 plus proches de notre cible ajoutées au tableau 5.1 ; notes presse et prix de lancement manquants complétés ou maintenus en « non vérifié » avec la raison
-  - [ ] Saisonnalité présentée comme un calendrier récurrent (trois Next Fest par an, grandes soldes, fenêtres encombrées par les AAA), sans fenêtre de sortie datée avant la roadmap (T-010)
-  - [ ] URL et date de consultation pour chaque source (ou phrase de la section 0 corrigée) ; source nommée pour la commission Epic
+  - [x] Incohérence sur les 2,4 Md$ résolue (section 1 point 3 et section 2.2) : période, périmètre et base de chaque pourcentage indiqués
+  - [x] Contradiction sur la conversion des wishlists du Next Fest corrigée (section 9)
+  - [x] Aucune donnée non relue à la source présentée comme vérifiée (intitulé de la section 8) ; toutes les étiquettes utilisées figurent dans la légende de la section 0
+  - [x] Prix de référence exprimé dans la devise de base de Steam, avec la méthode de déclinaison régionale ; équivalence 39,99 € / 44,99 $ justifiée ou retirée
+  - [x] Scénarios de la section 6.3 nommés de façon neutre, avec au moins un scénario sous 50 000 unités, un passage explicite des wishlists aux ventes de lancement puis à la longue traîne, et une recette nette estimée par unité, le tout signalé [Estimation]
+  - [x] Effet des sorties day-one sur Game Pass (Hellblade II, Clair Obscur, Stalker 2, Atomfall) et de l'exclusivité Epic d'Alan Wake 2 analysé ; leçon 5.3.1 et ligne « Abonnements » de la section 6.2 revues
+  - [x] Au moins 3 références photoréalistes de 2024-2025 plus proches de notre cible ajoutées au tableau 5.1 ; notes presse et prix de lancement manquants complétés ou maintenus en « non vérifié » avec la raison
+  - [x] Saisonnalité présentée comme un calendrier récurrent (trois Next Fest par an, grandes soldes, fenêtres encombrées par les AAA), sans fenêtre de sortie datée avant la roadmap (T-010)
+  - [x] URL et date de consultation pour chaque source (ou phrase de la section 0 corrigée) ; source nommée pour la commission Epic
 - **Contexte / références** : réserves de la validation de T-002, retours 1 à 9 (`production/validations/T-002.md`). À valider avant que T-015 n'utilise les chiffres de l'étude.
+- **Validation** : `production/validations/T-019.md` (cycle 1, 2026-11-20) · **Réserves** : T-025 · **Décisions applicables à T-015 et T-023** : décision 1 (fourchette de prix 39,99 à 49,99 lue en USD, prix catalogue de base Steam ; recette nette en USD, conversion en euros sur la recette seulement), décisions 2 et 3 (abonnements chiffrés comme un seuil ; aucun des deux montants de 2,4 Md$ utilisé comme entrée chiffrée avant T-020)
 
 ### T-020 : Vérification à la source des chiffres de l'étude de marché
 - **Assigné à** : `marketing-publishing` · **Dépend de** : T-019 · **Jalon** : M0 · **Statut** : BLOQUÉ
@@ -232,7 +234,7 @@
 - **Contexte / références** : réserve de T-002 (retour 10). Alimente T-015 (scénarios par concept) et T-004.
 
 ### T-022 : Données de marché par région et par langue
-- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : EN COURS
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : À CORRIGER
 - **Livrables** : `docs/business/MARCHE_REGIONS.md`
 - **Critères d'acceptation** :
   - [ ] Répartition des joueurs Steam par langue (enquête matériel Steam) et poids des grandes régions sur PC et consoles, avec la source et le niveau de confiance de chaque chiffre
@@ -243,7 +245,7 @@
 - **Validation** : `production/validations/T-022.md` (cycle 1, 2026-11-20 : REFUSÉ, retours 1 à 8 et seuil d'acceptation du cycle 2)
 
 ### T-023 : Révision v1.1 des trois concepts
-- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
+- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
 - **Livrables** : `docs/vision/CONCEPTS.md` (version 1.1, avec un journal des modifications)
 - **Critères d'acceptation** :
   - [ ] Synthèse des risques (section 0 « Risque global », section 5 « Risque de production ») recalculée à partir des tableaux X.11, selon une règle d'agrégation écrite (probabilité × impact)
@@ -257,7 +259,7 @@
 - **Contexte / références** : réserves de la validation de T-001, retours 1 à 11 (`production/validations/T-001.md`). À valider avant T-004. Les effectifs et les durées des sections X.10, sur lesquels T-015 s'appuie, ne changent pas, sauf erreur à signaler à `business-affairs`.
 
 ### T-024 : Registre des licences et règles d'usage de l'IA générative
-- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
+- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
 - **Livrables** : `docs/legal/LICENCES.md`
 - **Critères d'acceptation** :
   - [ ] Registre au format défini (asset ou outil, origine, licence et version des conditions, date de consultation, usage commercial autorisé, plateformes, attribution, obligations, preuve d'acquisition), prêt à recevoir chaque asset tiers comme l'exige `CLAUDE.md`
@@ -266,3 +268,16 @@
   - [ ] Clauses types à prévoir dans les contrats des comédiens : cession des droits à l'image et à la voix, consentement explicite à la réplique numérique et à l'animation faciale générée depuis l'audio, cadre syndical éventuel selon le pays des comédiens
   - [ ] Mention explicite : brouillon à faire valider par un juriste ; aucune acceptation de conditions, aucun compte créé et aucun achat sans l'accord de l'humain propriétaire du projet ; les pages inaccessibles sont signalées « non vérifié »
 - **Contexte / références** : réserve de la validation de T-001 (retour 12 ; `docs/vision/CONCEPTS.md`, section 8). Aucune tâche ne couvrait ce registre. Prérequis à toute importation d'asset tiers dans `game/` ou `docs/art/` ; alimente T-015 (coûts de licence) et T-004 (critère 11 de la grille marché).
+
+### T-025 : Finitions de l'étude de marché v2 (scénarios, sources, étiquettes)
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+- **Livrables** : `docs/business/ETUDE_MARCHE.md` (version 2.1, avec une entrée dans le journal des modifications)
+- **Critères d'acceptation** :
+  - [ ] Section 6.3 : recette nette cohérente avec la chaîne du modèle ajoutée au tableau des scénarios (pondération lancement / longue traîne qu'implique le multiplicateur × 3, soit ≈0,41 du prix catalogue) ; il est écrit que la borne 0,51 suppose toutes les ventes aux conditions du lancement
+  - [ ] Section 6.3 : sensibilités symétriques (variations défavorables au moins aussi fortes que les favorables : part de Steam au-dessus de 50 %, conversion sous 0,10, longue traîne × 2), chacune sourcée ou signalée [Estimation] ; contradiction « indépendantes de la qualité du jeu » / « corrélation » supprimée
+  - [ ] Décision 1 de `production/validations/T-019.md` reportée dans les sections 1 (point 6), 6.2 (paragraphe « Décision à arbitrer » remplacé), 6.3 (montants en USD) et 10 (critère 6)
+  - [ ] Section 13 complétée pour chaque source nommée dans le corps (au minimum GameBusiness.jp, SteamDB, Sportskeeda, Comicbook, MP1st, Robots Over Dinosaurs, Jefferies), avec l'URL renvoyée par la recherche ou « URL non retrouvée », et la passe ou la date
+  - [ ] Légende : [Estimation] réservée aux calculs et hypothèses du studio ; estimations tierces (Raijin, SteamDB, agrégateurs) requalifiées en [Analyste], avec le site nommé
+  - [ ] Section 9 : rapport de 0,752 reformulé en indices relatifs (volume de wishlists, indice d'achats), sans laisser croire à un taux de conversion de 75 %
+  - [ ] Aucune nouvelle donnée de marché sans source ; aucune page ouverte hors de l'accès réseau autorisé
+- **Contexte / références** : réserves de la validation de T-019, retours 1 à 6 (`production/validations/T-019.md`). Non bloquante pour T-015 : `business-affairs` applique directement les décisions 1 à 3 de cette validation. À faire avant T-020, qui modifie le même fichier.
