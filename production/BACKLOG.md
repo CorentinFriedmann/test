@@ -28,7 +28,7 @@
 | T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | EN COURS |
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | À FAIRE |
-| T-022 | Données de marché par région et par langue | marketing-publishing | aucune | EN COURS |
+| T-022 | Données de marché par région et par langue | marketing-publishing | aucune | EN REVUE BOSS |
 
 ---
 
@@ -229,7 +229,7 @@
 - **Contexte / références** : réserve de T-002 (retour 10). Alimente T-015 (scénarios par concept) et T-004.
 
 ### T-022 : Données de marché par région et par langue
-- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : EN COURS
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : EN REVUE BOSS
 - **Livrables** : `docs/business/MARCHE_REGIONS.md`
 - **Critères d'acceptation** :
   - [ ] Répartition des joueurs Steam par langue (enquête matériel Steam) et poids des grandes régions sur PC et consoles, avec la source et le niveau de confiance de chaque chiffre
