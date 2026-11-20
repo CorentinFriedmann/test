@@ -67,6 +67,7 @@
   - [ ] Un concept retenu, avec sa justification (marché, faisabilité technique, budget, vision)
   - [ ] Périmètre cible fixé (durée de jeu, taille du monde, solo ou multijoueur)
   - [ ] **Proposition présentée à l'humain propriétaire du projet pour accord final**
+- **Contexte / références** : poids et critères éliminatoires de la grille marché fixés dans `production/validations/T-002.md` (décision 3). La proposition indique le niveau de confiance des données de marché (T-020 faite ou non).
 
 ### T-005 : Piliers et pitch final
 - **Assigné à** : `game-director` · **Dépend de** : T-004 · **Jalon** : M1 · **Statut** : À FAIRE
@@ -153,13 +154,14 @@
   - [ ] Plan d'accessibilité (sous-titres, daltonisme, difficulté, aides motrices) inspiré des Xbox Accessibility Guidelines
 
 ### T-015 : Chiffrage des 3 concepts et pistes de financement
-- **Assigné à** : `business-affairs` · **Dépend de** : T-001, T-002, T-003 · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `business-affairs` · **Dépend de** : T-001, T-002, T-003, T-019, T-021 · **Jalon** : M0 · **Statut** : À FAIRE
 - **Livrables** : `docs/business/BUDGET.md`, `docs/business/FINANCEMENT.md`
 - **Critères d'acceptation** :
   - [ ] Fourchette de budget et durée de production pour chacun des 3 concepts, avec les postes de coût détaillés
   - [ ] Scénarios de ventes et point mort par concept, à partir de l'étude de marché
   - [ ] Pistes de financement avec critères d'éligibilité, sources officielles et dates de consultation
   - [ ] Mention explicite : brouillon à faire valider par un expert-comptable
+- **Contexte / références** : décisions de la Boss sur T-002 (`production/validations/T-002.md`, décisions 1 et 2). Scénario de base : sortie simultanée sur PC, PS5 et Xbox Series X|S, avec la certification, les kits de développement et les tests consoles chiffrés. Les chiffres [Mémoire] et « non vérifié » de l'étude ne servent que d'hypothèses de sensibilité nommées.
 
 ### T-016 : Moodboards et key art du concept retenu
 - **Assigné à** : `concept-artist` · **Revue de pôle** : art-director · **Dépend de** : T-005 · **Jalon** : M1 · **Statut** : À FAIRE
@@ -171,7 +173,7 @@
   - [ ] Licence et origine de chaque image consignées
 
 ### T-017 : Plan de localisation
-- **Assigné à** : `localization-manager` · **Dépend de** : T-002, T-008 · **Jalon** : M1 · **Statut** : À FAIRE
+- **Assigné à** : `localization-manager` · **Dépend de** : T-002, T-008, T-022 · **Jalon** : M1 · **Statut** : À FAIRE
 - **Livrables** : `docs/loc/PLAN_LOCALISATION.md`, `docs/loc/PIPELINE.md`
 - **Critères d'acceptation** :
   - [ ] Langues cibles et niveau par langue (texte, sous-titres, doublage), justifiés par le marché
@@ -187,3 +189,51 @@
   - [ ] Services choisis (EOS, Steamworks, services des plateformes) avec leurs coûts
   - [ ] Plan de télémétrie : événements, consentement, minimisation et conservation des données (RGPD)
   - [ ] Stratégie de patchs et de mises à jour
+
+### T-019 : Corrections et compléments de l'étude de marché
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+- **Livrables** : `docs/business/ETUDE_MARCHE.md` (mise à jour, avec un journal des modifications)
+- **Critères d'acceptation** :
+  - [ ] Incohérence sur les 2,4 Md$ résolue (section 1 point 3 et section 2.2) : période, périmètre et base de chaque pourcentage indiqués
+  - [ ] Contradiction sur la conversion des wishlists du Next Fest corrigée (section 9)
+  - [ ] Aucune donnée non relue à la source présentée comme vérifiée (intitulé de la section 8) ; toutes les étiquettes utilisées figurent dans la légende de la section 0
+  - [ ] Prix de référence exprimé dans la devise de base de Steam, avec la méthode de déclinaison régionale ; équivalence 39,99 € / 44,99 $ justifiée ou retirée
+  - [ ] Scénarios de la section 6.3 nommés de façon neutre, avec au moins un scénario sous 50 000 unités, un passage explicite des wishlists aux ventes de lancement puis à la longue traîne, et une recette nette estimée par unité, le tout signalé [Estimation]
+  - [ ] Effet des sorties day-one sur Game Pass (Hellblade II, Clair Obscur, Stalker 2, Atomfall) et de l'exclusivité Epic d'Alan Wake 2 analysé ; leçon 5.3.1 et ligne « Abonnements » de la section 6.2 revues
+  - [ ] Au moins 3 références photoréalistes de 2024-2025 plus proches de notre cible ajoutées au tableau 5.1 ; notes presse et prix de lancement manquants complétés ou maintenus en « non vérifié » avec la raison
+  - [ ] Saisonnalité présentée comme un calendrier récurrent (trois Next Fest par an, grandes soldes, fenêtres encombrées par les AAA), sans fenêtre de sortie datée avant la roadmap (T-010)
+  - [ ] URL et date de consultation pour chaque source (ou phrase de la section 0 corrigée) ; source nommée pour la commission Epic
+- **Contexte / références** : réserves de la validation de T-002, retours 1 à 9 (`production/validations/T-002.md`). À valider avant que T-015 n'utilise les chiffres de l'étude.
+
+### T-020 : Vérification à la source des chiffres de l'étude de marché
+- **Assigné à** : `marketing-publishing` · **Dépend de** : T-019 · **Jalon** : M0 · **Statut** : BLOQUÉ
+- **Livrables** : `docs/business/ETUDE_MARCHE.md` (version vérifiée)
+- **Critères d'acceptation** :
+  - [ ] Chaque chiffre [Annoncé] ou [Analyste] relu sur sa page d'origine ou sur la source primaire (communiqué de l'éditeur, rapport financier, documentation publique de Steamworks), avec l'URL et la date de consultation
+  - [ ] Chaque chiffre [Mémoire] confirmé et requalifié, ou retiré
+  - [ ] Écart Alinea / Sensor Tower sur les revenus Steam expliqué (périmètre, méthode) et valeur à utiliser en T-015 justifiée
+  - [ ] Commissions de Steam, Epic, PlayStation et Xbox confirmées par des documents publics ; à défaut, maintenues en [Mémoire] et signalées à `business-affairs`
+  - [ ] Aucune connexion à un compte développeur et aucun abonnement payant à un outil de données sans l'accord de l'humain propriétaire ; conditions d'utilisation des sites respectées
+  - [ ] Journal des modifications : chiffres confirmés, corrigés ou retirés
+- **Contexte / références** : réserve de T-002 (retour 12). Tâche bloquée tant que l'humain propriétaire du projet n'a pas décidé d'autoriser l'accès en lecture aux sources (sections 0 et 12 de l'étude) ou fourni lui-même les pages et les exports. Obligatoire avant tout usage des chiffres hors du studio (dossier de financement, éditeur, investisseur).
+
+### T-021 : Données de marché par concept et par genre
+- **Assigné à** : `marketing-publishing` · **Dépend de** : T-001, T-019 · **Jalon** : M0 · **Statut** : À FAIRE
+- **Livrables** : `docs/business/MARCHE_PAR_CONCEPT.md`
+- **Critères d'acceptation** :
+  - [ ] Pour le genre de chacun des 3 concepts de T-001 : nombre de jeux sortis sur Steam par an (2024 à 2026), ventes ou revenus estimés des titres dominants, part des nouvelles IP, avec la source et le niveau de confiance de chaque chiffre
+  - [ ] Pour chaque concept : 5 jeux comparables sortis depuis 2022 (ventes estimées, notes, prix de lancement, plateformes, présence sur un abonnement)
+  - [ ] Bases installées PS5 et Xbox Series (communications officielles ou analystes) et part du Steam Deck
+  - [ ] Notes proposées pour chaque concept sur les critères 1, 3, 6 et 9 de la grille marché (section 10 de l'étude), argumentées ; la note finale reste celle de la Boss en T-004
+  - [ ] Les extractions impossibles sans accès réseau autorisé sont signalées « non vérifié », jamais estimées sans source
+- **Contexte / références** : réserve de T-002 (retour 10). Alimente T-015 (scénarios par concept) et T-004.
+
+### T-022 : Données de marché par région et par langue
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : À FAIRE
+- **Livrables** : `docs/business/MARCHE_REGIONS.md`
+- **Critères d'acceptation** :
+  - [ ] Répartition des joueurs Steam par langue (enquête matériel Steam) et poids des grandes régions sur PC et consoles, avec la source et le niveau de confiance de chaque chiffre
+  - [ ] Pour au moins 3 jeux de référence de l'étude, répartition des avis ou des ventes par langue ou par région quand elle est disponible, signalée comme estimation
+  - [ ] Recommandation de langues en 3 paliers (texte, sous-titres, doublage), transmise à `localization-manager` pour T-017
+  - [ ] Points d'attention par région (classification, conditions de distribution) signalés sans conclusion juridique, pour relecture par un juriste
+- **Contexte / références** : réserve de T-002 (retour 11). Prérequis de T-017.
