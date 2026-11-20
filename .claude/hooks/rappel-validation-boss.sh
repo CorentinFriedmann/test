@@ -5,6 +5,11 @@
 # l'interface graphique est donc pris en compte automatiquement.
 input="$(cat)"
 
+# Agent lancé en arrière-plan : rien n'est encore remis, le rappel viendra avec la notification de fin.
+if printf '%s' "$input" | grep -Eqi 'async_launched|Async agent launched|"run_in_background"[[:space:]]*:[[:space:]]*true'; then
+  exit 0
+fi
+
 racine="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"
 cible="$(printf '%s' "$input" | grep -Eo '"subagent_type"[[:space:]]*:[[:space:]]*"[a-z0-9-]+"' | head -n1 | sed -E 's/.*"([a-z0-9-]+)"$/\1/')"
 
