@@ -7,7 +7,7 @@
 
 | ID | Tâche | Assigné à | Dépend de | Statut |
 |---|---|---|---|---|
-| T-001 | Trois concepts de jeu et pitch | game-director | aucune | EN REVUE BOSS |
+| T-001 | Trois concepts de jeu et pitch | game-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | EN COURS |
 | T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015 | À FAIRE |
@@ -25,21 +25,24 @@
 | T-016 | Moodboards et key art du concept retenu | concept-artist | T-005 | À FAIRE |
 | T-017 | Plan de localisation | localization-manager | T-002, T-008, T-022 | À FAIRE |
 | T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | À FAIRE |
-| T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | EN COURS |
+| T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | EN REVUE BOSS |
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | À FAIRE |
 | T-022 | Données de marché par région et par langue | marketing-publishing | aucune | EN REVUE BOSS |
+| T-023 | Révision v1.1 des trois concepts | game-director | aucune | À FAIRE |
+| T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
 
 ---
 
 ### T-001 : Trois concepts de jeu et pitch
-- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** : `docs/vision/CONCEPTS.md`
 - **Critères d'acceptation** :
-  - [ ] 3 concepts nettement différents (genre, univers, boucle de gameplay, USP)
-  - [ ] Chaque concept tire parti du rendu photoréaliste (Lumen, Nanite, MetaHuman)
-  - [ ] Pour chacun : public cible, 3 jeux comparables, taille d'équipe et durée estimées, risques
-  - [ ] Une recommandation argumentée
+  - [x] 3 concepts nettement différents (genre, univers, boucle de gameplay, USP)
+  - [x] Chaque concept tire parti du rendu photoréaliste (Lumen, Nanite, MetaHuman)
+  - [x] Pour chacun : public cible, 3 jeux comparables, taille d'équipe et durée estimées, risques
+  - [x] Une recommandation argumentée
+- **Validation** : `production/validations/T-001.md` (cycle 1, 2026-11-20) · **Réserves** : T-023, T-024
 
 ### T-002 : Étude de marché et positionnement
 - **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
@@ -191,7 +194,7 @@
   - [ ] Stratégie de patchs et de mises à jour
 
 ### T-019 : Corrections et compléments de l'étude de marché
-- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN REVUE BOSS
 - **Livrables** : `docs/business/ETUDE_MARCHE.md` (mise à jour, avec un journal des modifications)
 - **Critères d'acceptation** :
   - [ ] Incohérence sur les 2,4 Md$ résolue (section 1 point 3 et section 2.2) : période, périmètre et base de chaque pourcentage indiqués
@@ -237,3 +240,28 @@
   - [ ] Recommandation de langues en 3 paliers (texte, sous-titres, doublage), transmise à `localization-manager` pour T-017
   - [ ] Points d'attention par région (classification, conditions de distribution) signalés sans conclusion juridique, pour relecture par un juriste
 - **Contexte / références** : réserve de T-002 (retour 11). Prérequis de T-017.
+
+### T-023 : Révision v1.1 des trois concepts
+- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+- **Livrables** : `docs/vision/CONCEPTS.md` (version 1.1, avec un journal des modifications)
+- **Critères d'acceptation** :
+  - [ ] Synthèse des risques (section 0 « Risque global », section 5 « Risque de production ») recalculée à partir des tableaux X.11, selon une règle d'agrégation écrite (probabilité × impact)
+  - [ ] Note « 60 fps » d'AVEUX (section 6.1) et ligne « Risque 60 fps » du tableau 5 mises en cohérence avec la section 1.2 et le tableau C.6 (coût des visages en gros plan), en attendant la mesure de T-003 ; grille recalculée
+  - [ ] Règle de parité écrite pour les trois concepts : la Series S et le Steam Deck ne diffèrent que par le rendu, jamais par une information utile au jeu (brouillard d'ESTRAN en A.6 revu) ; la logique de jeu (faisceau, bruit, visibilité) ne dépend pas des réglages de rendu
+  - [ ] Pire cas technique d'ESTRAN décrit et ajouté à la condition 1 de la section 6.3 (nuit, pleine mer, faisceau du phare en mouvement et lampe du joueur, brouillard volumétrique, reflets sur l'eau) ; coexistence des deux sources lumineuses précisée en A.6
+  - [ ] Pour chaque concept : références de design séparées des concurrents directs ; au moins 2 concurrents directs sortis depuis 2022, avec « ce qui nous en distingue » (pistes du retour 5 de la validation, à vérifier) ; aucun chiffre de ventes (c'est le rôle de T-021)
+  - [ ] Pour chaque concept : capsule principale décrite (une image fixe et le titre) qui fait comprendre le jeu en 3 secondes, et contenu de la démo publique (20 à 30 min) avec ce qu'elle dévoile
+  - [ ] Prix : pour ESTRAN et AVEUX, argument de contenu pour 39,99 € ou justification d'un prix inférieur ; plateformes reformulées en poids attendu des ventes, avec une sortie simultanée (A.8, B.8, C.8) ; équivalent ESRB anticipé pour chaque concept
+  - [ ] Faits datés ou corrigés : Hellblade II (section 1.2), carton du trailer d'ESTRAN (A.12) ; test de sensibilité de la grille étendu aux notes (section 6.1)
+- **Contexte / références** : réserves de la validation de T-001, retours 1 à 11 (`production/validations/T-001.md`). À valider avant T-004. Les effectifs et les durées des sections X.10, sur lesquels T-015 s'appuie, ne changent pas, sauf erreur à signaler à `business-affairs`.
+
+### T-024 : Registre des licences et règles d'usage de l'IA générative
+- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+- **Livrables** : `docs/legal/LICENCES.md`
+- **Critères d'acceptation** :
+  - [ ] Registre au format défini (asset ou outil, origine, licence et version des conditions, date de consultation, usage commercial autorisé, plateformes, attribution, obligations, preuve d'acquisition), prêt à recevoir chaque asset tiers comme l'exige `CLAUDE.md`
+  - [ ] Conditions en vigueur résumées, avec la source officielle et la date de consultation : contrat de licence d'Unreal Engine (redevances, conditions pour les consoles), licences de Fab et statut des Megascans depuis la migration vers Fab, licence MetaHuman (y compris pour des visages créés à partir de scans de comédiens) ; coûts et redevances transmis à T-015
+  - [ ] Obligations de divulgation de l'IA générative par boutique (Steam, PlayStation, Xbox, Epic), d'après les seules informations publiques, et règle interne : ce que les agents IA du studio peuvent produire pour le jeu livré, et comment c'est tracé
+  - [ ] Clauses types à prévoir dans les contrats des comédiens : cession des droits à l'image et à la voix, consentement explicite à la réplique numérique et à l'animation faciale générée depuis l'audio, cadre syndical éventuel selon le pays des comédiens
+  - [ ] Mention explicite : brouillon à faire valider par un juriste ; aucune acceptation de conditions, aucun compte créé et aucun achat sans l'accord de l'humain propriétaire du projet ; les pages inaccessibles sont signalées « non vérifié »
+- **Contexte / références** : réserve de la validation de T-001 (retour 12 ; `docs/vision/CONCEPTS.md`, section 8). Aucune tâche ne couvrait ce registre. Prérequis à toute importation d'asset tiers dans `game/` ou `docs/art/` ; alimente T-015 (coûts de licence) et T-004 (critère 11 de la grille marché).
