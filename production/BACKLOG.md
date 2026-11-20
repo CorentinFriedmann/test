@@ -25,10 +25,10 @@
 | T-016 | Moodboards et key art du concept retenu | concept-artist | T-005 | À FAIRE |
 | T-017 | Plan de localisation | localization-manager | T-002, T-008, T-022 | À FAIRE |
 | T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | À FAIRE |
-| T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | À FAIRE |
+| T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | EN COURS |
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | À FAIRE |
-| T-022 | Données de marché par région et par langue | marketing-publishing | aucune | À FAIRE |
+| T-022 | Données de marché par région et par langue | marketing-publishing | aucune | EN COURS |
 
 ---
 
@@ -191,7 +191,7 @@
   - [ ] Stratégie de patchs et de mises à jour
 
 ### T-019 : Corrections et compléments de l'étude de marché
-- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
 - **Livrables** : `docs/business/ETUDE_MARCHE.md` (mise à jour, avec un journal des modifications)
 - **Critères d'acceptation** :
   - [ ] Incohérence sur les 2,4 Md$ résolue (section 1 point 3 et section 2.2) : période, périmètre et base de chaque pourcentage indiqués
@@ -229,7 +229,7 @@
 - **Contexte / références** : réserve de T-002 (retour 10). Alimente T-015 (scénarios par concept) et T-004.
 
 ### T-022 : Données de marché par région et par langue
-- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : À FAIRE
+- **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : EN COURS
 - **Livrables** : `docs/business/MARCHE_REGIONS.md`
 - **Critères d'acceptation** :
   - [ ] Répartition des joueurs Steam par langue (enquête matériel Steam) et poids des grandes régions sur PC et consoles, avec la source et le niveau de confiance de chaque chiffre
