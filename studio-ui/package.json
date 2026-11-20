@@ -1,0 +1,14 @@
+{
+  "name": "studio-ui",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interface graphique locale pour piloter le studio d'agents IA (équipe, backlog, validations de la Boss, exécutions).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test \"test/**/*.test.js\""
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

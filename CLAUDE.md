@@ -30,6 +30,9 @@ Le processus détaillé est dans `studio/WORKFLOW.md` et l'organigramme dans `st
 
 - `/sprint` : exécute les tâches prêtes du backlog, avec validation de la Boss après chacune.
 - `/revue-boss T-XXX` : soumet une tâche précise à la Boss.
+- Interface graphique : `node studio-ui/server.js` (voir `studio-ui/README.md`). Elle lance des sessions
+  non interactives : en cas de décision humaine nécessaire, s'arrêter et poser la question dans la réponse finale.
+- Pôles, emojis et titres des agents : `studio/equipe.json`. Tout nouvel agent doit y être ajouté.
 
 ## Stack technique de référence
 

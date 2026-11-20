@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="studio-token" content="__STUDIO_TOKEN__">
+  <title>Studio IA</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%AE%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="nav">
+      <div class="marque">
+        <span class="logo">🎮</span>
+        <div><strong>Studio IA</strong><small id="projet">Projet sans nom</small></div>
+      </div>
+      <nav>
+        <a href="#tableau" data-vue="tableau"><span class="ic">🏠</span><span class="lib">Tableau de bord</span></a>
+        <a href="#equipe" data-vue="equipe"><span class="ic">👥</span><span class="lib">Équipe</span><b class="pastille" id="nb-actifs" hidden></b></a>
+        <a href="#backlog" data-vue="backlog"><span class="ic">📋</span><span class="lib">Backlog</span><b class="pastille or" id="nb-revue" hidden></b></a>
+        <a href="#validations" data-vue="validations"><span class="ic">👑</span><span class="lib">Validations</span></a>
+        <a href="#executions" data-vue="executions"><span class="ic">▶️</span><span class="lib">Exécutions</span><b class="pastille vert" id="nb-runs" hidden></b></a>
+      </nav>
+      <button class="btn primaire large" data-action="lancer" data-type="sprint">▶ Lancer le sprint</button>
+      <div class="cli" id="cli">Connexion…</div>
+    </aside>
+    <main>
+      <div id="bandeau"></div>
+      <div id="vue"><p class="vide">Chargement du studio…</p></div>
+    </main>
+  </div>
+  <div id="modal" class="modal" hidden></div>
+  <div id="toasts" aria-live="polite"></div>
+  <script src="/markdown.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
