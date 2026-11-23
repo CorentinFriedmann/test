@@ -1,0 +1,25 @@
+param_id,value,unit,status,note
+island_radius,60,m,A_REGLER,rayon nominal de l'ile (prototype ISLAND_RADIUS)
+map_radius,75,m,FIXE,mur invisible : 1.25 x island_radius (GDD 9 cas 13)
+lighthouse_x,-8,m,A_REGLER,position du phare (prototype)
+lighthouse_z,-14,m,A_REGLER,position du phare (prototype)
+lighthouse_collision_radius,2.6,m,A_REGLER,rayon de la tour : le joueur ne la traverse pas
+player_start_offset,4.0,m,A_REGLER,distance du depart du joueur au centre du phare (sur la plateforme)
+other_ground_max,2.65,m,FIXE,GDD 17 : le reste de l'ile reste strictement sous cette altitude
+terrain_dome_height,3.2,m,A_REGLER,hauteur du dome (prototype)
+terrain_dome_offset,-0.9,m,A_REGLER,decalage vertical du dome (prototype)
+terrain_noise_low_amp,2.2,m,A_REGLER,amplitude du bruit basse frequence (prototype)
+terrain_noise_low_freq,0.08,1/m,A_REGLER,frequence du bruit basse frequence
+terrain_noise_high_amp,0.35,m,A_REGLER,amplitude du bruit haute frequence
+terrain_noise_high_freq,0.3,1/m,A_REGLER,frequence du bruit haute frequence
+terrain_softcap_start,2.2,m,A_REGLER,au dessus de cette altitude le relief est comprime vers other_ground_max
+terrain_softcap_max,2.55,m,A_REGLER,asymptote du relief hors plateforme (doit rester sous other_ground_max)
+station_altitude_tolerance,0.10,m,FIXE,GDD 8 : ecart admis entre le sol et l'altitude de l'echelle
+station_min_separation,15,m,A_REGLER,distance minimale entre deux echelles
+place_S1_flot_dist_min,35,m,FIXE,GDD 8 : distance au phare
+place_S1_flot_dist_max,50,m,FIXE,GDD 8 : distance au phare
+place_S2_haute_dist_min,25,m,FIXE,GDD 8 : distance au phare
+place_S2_haute_dist_max,40,m,FIXE,GDD 8 : distance au phare
+place_S3_jusant_dist_min,35,m,FIXE,GDD 8 : distance au phare
+place_S3_jusant_dist_max,50,m,FIXE,GDD 8 : distance au phare
+drown_recovery_s,4,s,A_REGLER,GDD 3 : duree de vidage complet du compteur de souffle des que d < 1.40

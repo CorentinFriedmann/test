@@ -1,0 +1,7 @@
+band_id,depth_min_m,depth_max_m,speed_mult,run_allowed,noise_mult,safe_from_threat,drown_timer_s,note
+zone_seche,-99.00,-0.25,1.00,1,0.25,1,0,d = niveau d'eau moins altitude du sol ; zone seche = abri ; la Laisse ne peut pas toucher le joueur
+berge,-0.25,0.15,1.00,1,0.50,0,0,sol mouille ; pas un abri
+gue,0.15,0.60,0.80,1,1.00,0,0,eau a la cheville au genou ; debut du bruit dans l'eau
+eau_profonde,0.60,1.10,0.55,0,1.50,0,0,eau a la cuisse ; course impossible
+eau_haute,1.10,1.40,0.35,0,2.00,0,0,eau a la taille ; presque nage
+submersion,1.40,99.00,0.25,0,2.00,0,8,tete sous l'eau ; defaite par noyade si le compteur atteint 8 s

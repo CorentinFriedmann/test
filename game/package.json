@@ -1,0 +1,23 @@
+{
+  "name": "estran",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ESTRAN, version courte une maree (T-029)",
+  "type": "module",
+  "license": "UNLICENSED",
+  "scripts": {
+    "gen": "node scripts/gen-data.mjs",
+    "sync-data": "node scripts/sync-data.mjs",
+    "build": "node scripts/build.mjs",
+    "test:unit": "node scripts/gen-data.mjs && node --test \"tests/unit/*.test.js\"",
+    "test:e2e": "node tests/e2e/run.cjs",
+    "test": "npm run test:unit && npm run test:e2e",
+    "all": "npm ci && npm run build && npm test"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

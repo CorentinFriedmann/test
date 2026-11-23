@@ -1,0 +1,72 @@
+param_id,category,value,unit,status,note
+sim_step,global,0.0333,s,FIXE,pas de simulation logique fixe (30 Hz) ; independant du rendu et des fps
+sim_seed,global,2026,int,FIXE,graine du generateur pseudo-aleatoire (mulberry32) ; meme graine = meme partie
+slice_duration,global,480,s,FIXE,duree de la tranche P2 = un cycle de maree (voir maree.csv)
+player_eye_height,joueur,1.70,m,FIXE,valeur du prototype
+player_speed_slow,joueur,1.50,m/s,A_REGLER,marche lente (touche C ou stick incline sous 55 pour cent)
+player_speed_walk,joueur,3.00,m/s,FIXE,valeur du prototype
+player_speed_run,joueur,5.50,m/s,FIXE,valeur du prototype
+player_stick_slow_threshold,joueur,0.55,ratio,A_REGLER,deflexion du stick sous laquelle la marche est lente
+player_speed_smooth,joueur,0.20,s,A_REGLER,lissage du changement de multiplicateur de vitesse entre deux bandes d'eau
+noise_idle,bruit,0,m,FIXE,rayon de base immobile ou interaction nulle
+noise_slow,bruit,4,m,A_REGLER,rayon de base marche lente
+noise_walk,bruit,8,m,A_REGLER,rayon de base marche
+noise_run,bruit,18,m,A_REGLER,rayon de base course
+noise_interact,bruit,4,m,A_REGLER,rayon de base pendant un releve ou le remontage du phare
+noise_debris,bruit,30,m,A_REGLER,impulsion fixe de 1 s quand le joueur heurte un debris ; non multipliee par la bande d'eau
+debris_count,bruit,4,count,A_REGLER,nombre de debris poses sur l'estran (seaux caisses) ; rayon de collision 0.6 m
+debris_collision_radius,bruit,0.60,m,A_REGLER,rayon de collision du debris
+noise_location_error,bruit,3.0,m,A_REGLER,erreur de position percue par la Laisse (tirage dans un disque)
+threat_spawn_level,menace,-0.20,m,A_REGLER,la Laisse apparait quand la maree montante atteint ce niveau (t = 57 s)
+threat_despawn_level,menace,-0.30,m,A_REGLER,la Laisse disparait quand la maree descendante passe sous ce niveau (t = 431 s)
+threat_spawn_dist_min,menace,45,m,A_REGLER,distance minimale au joueur du point d'apparition
+threat_spawn_dist_max,menace,70,m,A_REGLER,distance maximale au joueur du point d'apparition
+threat_water_min_depth,menace,0.30,m,A_REGLER,profondeur minimale de la case ou la Laisse peut se tenir
+threat_speed_roam,menace,2.0,m/s,A_REGLER,vitesse en etat RODE
+threat_speed_inquire,menace,3.5,m/s,A_REGLER,vitesse en etat ENQUETE
+threat_speed_hunt,menace,4.0,m/s,A_REGLER,vitesse en etat TRAQUE ; plus lente que la course du joueur en gue (4.4 m/s)
+threat_speed_flee,menace,4.5,m/s,A_REGLER,vitesse en etat REPLI
+threat_waypoint_min,menace,15,m,A_REGLER,distance minimale au joueur des points de ronde
+threat_waypoint_max,menace,45,m,A_REGLER,distance maximale au joueur des points de ronde
+threat_waypoint_period_min,menace,8,s,A_REGLER,duree minimale entre deux points de ronde
+threat_waypoint_period_max,menace,14,s,A_REGLER,duree maximale entre deux points de ronde
+threat_curiosity_after,menace,45,s,A_REGLER,si le joueur est dans l'eau (gue ou plus) sans contact depuis ce delai la ronde est tiree a 20 35 m du joueur
+threat_curiosity_dist_min,menace,20,m,A_REGLER,distance minimale des points de ronde en mode curiosite
+threat_curiosity_dist_max,menace,35,m,A_REGLER,distance maximale des points de ronde en mode curiosite
+threat_presence_radius,menace,4.0,m,A_REGLER,rayon de presence : le joueur hors zone seche a moins de cette distance est entendu meme immobile
+threat_hear_to_inquire,menace,0.4,s,A_REGLER,duree cumulee d'ecoute pour passer de RODE a ENQUETE
+threat_hear_to_hunt,menace,1.2,s,A_REGLER,duree cumulee d'ecoute en ENQUETE pour passer a TRAQUE
+threat_hunt_dist_override,menace,6.0,m,A_REGLER,distance sous laquelle ENQUETE devient TRAQUE sans delai
+threat_lose_track,menace,6.0,s,A_REGLER,silence necessaire pour passer de TRAQUE a ENQUETE puis de ENQUETE a RODE
+threat_bank_wait,menace,10,s,A_REGLER,attente au bord de l'eau quand le joueur est en zone seche avant de reprendre la ronde
+threat_contact_radius,menace,1.8,m,A_REGLER,distance de contact
+threat_contact_time,menace,0.5,s,A_REGLER,duree de contact continue avant saisie
+threat_grab_cold_speed_mult,menace,0.60,ratio,A_REGLER,multiplicateur de vitesse du joueur apres une premiere saisie
+threat_grab_cold_duration,menace,10,s,A_REGLER,duree de l'effet de froid
+threat_grab_recoil,menace,6,s,A_REGLER,duree du recul de la Laisse apres une saisie
+threat_grab_recoil_dist,menace,8,m,A_REGLER,distance de recul
+threat_grab_defeat_window,menace,45,s,A_REGLER,une seconde saisie dans ce delai est la defaite
+threat_audible_radius,menace,45,m,A_REGLER,distance maximale a laquelle le joueur entend les remous de la Laisse
+threat_cue_roar_radius,menace,60,m,A_REGLER,distance maximale a laquelle le joueur entend le grondement quand la Laisse l'a entendu
+lighthouse_beam_period,phare,8,s,FIXE,rotation complete du faisceau (prototype)
+lighthouse_beam_half_angle,phare,6,deg,A_REGLER,demi-angle logique du faisceau
+lighthouse_beam_reach,phare,70,m,A_REGLER,portee du faisceau a charge superieure ou egale a 20 pour cent
+lighthouse_beam_flee,phare,3,s,A_REGLER,duree du REPLI quand le faisceau touche la Laisse
+lighthouse_halo_radius,phare,14,m,A_REGLER,rayon du halo autour du phare : la Laisse n'y entre pas
+lighthouse_charge_start,phare,100,pct,FIXE,charge au debut de la tranche
+lighthouse_charge_decay,phare,0.50,pct/s,A_REGLER,usure : de 100 a 0 en 200 s
+lighthouse_charge_flicker,phare,20,pct,A_REGLER,sous ce seuil le faisceau clignote et sa portee diminue en proportion
+lighthouse_wind_hold,phare,5,s,A_REGLER,duree de maintien de E pour remonter le mecanisme
+lighthouse_wind_reach,phare,2.5,m,A_REGLER,distance maximale du joueur a la manivelle pendant le remontage
+lighthouse_wind_to,phare,100,pct,FIXE,charge apres remontage
+lighthouse_plateau_radius,phare,6,m,A_REGLER,rayon de la plateforme du phare
+lighthouse_plateau_height,phare,3.00,m,FIXE,altitude de la plateforme ; superieure a 2.40 + 0.25 donc toujours zone seche
+lamp_battery_seconds,lampe,120,s,A_REGLER,autonomie cumulee ; pas de recharge dans la tranche P2
+lamp_half_angle,lampe,20,deg,A_REGLER,demi-angle logique du cone de la lampe
+lamp_reach,lampe,12,m,A_REGLER,portee logique de la lampe
+lamp_flee_after,lampe,0.8,s,A_REGLER,duree d'eclairage continu avant que la Laisse recule
+lamp_flee_duration,lampe,5,s,A_REGLER,duree du REPLI declenche par la lampe
+interact_reach_station,controle,2.0,m,FIXE,distance maximale du joueur a l'echelle pour lire
+defeat_time_limit,regle,480,s,FIXE,fin de la tranche : echec si les 3 releves ne sont pas faits ou si le joueur n'est pas sur la plateforme
+victory_stations_required,regle,3,count,FIXE,nombre de releves requis
+telemetry_sample_period,telemetrie,1.0,s,A_REGLER,periode d'echantillonnage de la position et du niveau

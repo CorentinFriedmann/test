@@ -36,7 +36,7 @@
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
 | T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
 | T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | VALIDÉ AVEC RÉSERVES |
-| T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | EN COURS |
+| T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | À FAIRE |
 | T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | À FAIRE |
 | T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | À FAIRE |
 | T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | À FAIRE |
@@ -350,7 +350,7 @@
 - **Contexte / références** : Décision du propriétaire du 2026-11-23 : ESTRAN accepté à l'essai. Périmètre, portes d'arrêt et « on ne fait pas » dans production/validations/T-004.md.
 
 ### T-029 : Noyau jouable : marée, menace, île, boucle de jeu
-- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : EN COURS
+- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
 - **Livrables** : `game/` (copie de départ de `prototypes/estran-poc/`, mêmes versions figées, dépôt autonome avec `npm run all`), `game/tests/unit/`, `game/tests/e2e/`
 - **Critères d'acceptation** :
   - [ ] Simulation à pas fixe (30 Hz, `sim_step` de `menace.csv` ; arbitrage T-006) séparée du rendu, sans dépendance au rendu ; marée lue depuis `maree.csv`, menace depuis `menace.csv` (valeurs de T-006, pas de valeurs en dur)

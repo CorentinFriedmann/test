@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESTRAN</title>
+<style>
+  :root { --ink: #cfe3ee; --dim: #5d7686; --accent: #8fd3c8; --warn: #e6b86a; --bg: #05090d; }
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; font-family: system-ui, sans-serif; color: var(--ink); }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud { position: fixed; inset: 0; pointer-events: none; }
+  #hud svg { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  #gauge { position: absolute; left: 22px; top: 22%; bottom: 22%; width: 14px; border: 1.5px solid var(--ink); border-radius: 8px; background: rgba(5,9,13,.45); }
+  #gauge-fill { position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: linear-gradient(#4f8fb8, #2b5c80); border-radius: 0 0 6px 6px; }
+  #hud #gauge-chevron { position: absolute; left: 22px; width: 18px; height: 18px; fill: var(--ink); stroke: none; transition: transform .2s; }
+  #pastilles { position: absolute; right: 22px; top: 20px; display: flex; gap: 10px; }
+  .pastille { width: 34px; height: 34px; padding: 4px; border-radius: 50%; border: 1.5px solid var(--dim); background: rgba(5,9,13,.45); box-sizing: border-box; }
+  .pastille.todo { opacity: .6; }
+  .pastille.read { background: var(--accent); border-color: var(--accent); }
+  .pastille.read path { stroke: var(--bg); }
+  .pastille.now { border-color: var(--warn); animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 7px rgba(230,184,106,.25); } }
+  #lamp { position: absolute; right: 22px; bottom: 22px; display: flex; align-items: center; gap: 8px; opacity: .55; }
+  #lamp.on { opacity: 1; }
+  #lamp svg { width: 24px; height: 24px; }
+  #lamp-bar { width: 70px; height: 6px; border: 1.2px solid var(--ink); border-radius: 4px; overflow: hidden; }
+  #lamp-fill { height: 100%; width: 100%; background: var(--ink); }
+  #ring { position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; margin: -24px 0 0 -24px; }
+  #ring-bg { opacity: 0; stroke-width: 2.2; }
+  #ring.active #ring-bg { opacity: .3; }
+  #ring-fg { opacity: 0; stroke: var(--accent); stroke-width: 3; transform: rotate(-90deg); transform-origin: 24px 24px; }
+  #ring.active #ring-fg { opacity: 1; }
+  #ring-dot { fill: var(--ink); stroke: none; opacity: .8; }
+  #vignette-drown { position: absolute; inset: 0; opacity: 0; background: radial-gradient(ellipse at center, rgba(0,5,12,0) 25%, rgba(0,5,12,.97) 100%); }
+  #objective { position: absolute; left: 0; right: 0; bottom: 12%; text-align: center; font-size: 17px; letter-spacing: .04em; opacity: 0; transition: opacity 1s; text-shadow: 0 0 6px #000; }
+  #objective.on { opacity: .9; }
+  #card { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: rgba(2,5,9,.72); gap: 18px; }
+  #card.on { display: flex; }
+  #card-text { font-size: 30px; letter-spacing: .06em; }
+  #card-hint { font-size: 14px; border: 1.5px solid var(--dim); border-radius: 6px; padding: 3px 11px; color: var(--dim); }
+  #debug { position: fixed; left: 12px; bottom: 10px; font: 12px/1.4 monospace; white-space: pre; text-shadow: 0 0 4px #000; pointer-events: none; display: none; }
+  #intro { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+           background: rgba(0,0,0,.6); cursor: pointer; font-size: 16px; line-height: 1.8; }
+  #intro.hidden { display: none; }
+  #intro small { color: var(--dim); }
+</style>
+</head>
+<body>
+<div id="hud"></div>
+<div id="debug"></div>
+<div id="intro"><div><b style="font-size:28px;letter-spacing:.2em">ESTRAN</b><br><br>Cliquez pour jouer<br><small>ZQSD / WASD · souris · Maj · F · E (maintenir) · R</small></div></div>
+<!--APP-->
+</body>
+</html>
