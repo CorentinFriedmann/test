@@ -29,7 +29,7 @@
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | À FAIRE |
 | T-022 | Données de marché par région et par langue | marketing-publishing | aucune | À CORRIGER |
-| T-023 | Révision v1.1 des trois concepts | game-director | aucune | À FAIRE |
+| T-023 | Révision v1.1 des trois concepts | game-director | aucune | EN COURS |
 | T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
 
@@ -245,7 +245,7 @@
 - **Validation** : `production/validations/T-022.md` (cycle 1, 2026-11-20 : REFUSÉ, retours 1 à 8 et seuil d'acceptation du cycle 2)
 
 ### T-023 : Révision v1.1 des trois concepts
-- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : EN COURS
 - **Livrables** : `docs/vision/CONCEPTS.md` (version 1.1, avec un journal des modifications)
 - **Critères d'acceptation** :
   - [ ] Synthèse des risques (section 0 « Risque global », section 5 « Risque de production ») recalculée à partir des tableaux X.11, selon une règle d'agrégation écrite (probabilité × impact)
