@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESTRAN - preuve de faisabilité</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; font-family: system-ui, sans-serif; color: #9fb3c0; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #hud { position: fixed; left: 12px; bottom: 10px; font-size: 13px; line-height: 1.4; text-shadow: 0 0 4px #000; pointer-events: none; }
+  #intro { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+           background: rgba(0,0,0,.55); cursor: pointer; font-size: 16px; }
+  #intro.hidden { display: none; }
+</style>
+</head>
+<body>
+<div id="intro"><div><b>ESTRAN</b> (preuve de faisabilité)<br><br>Cliquez pour jouer<br>ZQSD / WASD : marcher, souris : regarder, Maj : courir<br>F : lampe, T : accélérer la marée</div></div>
+<div id="hud"></div>
+<!--APP-->
+</body>
+</html>

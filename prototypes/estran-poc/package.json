@@ -1,0 +1,19 @@
+{
+  "name": "estran-poc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ESTRAN web proof of concept (T-027)",
+  "type": "module",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node tests/run.cjs",
+    "all": "npm ci && npm run build && npm test"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}
