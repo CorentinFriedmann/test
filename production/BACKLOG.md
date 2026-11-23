@@ -13,7 +13,7 @@
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026, T-027 | VALIDÉ |
 | T-005 | Piliers et pitch final (ESTRAN « une marée ») | game-director | T-004 | VALIDÉ AVEC RÉSERVES |
-| T-006 | GDD « une marée » et tranche P2 | game-designer | T-005 | EN REVUE BOSS |
+| T-006 | GDD « une marée » et tranche P2 | game-designer | T-005 | VALIDÉ AVEC RÉSERVES |
 | T-007 | Bible artistique (rendu stylisé atmosphérique) | art-director | T-005, T-033 | À FAIRE |
 | T-008 | Bible narrative (textes, sans voix) | narrative-designer | T-005, T-033 | À FAIRE |
 | T-009 | Direction audio (synthèse Web Audio, sans doublage) | audio-director | T-031, T-033 | À FAIRE |
@@ -36,13 +36,14 @@
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
 | T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
 | T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | VALIDÉ AVEC RÉSERVES |
-| T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | À FAIRE |
+| T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | EN COURS |
 | T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | À FAIRE |
 | T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | À FAIRE |
 | T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | À FAIRE |
 | T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024 | À FAIRE |
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
+| T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | À FAIRE |
 
 ---
 
@@ -97,7 +98,7 @@
 - **Contexte / références** : `production/DECISIONS.md`, `docs/vision/PERIMETRE_SOLO.md` §2.1. Adaptée à la voie web (anciens critères : photoréalisme, plateformes consoles).
 
 ### T-006 : GDD « une marée » et tranche P2
-- **Assigné à** : `game-designer` · **Revue de pôle** : game-director · **Dépend de** : T-005 · **Jalon** : Essai · P2 (chemin critique) · **Statut** : EN REVUE BOSS
+- **Assigné à** : `game-designer` · **Revue de pôle** : game-director · **Dépend de** : T-005 · **Jalon** : Essai · P2 (chemin critique) · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** : `docs/design/GDD.md`, `docs/design/data/maree.csv`, `docs/design/data/menace.csv`
 - **Critères d'acceptation** :
   - [ ] Règle de marée spécifiée avec des chiffres : hauteur d'eau en fonction du temps (courbe dans `maree.csv`), zones qui se recouvrent, effet sur le déplacement, durée totale de la tranche P2 entre 5 et 10 minutes
@@ -349,10 +350,10 @@
 - **Contexte / références** : Décision du propriétaire du 2026-11-23 : ESTRAN accepté à l'essai. Périmètre, portes d'arrêt et « on ne fait pas » dans production/validations/T-004.md.
 
 ### T-029 : Noyau jouable : marée, menace, île, boucle de jeu
-- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : EN COURS
 - **Livrables** : `game/` (copie de départ de `prototypes/estran-poc/`, mêmes versions figées, dépôt autonome avec `npm run all`), `game/tests/unit/`, `game/tests/e2e/`
 - **Critères d'acceptation** :
-  - [ ] Simulation à pas fixe (60 Hz) séparée du rendu, sans dépendance au rendu ; marée lue depuis `maree.csv`, menace depuis `menace.csv` (valeurs de T-006, pas de valeurs en dur)
+  - [ ] Simulation à pas fixe (30 Hz, `sim_step` de `menace.csv` ; arbitrage T-006) séparée du rendu, sans dépendance au rendu ; marée lue depuis `maree.csv`, menace depuis `menace.csv` (valeurs de T-006, pas de valeurs en dur)
   - [ ] Île générée de façon procédurale et déterministe à partir d'une graine ; un jeu complet de la tranche P2 dure 5 à 10 minutes de temps de simulation
   - [ ] Déplacement, lampe, déclencheurs du « bruit dans l'eau » (événement émis par la simulation, consommé plus tard par T-031), victoire, défaite, recommencer ; HUD minimal défini par T-006, sans texte qui explique la règle
   - [ ] Au moins 15 tests unitaires (marée, menace, déterminisme : même graine, mêmes entrées, même état final) ; test de parité : deux réglages de rendu donnent un journal de simulation identique
@@ -429,3 +430,10 @@
   - [ ] Rôle, outils et nom des fiches inchangés ; la fiche `producer` n'est pas modifiée ; si elle doit l'être, une note est transmise à la Coordination
   - [ ] Chaque fiche renvoie vers `production/DECISIONS.md`
 - **Contexte / références** : ADR §7.2. Non bloquante pour P2. Si la session ne suffit pas, le `producer` découpe en deux tâches.
+
+### T-036 : Seuil de la porte P2 adapté (GDD §13)
+- **Assigné à** : `game-designer` · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : À FAIRE (avant T-032)
+- **Livrables** : `docs/design/GDD.md` §13 (paragraphe « Seuil de passage » remplacé)
+- **Critères d'acceptation** :
+  - [ ] Seuil reformulé selon `production/validations/T-006.md` (arbitrage 1) : propriétaire seul répondant, plus les automates de T-032 ; testeurs extérieurs reportés à la démo P3
+  - [ ] Aucune exigence d'un humain extérieur avant P3 ; cohérent avec `production/DECISIONS.md`, T-032 et T-033
