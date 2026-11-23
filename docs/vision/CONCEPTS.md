@@ -1,7 +1,7 @@
 # Concepts de jeu : trois propositions
 
-> **Tâche** : T-001 · **Auteur** : `game-director` · **Jalon** : M0 Concept · **Version** : 1.0 du 2026-11-20
-> **Statut** : brouillon remis pour validation de la Boss. Rien dans ce document n'est encore validé.
+> **Tâche** : T-001 · **Auteur** : `game-director` · **Jalon** : M0 Concept · **Version** : 1.1 du 2026-11-23 (révision T-023, journal en section 9)
+> **Statut** : révision v1.1 remise pour validation de la Boss (retours 1 à 11 de T-001). Rien dans ce document n'est encore validé en v1.1.
 > **Lecteurs principaux** : `boss` (choix du concept, T-004), `marketing-publishing` (étude de marché, T-002),
 > `technical-director` (choix techniques, T-003), `business-affairs` (chiffrage, T-015).
 
@@ -16,6 +16,7 @@
 6. Grille de notation et recommandation
 7. Questions ouvertes pour T-002, T-003 et T-015
 8. Originalité et points juridiques
+9. Journal des modifications (v1.1)
 
 Les trois fiches suivent **exactement la même structure** (sections X.1 à X.13) pour que chaque pôle puisse
 les comparer ligne à ligne.
@@ -32,8 +33,8 @@ les comparer ligne à ligne.
 | Pari technique dominant | La lumière et l'eau (Lumen) | La nature à grande échelle (Nanite, PCG, scans) | Les visages (MetaHuman Animator) |
 | Équipe au pic *(estimation)* | 22 à 33 ETP | 36 à 53 ETP | 23 à 34 ETP + forte sous-traitance de capture |
 | Production *(estimation)* | 26 à 32 mois | 34 à 42 mois | 24 à 30 mois |
-| Risque global | Moyen | Élevé | Moyen |
-| Note pondérée (section 6) | **4,15 / 5** | 3,40 / 5 | 3,70 / 5 |
+| Risque global *(règle d'agrégation en 5.1)* | Élevé (1 risque à 9) | Très élevé (1 risque à 12, 2 à 9) | Élevé (2 risques à 9, 1 à 8) |
+| Note pondérée (section 6) | **4,15 / 5** | 3,40 / 5 | 3,50 / 5 |
 
 **Recommandation du game director : ESTRAN**, sous trois conditions vérifiables au jalon M1 (section 6.3).
 AVEUX est le plan de repli ; DERNIÈRE POSITION CONNUE est le meilleur candidat pour un **deuxième projet**,
@@ -57,10 +58,14 @@ une fois le studio et ses pipelines photoréalistes en place.
 
 Repères publics, cités de mémoire et **à vérifier par `marketing-publishing` (T-002)** :
 
-- *Senua's Saga: Hellblade II* (Ninja Theory, 2024, UE5) : une référence de photoréalisme, mais limitée à
-  30 fps sur Xbox Series. C'est exactement ce que notre cahier des charges interdit. **Conséquence** :
-  nous choisissons des concepts dont le design rend les 60 fps naturels, au lieu de les chercher en fin de
-  production.
+- *Senua's Saga: Hellblade II* (Ninja Theory, UE5) : une référence de photoréalisme, dont les gros plans de
+  visages sont précisément ce qui coûte cher. **À sa sortie (mai 2024), le jeu était limité à 30 fps sur Xbox
+  Series** (fait daté). Selon mes informations, sa version PS5 (2025) et une mise à jour ultérieure ont ajouté un
+  mode performance : **à vérifier par T-002**, avec les dates exactes. Si cela se confirme, la leçon se renforce :
+  le 60 fps a été obtenu **après coup**, ce que notre cahier des charges interdit. **Conséquence** : nous
+  choisissons des concepts dont le design rend les 60 fps naturels, au lieu de les chercher en fin de production.
+  **Pour AVEUX**, cette leçon s'applique directement : un visage en gros plan remplit l'écran, et le coût par pixel
+  (diffusion sous la surface, cheveux en mèches) est maximal là où le concept se joue (voir C.6 et 6.1).
 - *Clair Obscur: Expedition 33* (Sandfall Interactive, 2025, UE5) : une équipe interne compacte (de l'ordre
   d'une trentaine de personnes selon les déclarations publiques du studio, chiffre à vérifier), appuyée par de
   la sous-traitance, peut atteindre un très haut niveau visuel et un grand succès commercial.
@@ -95,6 +100,23 @@ C'est la règle commune aux trois concepts.
 - **Sous-traitance** : listée à part, pour que `business-affairs` la chiffre séparément.
 - **Prix, public et classification d'âge** : hypothèses à confirmer par T-002.
 
+### 1.5 Règle de parité entre plateformes (valable pour les trois concepts)
+
+Cette règle reprend celle que le `technical-director` a écrite dans `docs/tech/ARCHITECTURE.md` §10.1
+(ADR-10 bis) ; elle n'est pas recopiée ici, seul son effet sur le design l'est.
+
+- **Les plateformes (Series S, Steam Deck, Series X, PS5, PC) ne diffèrent que par le rendu** : résolution
+  interne, qualité de Lumen, finesse du brouillard, résolution des ombres, niveau de détail, mode de cheveux,
+  fréquence d'image. Elles ne diffèrent **jamais par une information utile au jeu** : ce que le joueur peut voir,
+  entendre ou en déduire pour décider.
+- **La logique de jeu ne dépend jamais des réglages de rendu.** Le faisceau qui repousse la Laisse (A), la
+  portée de visibilité, le bruit, les zones sûres, la distance de vue d'une tempête (B), les micro-expressions
+  qui trahissent un mensonge (C) sont calculés à partir de données de jeu, pas lus dans l'image rendue. Le rendu
+  illustre l'état de jeu ; il ne le décide pas.
+- **Conséquence pour les fiches** : les « garde-fous » X.6 qui concernent la Series S et le Steam Deck ne peuvent
+  réduire que la **finesse** (grille du brouillard, résolution d'ombre, LOD), jamais la **portée** ni la
+  **densité** équivalentes en jeu. Toute formulation contraire de la v1.0 a été retirée (A.6, A.11).
+
 ---
 
 ## 2. Concept A : ESTRAN
@@ -110,8 +132,8 @@ C'est la règle commune aux trois concepts.
 | Univers | Île de marée fictive au large d'une côte atlantique imaginaire, fin des années 1980 |
 | Solo ou multijoueur | Solo |
 | Durée de jeu visée | 7 à 9 h pour finir l'histoire, 10 à 12 h pour tout découvrir |
-| Classification anticipée | PEGI 16 *(hypothèse, T-002)* |
-| Prix de lancement | 29,99 € *(hypothèse, fourchette 24,99 à 34,99 €, T-002)* |
+| Classification anticipée | PEGI 16 ; équivalent ESRB anticipé : **M** (Mature 17+), à cause de l'horreur et des thèmes, sans gore recherché *(hypothèses, T-002)* |
+| Prix de lancement | 29,99 € *(base de chiffrage, décision 5 de T-001)* ; variante haute 39,99 €, argumentée en A.8 |
 | Équipe et durée | 22 à 33 ETP au pic, 26 à 32 mois *(estimations, détail en A.10)* |
 
 ### A.2 Pitch
@@ -176,11 +198,26 @@ transitions continues entre eux. Pas de simulation de fluide.
 
 - Distances de vue courtes la plupart du temps (nuit, brouillard, intérieurs). Les grandes vues de jour sont
   cadrées, et l'horizon marin est une surface plane peu coûteuse.
-- Une lumière principale avec ombres (lampe ou faisceau) et 1 à 2 lumières locales à la fois.
+- **Pire cas technique** (retour 4 de T-001), qui sert de scène de mesure : **nuit, pleine mer (eau dans tout le
+  champ), faisceau du phare en mouvement et lampe du joueur visibles ensemble, brouillard volumétrique, reflets
+  sur l'eau, un ou deux monstres dans le champ**. Estimation du `technical-director` (`docs/tech/BUDGETS.md`
+  §14.1.1, **non mesurée**) : environ **17,5 ms avant optimisation, pour 14,5 ms visées**, soit 3,0 ms de trop,
+  que six leviers de rendu ramèneraient à environ 13,7 ms. La cause principale : deux lumières locales mobiles
+  invalident à chaque image leurs ombres (Virtual Shadow Maps) et s'injectent dans le brouillard.
+- **Coexistence des deux sources** : les scènes clés (A.2, A.4, trailer) les montrent ensemble. Règle de design :
+  la **lampe du joueur est la seule lumière locale à ombres complètes** ; le **faisceau du phare** est un cône de
+  grande portée dont les ombres sont **limitées à son cône** (ou à un rayon autour du joueur), sans ombre dynamique
+  sur le reste de l'île. Les deux lumières ont un rayon d'atténuation borné. Ce choix est un levier de **rendu** :
+  l'effet du faisceau sur la Laisse est calculé par la logique de jeu (cône et tracés de collision contre les
+  volumes de l'île), jamais à partir des ombres rendues. Le faisceau garde la même portée visible sur toutes les
+  plateformes (règle de parité, 1.5).
 - Translucidité limitée à l'eau (ombrage d'eau à couche unique), pas de grandes surfaces vitrées.
 - 1 à 3 personnages à l'écran.
-- **Series S** : la direction artistique autorise un brouillard plus dense, une résolution interne et une
-  qualité Lumen réduites. **Steam Deck** : bon candidat (lieux contenus, rythme lent).
+- **Series S** : résolution interne, qualité de Lumen, **finesse** de la grille du brouillard et résolution des
+  ombres réduites ; la **portée de visibilité, la densité du brouillard en jeu et la portée du faisceau restent
+  identiques** à celles de la PS5 (règle de parité, 1.5 ; test de lisibilité en `BUDGETS.md` §14.1.1). Un
+  brouillard « plus dense » sur Series S est **interdit** : il changerait la distance à laquelle on voit la Laisse,
+  donc la difficulté. **Steam Deck** : bon candidat (lieux contenus, rythme lent), mêmes règles.
 
 ### A.7 Périmètre AA maîtrisé
 
@@ -199,13 +236,31 @@ transitions continues entre eux. Pas de simulation de fluide.
 - **Élargi** : amateurs d'exploration narrative attirés par la beauté de l'estran de jour ; public des
   vidéastes et streamers spécialisés dans l'horreur (jeu court, peurs partageables, démo idéale pour un
   festival Steam).
-- **Plateformes prioritaires** *(hypothèse T-002)* : PC Steam d'abord, puis PS5 et Xbox.
+- **Plateformes, par poids attendu des ventes** *(hypothèse, à confirmer par T-002)* : PC (Steam) et PS5 en
+  tête, à parts proches ; Xbox Series X|S en complément. **Sortie simultanée** sur PC, PS5 et Xbox (scénario de
+  base, T-002 décision 2) : aucune plateforme n'est servie après les autres.
+- **Prix et contenu** *(retour 7)*. Base de chiffrage : **29,99 €** pour 7 à 9 h (10 à 12 h à 100 %), ce qui est
+  cohérent avec la durée et avec le genre (horreur narrative courte, sans combat) ; les prix de lancement des
+  comparables sont à collecter par T-021. **Contenu qui justifierait 39,99 €** : les 8 marées complètes avec leurs
+  coefficients croissants, les 10 à 12 h de découverte à 100 %, les fins variantes, un mode « grande marée »
+  rejouable (mêmes données de marée, difficulté et variations de la Laisse, sans nouveau décor) et un mode photo.
+  Ce contenu est déjà dans le périmètre de A.7 et A.10. Décision de prix en T-004.
 
-### A.9 Jeux comparables
+### A.9 Concurrents directs et références de design
+
+*Dates et studios cités de mémoire, à vérifier par T-021. Aucun chiffre de ventes dans cette fiche (T-021).*
+
+**Concurrents directs** (sortis depuis 2022, qui visent le même joueur et le même créneau) :
+
+| Jeu | Ce qu'il partage avec nous | Ce qui nous en distingue |
+|---|---|---|
+| *Dredge* (Black Salt Games, 2023) | Horreur maritime où le danger vient de la nuit, et l'horloge jour / nuit comme tension | Rendu photoréaliste en vue subjective, contre une vue stylisée ; la **menace est liée à la marée** et change le décor lui-même ; pas de boucle de pêche ni de gestion d'inventaire ; récit intime et sans combat |
+| *Still Wakes the Deep* (The Chinese Room, 2024) | Un héros ordinaire et sans combat, un lieu clos, une menace liée à l'eau, une narration intime | Une île semi-ouverte et non linéaire au lieu d'un parcours linéaire ; une carte qui change systémiquement avec la marée ; des extérieurs de jour aussi beaux qu'effrayants |
+
+**Références de design** (ce que nous leur empruntons, sans les concurrencer) :
 
 | Jeu | Ce qu'on lui emprunte | Ce qu'on fait différemment |
 |---|---|---|
-| *Still Wakes the Deep* (The Chinese Room, 2024) | Un héros ordinaire et sans combat, un lieu clos, une menace liée à l'eau, une narration intime | La carte change systémiquement avec la marée ; une île semi-ouverte et non linéaire ; des extérieurs de jour aussi beaux qu'effrayants |
 | *Amnesia: The Bunker* (Frictional Games, 2023) | Un hub semi-ouvert hanté par un prédateur systémique persistant ; la lumière comme ressource | Notre ressource est un temps naturel et lisible (la marée) ; menace qui vit dans l'eau ; rendu photoréaliste |
 | *Outer Wilds* (Mobius Digital, 2019) | Un monde qui se transforme selon une horloge ; une progression par la connaissance du lieu | Pas de boucle temporelle ; de l'horreur ; une vue subjective photoréaliste et un récit intime |
 
@@ -234,7 +289,7 @@ transitions continues entre eux. Pas de simulation de fluide.
 | # | Risque | Probabilité | Impact | Mitigation |
 |---|---|---|---|---|
 | A1 | Level design à trois états d'eau : chaque espace se conçoit trois fois | Élevée | Élevé | États de référence discrets ; blockout jouable d'une première zone dès M1 ; île plafonnée à 1 km² ; outil d'éditeur pour prévisualiser les états |
-| A2 | Coût GPU de l'eau (translucidité, réflexions) et de Lumen sur Series S à 60 fps | Moyenne | Élevé | Eau à couche unique, sans simulation ; scène de référence profilée sur Series S en M1 ; brume et nuit plus denses autorisées sur Series S |
+| A2 | Coût GPU de l'eau (translucidité, réflexions) et de Lumen sur Series S à 60 fps | Moyenne | Élevé | Eau à couche unique, sans simulation ; scène de référence profilée sur Series S en M1, **dans le pire cas nocturne décrit en A.6** ; leviers de rendu seulement (finesse du brouillard, résolution d'ombre), jamais la portée ni la densité en jeu (règle de parité, 1.5) |
 | A3 | Marché de l'horreur encombré ; étiquette « walking sim » | Moyenne | Élevé | USP de la marée visible en 10 s ; prédateur systémique ; démo pour un festival Steam ; prix aligné sur la durée |
 | A4 | Lisibilité dans l'obscurité (TV à 3 m, Steam Deck, HDR) | Moyenne | Moyen | Règle de direction artistique « lisible avant d'être sombre » ; calibrage gamma et HDR ; tests sur TV et Deck dès la vertical slice |
 | A5 | Répétitivité du cycle de marée sur 8 chapitres | Moyenne | Moyen | Chaque marée découvre un lieu nouveau ; coefficients croissants ; variations météo ; la Laisse change de comportement |
@@ -246,12 +301,31 @@ transitions continues entre eux. Pas de simulation de fluide.
   rasant, reflets parfaits dans le sable mouillé. La mer monte ; derrière elle, le chemin disparaît.
 - **4 à 8 s** : nuit, couloir inondé. La lampe éclaire une eau qui monte aux genoux. Au fond, quelque chose se
   tient debout dans l'eau, immobile. Le faisceau du phare passe : il n'y a plus rien.
-- **8 à 10 s** : carton « **Toutes les six heures, la mer revient. Elle n'est jamais seule.** » Logo ESTRAN.
+- **8 à 10 s** : carton « **Deux fois par jour, la mer revient. Elle n'est jamais seule.** » Logo ESTRAN.
+  *(Fait corrigé, retour 10 : la pleine mer revient environ toutes les 12 h 25, donc deux fois par jour, comme
+  l'écrit A.1 ; ce sont la montée et la descente qui durent environ six heures. L'exactitude fait partie de la
+  promesse de l'USP 2.)*
+
+**Capsule principale** (image fixe et titre, à comprendre en 3 secondes) : l'USP d'ESTRAN est temporelle, donc la
+capsule doit la **figer**. Image : à l'aube, un estran immense et lisse ; au premier plan, une ligne de traces de
+pas qui part de l'objectif vers un phare minuscule, et **la mer, déjà rouge de lumière rasante, qui avale les
+dernières traces** (celles du premier plan sont encore sèches, celles du fond ont disparu sous l'eau). Dans un
+coin, une main tient une montre : le temps manque. Titre « ESTRAN » en grandes capitales ; sous-titre
+« Deux fois par jour, la mer revient ». Lecture en 3 secondes : un chemin, une mer qui monte, un refuge lointain.
+Un second visuel (même vue en deux moitiés, basse mer à gauche et pleine mer à droite) sert de carrousel Steam.
 
 ### A.13 Vertical slice envisagée (M2)
 
 La première marée complète : arrivée à basse mer, expédition jusqu'au marégraphe, montée du flot, première
 rencontre avec la Laisse, refuge au phare. **12 à 15 minutes**, sur PC et PS5, à 60 fps en mode performance.
+
+**Démo publique (Steam Next Fest, 20 à 30 minutes)** *(retour 9)* : la vertical slice, étendue à la première marée
+complète puis au début de la deuxième (22 à 25 minutes visées). **Elle dévoile** : la règle de la marée (le chemin
+qui disparaît), la lumière comme mécanique, l'ambiance de l'estran de jour et de nuit, le premier intérieur.
+**Elle montre la Laisse sans la révéler** : on entend son bruit dans l'eau, on voit ses traces et le faisceau qui
+la fait disparaître, jamais son corps en pleine lumière ni de près. Le hook (la menace systémique) est tenu, la
+révélation est gardée pour le jeu complet. **Elle cache** : les 6 marées suivantes, les variantes de comportement
+de la Laisse et la fin.
 
 ---
 
@@ -268,8 +342,8 @@ rencontre avec la Laisse, refuge au phare. **12 à 15 minutes**, sur PC et PS5, 
 | Univers | Massif alpin fictif, époque contemporaine : une vallée et ses habitants, de l'hiver au dégel |
 | Solo ou multijoueur | Solo |
 | Durée de jeu visée | 12 à 15 h |
-| Classification anticipée | PEGI 12 *(hypothèse, T-002)* |
-| Prix de lancement | 39,99 € *(hypothèse, fourchette 34,99 à 44,99 €, T-002)* |
+| Classification anticipée | PEGI 12 ; équivalent ESRB anticipé : **T** (Teen), éventuellement E10+ selon les scènes de détresse *(hypothèses, T-002)* |
+| Prix de lancement | 39,99 € *(hypothèse, dans la fourchette de travail de T-002 ; la durée de 12 à 15 h le justifie)* |
 | Équipe et durée | 36 à 53 ETP au pic, 34 à 42 mois *(estimations, détail en B.10)* |
 
 ### B.2 Pitch
@@ -331,7 +405,9 @@ conduite.
 - Les tempêtes réduisent la distance de vue ; les grandes vues dégagées sont rares et cadrées.
 - Déformation de la neige uniquement près du joueur ; 4 personnages au plus à l'écran.
 - World Partition et HLOD ; hélicoptère en séquences.
-- **Series S** : la plateforme la plus à risque, avec un profil dédié. **Steam Deck** : objectif « jouable » ;
+- **Series S** : la plateforme la plus à risque, avec un profil dédié, **limité au rendu** (densité de végétation en
+  imposteurs, résolution, qualité de Lumen) : la distance de visibilité d'une tempête, la position des traces et des
+  victimes sont des données de jeu identiques partout (règle de parité, 1.5). **Steam Deck** : objectif « jouable » ;
   le label « vérifié » n'est pas garanti.
 
 ### B.7 Périmètre AA maîtrisé
@@ -355,9 +431,22 @@ scénarisée et contextuelle.
   passionnés de montagne et d'activités de plein air.
 - **Élargi** : joueurs qui cherchent une aventure premium non violente (PEGI 12 anticipé), jeu partagé
   en couple ou en famille sur le canapé, créateurs de contenu friands de « nature photoréaliste ».
-- **Plateformes prioritaires** *(hypothèse T-002)* : PC et PS5 à parts proches.
+- **Plateformes, par poids attendu des ventes** *(hypothèse, à confirmer par T-002)* : PC et PS5 à parts proches,
+  Xbox Series X|S en complément. **Sortie simultanée** sur les trois (scénario de base, T-002 décision 2).
 
-### B.9 Jeux comparables
+### B.9 Concurrents directs et références de design
+
+*Dates et studios cités de mémoire, à vérifier par T-021. Aucun chiffre de ventes dans cette fiche (T-021).*
+
+**Concurrents directs** (sortis depuis 2022) :
+
+| Jeu | Ce qu'il partage avec nous | Ce qui nous en distingue |
+|---|---|---|
+| *Jusant* (Don't Nod, 2023) | Une montagne sans ennemis, la traversée comme gameplay, un jeu court et contemplatif | Un monde photoréaliste contre un décor stylisé ; des missions de sauvetage centrées sur des personnes ; la météo qui change la vallée ; 12 à 15 h contre un jeu bref |
+| *Death Stranding 2: On the Beach* (Kojima Productions, 2025, à vérifier) | Le terrain comme gameplay, la solitude dans le paysage, la charge et l'équilibre | Réalisme contemporain sans science-fiction ni combat ; une zone unique et dense ; l'enjeu est la survie d'autrui, pas la livraison |
+| *Simulateurs de secours en montagne* (titres et studios **à identifier**, à vérifier) | Le métier de secouriste, au plus près du réel | Une aventure narrative et émotionnelle, non une simulation ; positionnement à protéger (risque B4) |
+
+**Références de design** :
 
 | Jeu | Ce qu'on lui emprunte | Ce qu'on fait différemment |
 |---|---|---|
@@ -405,11 +494,22 @@ scénarisée et contextuelle.
   Les yeux s'ouvrent.
 - **8 à 10 s** : carton « **Quatre heures de jour. Ramenez-les vivants.** » Logo DERNIÈRE POSITION CONNUE.
 
+**Capsule principale** (image fixe et titre, à comprendre en 3 secondes) : gros plan sur un visage givré, cils
+blancs de cristaux, yeux entrouverts, éclairé par le cône d'une frontale dans le blizzard ; au bord du cadre, une
+main gantée écarte la neige. Titre « DERNIÈRE POSITION CONNUE », sous-titre « Ramenez-les vivants ». Lecture en
+3 secondes : quelqu'un est vivant sous la neige, et c'est à nous de le sortir de là.
+
 ### B.13 Vertical slice envisagée (M2)
 
 Une mission courte et complète : appel, briefing, montée dans le brouillard, pistage jusqu'à un randonneur blessé,
 bilan, descente en luge sous une tempête qui se lève. **12 à 15 minutes**, sur PC et PS5, à 60 fps en mode
 performance.
+
+**Démo publique (Steam Next Fest, 20 à 30 minutes)** *(retour 9)* : la mission de la vertical slice, précédée d'un
+court prologue de traversée libre (une dizaine de minutes en tout pour ce prologue et la mise en place des outils).
+**Elle dévoile** : la traversée, la météo qui se lève, le pistage, l'émotion de la découverte d'un visage vivant.
+**Elle cache** : la taille de la vallée, les arcs narratifs, les autres types de missions (crevasse, avalanche,
+rivière en crue).
 
 ---
 
@@ -426,8 +526,8 @@ performance.
 | Univers | Ville portuaire européenne fictive, hiver 1999 : un commissariat de nuit et des scènes de crime |
 | Solo ou multijoueur | Solo (un mode « le public vote » pour les streamers est étudié, hors périmètre de base) |
 | Durée de jeu visée | 8 à 10 h ; rejouabilité par les embranchements |
-| Classification anticipée | PEGI 16 *(hypothèse, T-002)* |
-| Prix de lancement | 24,99 € à 29,99 € *(hypothèse, T-002)* |
+| Classification anticipée | PEGI 16 ; équivalent ESRB anticipé : **M** (Mature 17+), ou T si la violence reste hors champ *(hypothèses, T-002)* |
+| Prix de lancement | 24,99 € (base de chiffrage, décision 5 de T-001) à 29,99 € ; variante haute 39,99 €, argumentée en C.8 |
 | Équipe et durée | 23 à 34 ETP au pic et forte sous-traitance de capture, 24 à 30 mois *(estimations, détail en C.10)* |
 
 ### C.2 Pitch
@@ -491,9 +591,18 @@ partir de MetaHuman puis personnalisés ; des objets d'époque photographiés et
 **Garde-fous de design pour tenir 60 fps** *(proposés au `technical-director`, à confirmer en T-003)* :
 
 - Au plus 2 personnages au niveau de détail maximal à l'écran ; pièces de moins de 100 m².
-- Cheveux en mèches sur PS5, Xbox Series X et PC ; cartes de cheveux sur Series S et Steam Deck si nécessaire.
+- Cheveux en mèches sur PS5, Xbox Series X et PC ; cartes de cheveux sur Series S et Steam Deck si nécessaire
+  (différence de rendu seulement).
+- **Parité (1.5)** : aucun signe porteur d'information (regard, déglutition, crispation) n'est absent ou atténué
+  sur une plateforme. Le rig facial réduit de la Series S doit conserver tous les gestes listés comme porteurs
+  d'indice (`BUDGETS.md` §14.1.2). La couche de signes est calculée par la logique de jeu, pas par le niveau de
+  détail affiché.
 - Le coût principal tient à la peau, aux cheveux, aux yeux et à l'évaluation du rig facial : le nombre de
-  visages haute qualité simultanés est donc plafonné par le design.
+  visages haute qualité simultanés est donc plafonné par le design. **Estimation du `technical-director`
+  (`BUDGETS.md` §14.1.2, non mesurée)** pour deux visages en gros plan : 2,0 à 3,0 ms de GPU sur PS5, 1,4 à
+  2,0 ms sur Series S, contre 1,0 ms prévu pour le poste « Personnages » d'une scène de jeu ; le budget du poste
+  est porté à 3,0 ms (PS5) et 2,0 ms (Series S) en scène de dialogue, repris sur le décor. C'est le risque 60 fps
+  principal du concept, à mesurer en S-10 (T-003).
 - **Steam Deck** : bon candidat, avec le zoom de la relecture et des sous-titres agrandis.
 
 ### C.7 Périmètre AA maîtrisé
@@ -511,12 +620,33 @@ partir de MetaHuman puis personnalisés ; des objets d'époque photographiés et
   policières et de documentaires criminels.
 - **Élargi** : streamers et leur public (« il ment ou pas ? » est un format participatif naturel) ; joueurs
   occasionnels, car le jeu demande peu de dextérité.
-- **Plateformes prioritaires** *(hypothèse T-002)* : PS5 et PC.
+- **Plateformes, par poids attendu des ventes** *(hypothèse, à confirmer par T-002)* : PS5 et PC en tête, Xbox
+  Series X|S en complément (genre narratif, public de séries policières sur console). **Sortie simultanée** sur
+  les trois (scénario de base, T-002 décision 2).
+- **Prix et contenu** *(retour 7)*. Base de chiffrage : **24,99 €** (borne basse de la fourchette de T-001) pour
+  8 à 10 h. **Argument d'un prix inférieur à 39,99 €** : un jeu de dialogue plus étroit que la moyenne du marché
+  premium (C4), une rejouabilité faible (C7) et une durée proche de celle d'ESTRAN ; les prix de lancement des
+  comparables restent à collecter par T-021. **Contenu qui justifierait 39,99 €** : les 6 affaires complètes
+  (sans le repli à 5), les 20 à 25 personnages, les fins multiples avec le mode expert sans assistance, le doublage
+  anglais et français. Ce contenu est déjà celui de C.4 et C.10, avec un coût de capture élevé. Décision de prix
+  en T-004.
 
-### C.9 Jeux comparables
+### C.9 Concurrents directs et références de design
+
+*Dates et studios cités de mémoire, à vérifier par T-021. Aucun chiffre de ventes dans cette fiche (T-021).*
+
+**Concurrents directs** (sortis depuis 2022) :
+
+| Jeu | Ce qu'il partage avec nous | Ce qui nous en distingue |
+|---|---|---|
+| *The Operator* (2024, studio à vérifier) | Le jeu d'enquête par interrogatoire, où l'on questionne et où l'on déduit | Un visage photoréaliste en gros plan comme interface, contre une enquête menée surtout par documents et par interface ; une couche de signes qui varie selon le stress ; des embranchements aux conséquences durables |
+| *Who's Lila?* (2024, studio à vérifier) | Le visage comme interface de jeu | Un visage photoréaliste capté sur de vrais comédiens ; un interrogatoire contextuel et déductif, non un défi d'expressions ; une nuit de garde à vue qui structure le récit |
+
+**Références de design** (plus anciennes) :
 
 | Jeu | Ce qu'on lui emprunte | Ce qu'on fait différemment |
 |---|---|---|
+| *Telling Lies* (Sam Barlow, 2019) et *Interrogation: You Will Be Deceived* (2019, studio à vérifier) | Revoir et croiser des déclarations pour trouver la faille | Du temps réel et une performance faciale influencée par le joueur |
 | *L.A. Noire* (Team Bondi / Rockstar Games, 2011) | La performance faciale captée comme indice ; l'interrogatoire comme duel | L'interrogatoire est le jeu entier (pas de conduite ni de fusillades) ; pas de choix binaire vérité / doute / mensonge, mais des approches et une relecture ; la technologie MetaHuman actuelle |
 | *Her Story* (Sam Barlow, 2015) | Revoir des enregistrements pour trouver la faille ; un joueur détective actif | Des interrogatoires en temps réel que le joueur influence ; de la 3D photoréaliste au lieu de vidéo filmée ; des conséquences durables |
 | *Detroit: Become Human* (Quantic Dream, 2018) | Le jeu d'acteurs capté, les embranchements et leurs conséquences, une mise en scène de cinéma | La déduction au cœur du jeu, sans séquences d'action à réflexes ; un périmètre contenu (une ville, six nuits) ; un budget AA |
@@ -549,7 +679,7 @@ partir de MetaHuman puis personnalisés ; des objets d'époque photographiés et
 | C1 | Vallée de l'étrange : si un visage sonne faux, le concept s'effondre | Moyenne | Très élevé | Une affaire complète en vertical slice ; de vrais comédiens ; des animateurs faciaux pour la finition ; tests avec des joueurs dès M1 |
 | C2 | Lisibilité des signes : trop subtils, c'est frustrant ; trop évidents, c'est trivial | Élevée | Élevé | Ligne de base par personnage ; signes cohérents et apprenables ; mode « lecture assistée » (accessibilité) ; tests de jeu fréquents |
 | C3 | Volume de capture, d'écriture et de voix ; doublage synchronisé coûteux par langue | Élevée | Élevé | Couche additive de signes pour réduire les variantes captées ; repli à 5 affaires ; doublage anglais et français, sous-titres ailleurs ; animation faciale générée depuis l'audio des doublages à évaluer |
-| C4 | Marché plus étroit pour un jeu « bavard », surtout sur console | Moyenne | Élevé | Prix ajusté ; première affaire en démo ; mode public pour les streamers ; marketing sur le hook du visage |
+| C4 | Marché plus étroit pour un jeu « bavard », surtout sur console | Moyenne | Élevé | Prix ajusté (C.8) ; **démo courte de 20 à 30 minutes** (C.13), non la première affaire entière de 60 à 90 minutes ; mode public pour les streamers ; marketing sur le hook du visage |
 | C5 | Thèmes sensibles : coercition policière, faux aveux | Moyenne | Moyen | Institutions fictives ; la violence n'est jamais récompensée ; relecture juridique et de sensibilité ; classification anticipée |
 | C6 | Droits des comédiens (image, voix, réutilisation numérique, IA) | Moyenne | Élevé | Contrats de cession explicites préparés par `business-affairs` et validés par un avocat ; consentement explicite pour toute réutilisation numérique |
 | C7 | Faible rejouabilité | Élevée | Moyen | Embranchements et fins multiples ; mode expert sans assistance ; prix cohérent avec la durée |
@@ -561,10 +691,22 @@ partir de MetaHuman puis personnalisés ; des objets d'époque photographiés et
 - **4 à 8 s** : rembobinage, ralenti, zoom sur le coin de sa bouche : une contraction d'un dixième de seconde.
 - **8 à 10 s** : carton « **Tout le monde ment. Les visages, un peu moins.** » Logo AVEUX.
 
+**Capsule principale** (image fixe et titre, à comprendre en 3 secondes) : un visage d'homme en gros plan, de face,
+dans l'image granuleuse d'une cassette, avec un horodatage « 03:12:44 » en bas à gauche ; un petit réticule de
+zoom encadre le coin de sa bouche, qui se contracte. Titre « AVEUX », sous-titre « Tout le monde ment ». Lecture en
+3 secondes : un interrogatoire filmé, et on nous demande de regarder le visage.
+
 ### C.13 Vertical slice envisagée (M2)
 
 Une nuit complète en version courte : deux suspects, trois preuves, la relecture, la confrontation et le
 procès-verbal. **12 à 15 minutes**, sur PC et PS5, à 60 fps en mode performance.
+
+**Démo publique (Steam Next Fest, 20 à 30 minutes)** *(retour 9)* : la **version courte de la première affaire**
+(l'affaire complète dure 60 à 90 minutes, trop longue pour un festival) : un seul suspect principal, trois
+preuves, la relecture zoomée, une confrontation et le procès-verbal, avec le mode « lecture assistée » activé par
+défaut pour apprendre le langage des signes. **Elle dévoile** : le visage comme interface, la relecture, le
+doute entre un coupable et un innocent qui craque. **Elle cache** : l'escalade sur les six nuits, les
+conséquences durables des choix et la fin.
 
 ---
 
@@ -583,18 +725,44 @@ procès-verbal. **12 à 15 minutes**, sur PC et PS5, à 60 fps en mode performan
 | Espace jouable | Une île de 0,6 à 1 km², une douzaine d'intérieurs | Une vallée de 4 à 6 km² | Un commissariat, 6 à 10 scènes compactes |
 | Durée de jeu | 7 à 9 h | 12 à 15 h | 8 à 10 h |
 | Solo ou multijoueur | Solo | Solo | Solo |
-| Classification anticipée | PEGI 16 | PEGI 12 | PEGI 16 |
-| Prix *(hypothèse)* | 29,99 € | 39,99 € | 24,99 à 29,99 € |
+| Classification anticipée | PEGI 16 ; ESRB M | PEGI 12 ; ESRB T | PEGI 16 ; ESRB M (ou T) |
+| Prix *(hypothèse)* | 29,99 € (variante haute 39,99 €) | 39,99 € | 24,99 à 29,99 € (variante haute 39,99 €) |
 | Équipe au pic *(estimation)* | 22 à 33 ETP | 36 à 53 ETP | 23 à 34 ETP |
 | Production *(estimation)* | 26 à 32 mois | 34 à 42 mois | 24 à 30 mois |
 | Sous-traitance dominante | Musique, petit casting, QA | Capture de traversée, doublage | Comédiens et capture, localisation |
 | Coût relatif *(estimation)* | Moyen | Élevé | Moyen, avec une part variable liée au casting |
-| Risque 60 fps (Series S) | Moyen (eau) | Élevé (végétation, météo, vues) | Faible (visages en nombre plafonné) |
+| Risque 60 fps (Series S) | Moyen (eau ; pire cas nocturne estimé à 17,5 ms pour 14,5 visées avant optimisation, non mesuré) | Élevé (végétation, météo, vues) | **Moyen** (visages en gros plan : 2,0 à 3,0 ms estimés pour deux visages sur PS5, non mesuré ; à mesurer par T-003) |
 | Steam Deck | Bon candidat | Difficile (« jouable » visé) | Bon candidat |
-| Risque de production | Moyen (level design à 3 états) | Élevé (monde, animation) | Moyen (volume de capture) |
+| Risque de production *(règle 5.1, risques de contenu et de volume : A1, A5, A6 ; B2, B3, B5, B6 ; C1, C2, C3, C5, C6, C7)* | **Élevé** (max 9 : A1 ; 1 risque à 9) | **Élevé** (max 9 : B2, B3 ; 2 risques à 9) | **Élevé** (max 9 : C2, C3 ; 2 risques à 9, C1 à 8) |
+| Risque global *(règle 5.1, tous les risques X.11)* | **Élevé** (max 9, 1 risque à 9) | **Très élevé** (max 12 : B1 ; 3 risques à 9 ou plus) | **Élevé** (max 9, 2 risques à 9, C1 à 8) |
 | Risque marché | Moyen (horreur encombrée) | Moyen (positionnement inédit à expliquer) | Moyen à élevé (niche plus étroite) |
 | Hook en 10 s | La mer monte et efface le chemin | Un visage givré rouvre les yeux | Un mensonge rembobiné au ralenti |
 | Extensibilité | Nouvelle île en DLC, anthologie littorale | Nouveaux massifs et saisons en DLC | Nouvelles affaires en DLC épisodiques |
+
+### 5.1 Règle d'agrégation des risques
+
+Les tableaux X.11 sont la source ; la synthèse (section 0 et lignes « Risque global » et « Risque de production »
+ci-dessus) en est **calculée**, jamais écrite à la main.
+
+- **Probabilité (P)** : Faible = 1, Moyenne = 2, Élevée = 3, Très élevée = 4. **Impact (I)** : Faible = 1,
+  Moyen = 2, Élevé = 3, Très élevé = 4.
+- **Score d'un risque = P × I** (de 1 à 16).
+- **Niveau global du concept = niveau du pire risque** : **Très élevé** si le maximum est de 12 ou plus ;
+  **Élevé** de 9 à 11 ; **Moyen** de 5 à 8 ; **Faible** jusqu'à 4. On indique en plus le **nombre de risques à 9
+  ou plus**, pour qu'un concept qui en cumule plusieurs ne se confonde pas avec un concept qui n'en a qu'un.
+- **Risque de production** : même règle, restreinte aux risques de contenu, de volume et de qualité de production
+  (hors coût GPU, marché et affichage). Le **risque global** les prend tous.
+
+| Concept | Scores P × I (X.11) | Maximum | Risques à 9 ou plus | Niveau global |
+|---|---|---|---|---|
+| A. ESTRAN | A1 9 ; A2 6 ; A3 6 ; A4 4 ; A5 4 ; A6 2 | 9 | 1 | **Élevé** |
+| B. DERNIÈRE POSITION CONNUE | B1 12 ; B2 9 ; B3 9 ; B4 6 ; B5 4 ; B6 3 | 12 | 3 | **Très élevé** |
+| C. AVEUX | C1 8 ; C2 9 ; C3 9 ; C4 6 ; C5 4 ; C6 6 ; C7 6 | 9 | 2 | **Élevé** |
+
+Lecture : la v1.0 résumait A et C en « Moyen » alors que chacun porte au moins un risque à 9. Le classement par
+risque ne change pas (B reste le plus risqué), mais A et C ne sont plus sous-estimés. C1 (vallée de l'étrange,
+probabilité moyenne, impact très élevé) fait 8 : un seul cran de probabilité de plus le ferait passer à 12. La
+recommandation reste ESTRAN parce que son seul risque à 9 (A1) se vérifie par un prototype au jalon M1.
 
 ---
 
@@ -605,22 +773,49 @@ procès-verbal. **12 à 15 minutes**, sur PC et PS5, à 60 fps en mode performan
 Notes de 1 à 5 attribuées par le game director. Elles sont **subjectives** et seront recalculées quand T-002,
 T-003 et T-015 seront disponibles.
 
+**Note 60 fps d'AVEUX ramenée de 5 à 4** (retour 2) : la section 1.2 tire de *Hellblade II* la leçon que les gros
+plans photoréalistes coûtent cher, et C.6 dit que la peau, les cheveux, les yeux et le rig facial sont le coût
+principal (2,0 à 3,0 ms estimés pour deux visages sur PS5, `BUDGETS.md` §14.1.2, non mesuré). La note reste à 4,
+et non plus bas, parce que le design plafonne les visages (2 au plus) et les pièces. Elle sera revue par T-003 (S-10).
+La note de 4 d'ESTRAN reste conditionnée par la scène du pire cas (6.3, condition 1), estimée à 17,5 ms avant
+optimisation pour 14,5 visées. AVEUX passe de 3,70 à **3,50** ; le classement ne change pas.
+
 | Critère (poids) | A. ESTRAN | B. DERNIÈRE POSITION CONNUE | C. AVEUX |
 |---|---|---|---|
 | Vendabilité et clarté du hook (25 %) | 4 | 4 | 3 |
 | Faisabilité pour un studio qui démarre : périmètre, équipe, coût (25 %) | 4 | 2 | 3 |
-| Tenue des 60 fps en mode performance, Series S comprise (20 %) | 4 | 2 | 5 |
+| Tenue des 60 fps en mode performance, Series S comprise (20 %) | 4 | 2 | **4** |
 | Rendement du photoréalisme : qualité visuelle par euro, au service de l'expérience (15 %) | 5 | 5 | 4 |
 | Originalité et différenciation (15 %) | 4 | 5 | 4 |
-| **Note pondérée** | **4,15** | **3,40** | **3,70** |
+| **Note pondérée** | **4,15** | **3,40** | **3,50** |
 
 **Solidité du classement** :
 
 - B ne passe devant A que si la faisabilité et la tenue des 60 fps pèsent **ensemble moins de la moitié du
   poids de l'originalité** (moins de 7,5 % avec une originalité à 15 %), ce qui contredirait le cahier des
   charges du studio.
-- C ne passe devant A que si la tenue des 60 fps pèse **plus que la vendabilité, la faisabilité et le
-  photoréalisme réunis**.
+- C ne passe jamais devant A par les seuls poids : avec les notes de la v1.1, A est au moins égal à C sur chaque
+  critère (la tenue des 60 fps et l'originalité sont à égalité), donc quelle que soit la pondération non négative
+  A reste devant ou à égalité.
+
+**Test de sensibilité sur les notes** *(retour 11)*. L'écart de départ est de 0,65 point entre A et C, et de
+0,75 point entre A et B. Aucune note seule ne renverse le classement ; il faut plusieurs notes qui bougent dans le
+même sens.
+
+| Scénario (notes modifiées) | A | B | C | Classement |
+|---|---|---|---|---|
+| Base v1.1 | 4,15 | 3,40 | 3,50 | A, C, B |
+| T-003 juge l'eau intenable : A 60 fps 4 vers 2 ; C 60 fps 4 vers 5 | 3,75 | 3,40 | 3,70 | A devant C de 0,05 |
+| Le scénario précédent et T-015 abaisse la faisabilité d'A de 4 à 3 | 3,50 | 3,40 | 3,70 | **C passe devant A** |
+| T-002 et T-015 : A vendabilité 3 et faisabilité 3 ; C vendabilité 4 et faisabilité 4 | 3,65 | 3,40 | 4,00 | **C passe devant A** |
+| Tout joue pour B : vendabilité 5, faisabilité 3, 60 fps 3 | 4,15 | 4,10 | 3,50 | A devant B de 0,05 |
+| Le scénario précédent et T-003 abaisse le 60 fps d'A de 4 à 3 | 3,95 | 4,10 | 3,50 | **B passe devant A** |
+
+**Quelle tâche peut faire bouger quelle note** : la tenue des 60 fps par **T-003** (S-9 pour A, S-10 pour C, B1
+pour B) ; la vendabilité par **T-002 et T-021** (marché, prix de lancement des concurrents directs) ; la
+faisabilité par **T-015** (chiffrage des équipes et des durées). L'originalité et le rendement du photoréalisme
+relèvent du game director et de l'`art-director`. Le classement dépend surtout du 60 fps d'ESTRAN : c'est la note à
+mesurer en premier.
 
 ### 6.2 Recommandation : ESTRAN
 
@@ -646,7 +841,11 @@ T-003 et T-015 seront disponibles.
 
 1. **Prototype de marée** : une zone en blockout avec les 3 états d'eau et leurs transitions, mesurée à 60 fps
    en mode performance sur PS5 et sur Xbox Series S (ou sur une configuration équivalente validée par le
-   `technical-director`), avant l'engagement de la vertical slice.
+   `technical-director`), avant l'engagement de la vertical slice. **La scène mesurée est le pire cas** : nuit,
+   pleine mer (eau dans tout le champ), faisceau du phare en mouvement et lampe du joueur ensemble, brouillard
+   volumétrique, reflets sur l'eau, un ou deux monstres dans le champ (protocole S-9, `BUDGETS.md` §14.1.1 ; estimation
+   de départ : 17,5 ms avant optimisation pour 14,5 ms visées, avec six leviers de rendu qui ne touchent aucune
+   information de jeu). Les seuls états d'eau, sans cette scène, ne suffisent pas.
 2. **Prototype de la Laisse** : en test de jeu, les testeurs comprennent sans tutoriel la règle
    « bruit dans l'eau, lumière du phare » en moins de 10 minutes, et décrivent la rencontre comme effrayante.
 3. **Lisibilité de l'obscurité** validée sur une TV à 3 m et sur Steam Deck.
@@ -660,6 +859,8 @@ complètement, je recommande de basculer sur **AVEUX**, le concept dont le risqu
 - **T-002** montre que l'horreur AA est saturée ou se vend mal sur consoles : AVEUX ou B remontent.
 - **T-003** juge l'eau dynamique avec Lumen intenable à 60 fps sur Series S, même en états discrets :
   AVEUX devient le premier choix.
+- **T-003** juge le pire cas nocturne (A.6) intenable sur Series S même avec tous les leviers de rendu autorisés par
+  la règle de parité : c'est le scénario du test de sensibilité (6.1) qui rapproche C d'A.
 - **T-015** montre un écart de budget important entre A et C au profit de C : la question se rouvre, car A et C
   sont proches en équipe et en durée. B reste, selon toute vraisemblance, trop coûteux pour un premier projet.
 
@@ -680,8 +881,14 @@ et les piliers du concept retenu seront rédigés en T-005 (`docs/vision/PITCH.m
 **Pour le `technical-director` (T-003)**
 
 - Coût d'une eau à couche unique à hauteur variable combinée à Lumen, à 60 fps sur Series S (concept A).
+- **Pire cas nocturne d'ESTRAN** (retour 4) : nuit, pleine mer, faisceau en mouvement et lampe du joueur,
+  brouillard volumétrique, reflets sur l'eau ; est-ce que la règle « lampe à ombres complètes, faisceau à ombres
+  limitées à son cône » (A.6) tient 60 fps, et à quel coût en rendu ? Estimation actuelle : 17,5 ms pour 14,5 visées.
 - Maturité de Nanite pour la végétation dans la version d'UE5 retenue, et coût de la météo dynamique (concept B).
-- Coût de 2 MetaHumans au niveau de détail maximal avec cheveux en mèches sur Series S (concept C).
+- Coût de 2 MetaHumans au niveau de détail maximal avec cheveux en mèches sur Series S (concept C) ; estimation
+  actuelle : 1,4 à 2,0 ms sur Series S, 2,0 à 3,0 ms sur PS5 (`BUDGETS.md` §14.1.2).
+- **Pour T-021** : dates, studios et prix de lancement des concurrents directs cités en A.9, B.9 et C.9 (chiffres de
+  ventes inclus), non vérifiés dans cette révision.
 - Maturité du motion matching et des outils MetaHuman Animator dans la version retenue (concepts B et C).
 
 **Pour `business-affairs` (T-015)**
@@ -710,3 +917,28 @@ et les piliers du concept retenu seront rédigés en T-005 (`docs/vision/PITCH.m
 - **Comédiens (A, B et surtout C)** : contrats de cession des droits à l'image et à la voix, avec un
   consentement explicite pour toute réutilisation numérique, à préparer par `business-affairs` et à faire
   valider par un avocat.
+
+---
+
+## 9. Journal des modifications
+
+### v1.1 du 2026-11-23 (tâche T-023, auteur `game-director`)
+
+Les effectifs et les durées des sections A.10, B.10 et C.10 **n'ont pas été modifiés** (base du chiffrage T-015) ;
+leurs totaux (22 à 33, 36 à 53, 23 à 34 ETP ; 26 à 32, 34 à 42, 24 à 30 mois) ont été recalculés et sont corrects.
+
+| Retour de la Boss (T-001) | Modification | Où |
+|---|---|---|
+| 1. Synthèse des risques | Règle d'agrégation P × I écrite et synthèse recalculée : ESTRAN Élevé, DERNIÈRE POSITION CONNUE Très élevé, AVEUX Élevé (au lieu de Moyen, Élevé, Moyen) | 0, 5 (lignes de risque), 5.1 |
+| 2. Note 60 fps d'AVEUX | Note ramenée de 5 à 4, risque 60 fps ramené de Faible à Moyen, estimation de §14.1.2 citée, note pondérée de 3,70 à 3,50 ; classement inchangé | 0, 1.2, C.6, 5, 6.1 |
+| 3. Parité de jeu | Règle de parité résumée (renvoi à `ARCHITECTURE.md` §10.1) ; brouillard plus dense sur Series S retiré d'A.6 et d'A.11 ; garde-fous de B.6 et C.6 alignés | 1.5, A.6, A.11, B.6, C.6 |
+| 4. Pire cas d'ESTRAN | Pire cas décrit (17,5 ms estimés pour 14,5 visées) ; coexistence lampe et faisceau précisée ; condition 1 de 6.3 reformulée ; question ajoutée pour T-003 | A.6, 6.3, 6.4, 7 |
+| 5. Concurrents directs | Concurrents directs séparés des références de design, au moins 2 par concept sortis depuis 2022, avec « ce qui nous en distingue » ; aucun chiffre de ventes ; dates et studios incertains marqués « à vérifier » | A.9, B.9, C.9, 7 |
+| 6. Capsule fixe | Capsule principale décrite pour les trois concepts | A.12, B.12, C.12 |
+| 7. Prix et contenu | Argument de contenu pour 39,99 € ou de prix inférieur (A et C) ; prix alignés sur la décision 5 de T-001 | A.1, A.8, C.1, C.8, 5 |
+| 8. Ordre de sortie | Plateformes reformulées en poids attendu des ventes, avec sortie simultanée | A.8, B.8, C.8 |
+| 9. Démo publique | Contenu de la démo de 20 à 30 minutes et ce qu'elle dévoile ou cache ; version courte de la première affaire d'AVEUX ; mitigation de C4 corrigée | A.13, B.13, C.13, C.11 |
+| 10. Faits à dater ou corriger | *Hellblade II* daté (sortie mai 2024 à 30 fps, mise à jour à vérifier) ; carton d'ESTRAN corrigé (« Deux fois par jour, la mer revient ») ; équivalent ESRB ajouté | 1.2, A.12, A.1, B.1, C.1, 5 |
+| 11. Sensibilité de la grille | Test sur les notes ajouté, avec la tâche qui peut faire bouger chaque note ; test sur les poids revu pour AVEUX | 6.1 |
+
+Retour 12 (licences et IA générative) : traité par la tâche T-024 (`business-affairs`), non par ce document.
