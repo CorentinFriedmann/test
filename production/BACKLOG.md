@@ -27,7 +27,7 @@
 | T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | À FAIRE |
 | T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
-| T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | À FAIRE |
+| T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | EN COURS |
 | T-022 | Données de marché par région et par langue | marketing-publishing | aucune | À CORRIGER |
 | T-023 | Révision v1.1 des trois concepts | game-director | aucune | VALIDÉ |
 | T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
@@ -223,7 +223,7 @@
 - **Contexte / références** : réserve de T-002 (retour 12). Tâche bloquée tant que l'humain propriétaire du projet n'a pas décidé d'autoriser l'accès en lecture aux sources (sections 0 et 12 de l'étude) ou fourni lui-même les pages et les exports. Obligatoire avant tout usage des chiffres hors du studio (dossier de financement, éditeur, investisseur).
 
 ### T-021 : Données de marché par concept et par genre
-- **Assigné à** : `marketing-publishing` · **Dépend de** : T-001, T-019 · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `marketing-publishing` · **Dépend de** : T-001, T-019 · **Jalon** : M0 · **Statut** : EN COURS
 - **Livrables** : `docs/business/MARCHE_PAR_CONCEPT.md`
 - **Critères d'acceptation** :
   - [ ] Pour le genre de chacun des 3 concepts de T-001 : nombre de jeux sortis sur Steam par an (2024 à 2026), ventes ou revenus estimés des titres dominants, part des nouvelles IP, avec la source et le niveau de confiance de chaque chiffre
