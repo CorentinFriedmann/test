@@ -12,8 +12,8 @@
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026, T-027 | VALIDÉ |
-| T-005 | Piliers et pitch final (ESTRAN « une marée ») | game-director | T-004 | EN REVUE BOSS |
-| T-006 | GDD « une marée » et tranche P2 | game-designer | T-005 | À FAIRE |
+| T-005 | Piliers et pitch final (ESTRAN « une marée ») | game-director | T-004 | VALIDÉ AVEC RÉSERVES |
+| T-006 | GDD « une marée » et tranche P2 | game-designer | T-005 | EN COURS |
 | T-007 | Bible artistique (rendu stylisé atmosphérique) | art-director | T-005, T-033 | À FAIRE |
 | T-008 | Bible narrative (textes, sans voix) | narrative-designer | T-005, T-033 | À FAIRE |
 | T-009 | Direction audio (synthèse Web Audio, sans doublage) | audio-director | T-031, T-033 | À FAIRE |
@@ -86,7 +86,7 @@
 - **Contexte / références** : poids et critères éliminatoires de la grille marché fixés dans `production/validations/T-002.md` (décision 3). La proposition indique le niveau de confiance des données de marché (T-020 faite ou non).
 
 ### T-005 : Piliers et pitch final (ESTRAN « une marée »)
-- **Assigné à** : `game-director` · **Dépend de** : T-004 (VALIDÉ) · **Jalon** : Essai · P2 (chemin critique, 1re tâche) · **Statut** : EN REVUE BOSS
+- **Assigné à** : `game-director` · **Dépend de** : T-004 (VALIDÉ) · **Jalon** : Essai · P2 (chemin critique, 1re tâche) · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** : `docs/vision/PITCH.md`, `docs/vision/PILIERS.md`
 - **Critères d'acceptation** :
   - [ ] Pitch en une phrase (30 mots au plus), en un paragraphe et en une page, pour ESTRAN version « une marée » (voir `production/validations/T-004.md` §6)
@@ -97,7 +97,7 @@
 - **Contexte / références** : `production/DECISIONS.md`, `docs/vision/PERIMETRE_SOLO.md` §2.1. Adaptée à la voie web (anciens critères : photoréalisme, plateformes consoles).
 
 ### T-006 : GDD « une marée » et tranche P2
-- **Assigné à** : `game-designer` · **Revue de pôle** : game-director · **Dépend de** : T-005 · **Jalon** : Essai · P2 (chemin critique) · **Statut** : À FAIRE
+- **Assigné à** : `game-designer` · **Revue de pôle** : game-director · **Dépend de** : T-005 · **Jalon** : Essai · P2 (chemin critique) · **Statut** : EN COURS
 - **Livrables** : `docs/design/GDD.md`, `docs/design/data/maree.csv`, `docs/design/data/menace.csv`
 - **Critères d'acceptation** :
   - [ ] Règle de marée spécifiée avec des chiffres : hauteur d'eau en fonction du temps (courbe dans `maree.csv`), zones qui se recouvrent, effet sur le déplacement, durée totale de la tranche P2 entre 5 et 10 minutes
