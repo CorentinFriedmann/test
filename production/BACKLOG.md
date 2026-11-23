@@ -10,7 +10,7 @@
 | T-001 | Trois concepts de jeu et pitch | game-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | VALIDÉ AVEC RÉSERVES |
-| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026 | À FAIRE |
+| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026, T-027 | À FAIRE |
 | T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
 | T-006 | GDD v1 | game-designer | T-005 | À FAIRE |
 | T-007 | Bible artistique | art-director | T-005 | À FAIRE |
@@ -33,6 +33,7 @@
 | T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
+| T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | EN COURS |
 
 ---
 
@@ -66,7 +67,7 @@
   - [ ] Liste des risques techniques (stutter de shaders, mémoire Series S...) avec mitigations
 
 ### T-004 : Choix du concept (Go / No-Go)
-- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015, T-023, T-026 · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015, T-023, T-026, T-027 · **Jalon** : M0 · **Statut** : À FAIRE
 - **Livrables** : `production/validations/T-004.md`
 - **Critères d'acceptation** :
   - [ ] Un concept retenu, avec sa justification (marché, faisabilité technique, budget, vision)
@@ -294,3 +295,18 @@
   - [x] Enveloppe de financement fournie par l'humain propriétaire, reprise telle quelle ; aucune hypothèse de fonds propres du propriétaire sans son accord
   - [x] Mention explicite : brouillon à faire valider par un expert-comptable
 - **Contexte / références** : réserve bloquante de `production/validations/T-015.md` (retours 1 et 2 et point stratégique). Les effectifs de `CONCEPTS.md` X.10 sont ceux d'un studio classique ; ils ne sont pas modifiés. Le périmètre réduit ne se chiffre pas avant que le propriétaire ait donné son enveloppe. **Réponse du propriétaire (2026-11-23, `production/DECISIONS.md`)** : aucun apport financier en dehors de l'abonnement Claude ; il travaille seul et il est débutant en Unreal ; sortie sur PC d'abord, consoles ensuite.
+
+### T-027 : Pivot technique web : pile, pipeline autonome et prototype de faisabilité
+- **Assigné à** : `technical-director` · **Dépend de** : T-026 · **Jalon** : M0 · **Statut** : EN COURS
+- **Livrables** :
+  - `docs/tech/ADR_PIVOT_WEB.md`
+  - `docs/tech/PIPELINE_WEB.md`
+  - `prototypes/estran-poc/`
+- **Critères d'acceptation** :
+  - [ ] Pile web retenue et justifiée (moteur de rendu three.js ou alternative, WebGL2 ou WebGPU, langage, outil de build), avec des versions exactes figées, installable depuis les registres de paquets autorisés par le réseau de la session
+  - [ ] Prototype minimal exécutable dans le dépôt : une scène nocturne d'ESTRAN (eau avec marée, brouillard, faisceau de phare, lampe du joueur), lancée et testée automatiquement dans le cloud (navigateur headless, capture d'écran), sans aucune action humaine
+  - [ ] Pipeline autonome documenté et exécuté au moins une fois : installation, build, tests automatisés, captures, publication d'une version jouable consultable par le propriétaire (page publiée ou équivalent)
+  - [ ] Budgets de performance cibles (PC de milieu de gamme, Steam Deck) et limites des mesures faites en rendu logiciel dans le cloud ; distribution envisagée (itch.io en HTML5, Steam via une application empaquetée) avec les étapes qui exigent le propriétaire
+  - [ ] Faisabilité des 3 concepts dans cette pile et ce que devient le réalisme ; origine des assets (procéduraux, CC0, générés) avec les contraintes de licence et de réseau
+  - [ ] Liste des documents et des fiches d'agents à mettre à jour (ARCHITECTURE, BUDGETS, NORMES_CODE, agents écrits pour Unreal)
+- **Contexte / références** : Décision du propriétaire du 2026-11-23 (production/DECISIONS.md, voie « les agents font tout »). Remplace Unreal Engine 5 comme référence. Prérequis de T-004.

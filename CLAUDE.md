@@ -51,6 +51,12 @@ de la section « Modes de fonctionnement » de `studio/WORKFLOW.md` :
 
 ## Stack technique de référence
 
+> **Décision du propriétaire (2026-11-23)** : le jeu est fabriqué **en technologie web 3D** (three.js ou équivalent,
+> choix détaillé en T-027), de bout en bout par les agents et testé dans le cloud (navigateur headless, Playwright).
+> Le propriétaire n'intervient pas techniquement. La référence Unreal Engine 5 ci-dessous ne sert plus qu'à un
+> éventuel portage futur ; en cas de conflit, la pile web de `docs/tech/ADR_PIVOT_WEB.md` prime.
+
+
 - **Moteur** : Unreal Engine 5 (dernière version stable), C++ en priorité, Blueprints pour le prototypage et le scripting designer.
 - **Rendu réaliste** : Lumen (GI dynamique), Nanite, Virtual Shadow Maps, matériaux Substrate,
   MetaHuman, PCG, upscaling (DLSS / FSR / XeSS / TSR, PSSR sur PS5 Pro).
