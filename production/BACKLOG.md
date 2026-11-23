@@ -32,7 +32,7 @@
 | T-023 | Révision v1.1 des trois concepts | game-director | aucune | VALIDÉ |
 | T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
-| T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | EN COURS |
+| T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | EN REVUE BOSS |
 
 ---
 
@@ -285,7 +285,7 @@
 - **Contexte / références** : réserves de la validation de T-019, retours 1 à 6 (`production/validations/T-019.md`). Non bloquante pour T-015 : `business-affairs` applique directement les décisions 1 à 3 de cette validation. À faire avant T-020, qui modifie le même fichier.
 
 ### T-026 : Scénario « studio IA + petite équipe humaine » pour les 3 concepts
-- **Assigné à** : `business-affairs` · **Dépend de** : T-015 · **Jalon** : M0 · **Statut** : EN COURS
+- **Assigné à** : `business-affairs` · **Dépend de** : T-015 · **Jalon** : M0 · **Statut** : EN REVUE BOSS
 - **Livrables** : `docs/business/BUDGET_PETITE_EQUIPE.md`
 - **Critères d'acceptation** :
   - [ ] Pour chaque concept, un périmètre réduit explicite (durée de jeu, taille du monde, ce qui est coupé ou remplacé par des assets sous licence) avec les effectifs humains et la durée, proposés par `game-director` ou `producer` et non inventés par `business-affairs`
