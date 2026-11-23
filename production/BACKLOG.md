@@ -10,7 +10,7 @@
 | T-001 | Trois concepts de jeu et pitch | game-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | VALIDÉ AVEC RÉSERVES |
-| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026, T-027 | À FAIRE |
+| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026, T-027 | EN COURS |
 | T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
 | T-006 | GDD v1 | game-designer | T-005 | À FAIRE |
 | T-007 | Bible artistique | art-director | T-005 | À FAIRE |
@@ -67,7 +67,7 @@
   - [ ] Liste des risques techniques (stutter de shaders, mémoire Series S...) avec mitigations
 
 ### T-004 : Choix du concept (Go / No-Go)
-- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015, T-023, T-026, T-027 · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015, T-023, T-026, T-027 · **Jalon** : M0 · **Statut** : EN COURS
 - **Livrables** : `production/validations/T-004.md`
 - **Critères d'acceptation** :
   - [ ] Un concept retenu, avec sa justification (marché, faisabilité technique, budget, vision)

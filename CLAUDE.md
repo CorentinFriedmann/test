@@ -13,7 +13,7 @@ aujourd'hui** tout en restant **fluide** (60 fps en mode performance sur console
 ## Décisions du propriétaire
 
 Les décisions de l'humain propriétaire sont consignées dans `production/DECISIONS.md` et **priment** sur celles de la Boss.
-Situation actuelle : budget limité à l'abonnement Claude, propriétaire seul et débutant, PC d'abord puis consoles.
+Situation actuelle : budget limité à l'abonnement Claude ; le propriétaire ne fait rien lui-même ; jeu en 3D web fabriqué par les agents ; rendu stylisé atmosphérique (pas photoréaliste) ; PC d'abord. En mode économe, enchaîner les tâches et ne s'arrêter qu'aux vraies décisions (voir DECISIONS.md).
 Transmets ce fichier à tout agent qui propose un périmètre, un budget ou un plan.
 
 ## Règle n°1 : validation par la Boss (non négociable)
