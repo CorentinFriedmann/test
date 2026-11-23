@@ -10,6 +10,12 @@ Créer un **jeu vidéo vendable**, jouable sur **PC (Steam, Epic, Steam Deck)**,
 **PlayStation 5** et **Xbox Series X|S**, avec les **graphismes les plus réalistes possibles
 aujourd'hui** tout en restant **fluide** (60 fps en mode performance sur console).
 
+## Décisions du propriétaire
+
+Les décisions de l'humain propriétaire sont consignées dans `production/DECISIONS.md` et **priment** sur celles de la Boss.
+Situation actuelle : budget limité à l'abonnement Claude, propriétaire seul et débutant, PC d'abord puis consoles.
+Transmets ce fichier à tout agent qui propose un périmètre, un budget ou un plan.
+
 ## Règle n°1 : validation par la Boss (non négociable)
 
 1. Toute tâche est décrite dans `production/BACKLOG.md` avec un ID `T-XXX` et des critères d'acceptation.
