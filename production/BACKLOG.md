@@ -12,7 +12,7 @@
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026, T-027 | VALIDÉ |
-| T-005 | Piliers et pitch final (ESTRAN « une marée ») | game-director | T-004 | À FAIRE |
+| T-005 | Piliers et pitch final (ESTRAN « une marée ») | game-director | T-004 | EN COURS |
 | T-006 | GDD « une marée » et tranche P2 | game-designer | T-005 | À FAIRE |
 | T-007 | Bible artistique (rendu stylisé atmosphérique) | art-director | T-005, T-033 | À FAIRE |
 | T-008 | Bible narrative (textes, sans voix) | narrative-designer | T-005, T-033 | À FAIRE |
@@ -35,7 +35,7 @@
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
 | T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
-| T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | EN REVUE BOSS |
+| T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | VALIDÉ AVEC RÉSERVES |
 | T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | À FAIRE |
 | T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | À FAIRE |
 | T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | À FAIRE |
@@ -86,7 +86,7 @@
 - **Contexte / références** : poids et critères éliminatoires de la grille marché fixés dans `production/validations/T-002.md` (décision 3). La proposition indique le niveau de confiance des données de marché (T-020 faite ou non).
 
 ### T-005 : Piliers et pitch final (ESTRAN « une marée »)
-- **Assigné à** : `game-director` · **Dépend de** : T-004 (VALIDÉ) · **Jalon** : Essai · P2 (chemin critique, 1re tâche) · **Statut** : À FAIRE
+- **Assigné à** : `game-director` · **Dépend de** : T-004 (VALIDÉ) · **Jalon** : Essai · P2 (chemin critique, 1re tâche) · **Statut** : EN COURS
 - **Livrables** : `docs/vision/PITCH.md`, `docs/vision/PILIERS.md`
 - **Critères d'acceptation** :
   - [ ] Pitch en une phrase (30 mots au plus), en un paragraphe et en une page, pour ESTRAN version « une marée » (voir `production/validations/T-004.md` §6)
@@ -335,7 +335,7 @@
 - **Contexte / références** : Décision du propriétaire du 2026-11-23 (production/DECISIONS.md, voie « les agents font tout »). Remplace Unreal Engine 5 comme référence. Prérequis de T-004.
 
 ### T-028 : Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls)
-- **Assigné à** : `producer` · **Dépend de** : T-004, T-027 · **Jalon** : M1 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `producer` · **Dépend de** : T-004, T-027 · **Jalon** : M1 · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** :
   - `production/BACKLOG.md`
   - `production/ROADMAP.md`
@@ -345,6 +345,7 @@
   - [ ] Une tâche de mise à jour des documents techniques et des fiches d'agents pour la voie web (liste de docs/tech/ADR_PIVOT_WEB.md §7)
   - [ ] production/ROADMAP.md : étapes de l'essai (P1 à P4 de production/validations/T-004.md), ce que le propriétaire verra et décidera à chaque porte, sans date ferme
   - [ ] Respect de production/DECISIONS.md (le propriétaire ne fait rien, budget limité à l'abonnement Claude, mode économe) et des réserves non bloquantes des validations précédentes, reprises quand elles concernent le plan
+- **Validation** : `production/validations/T-028.md` (cycle 1, 2026-11-23) · Réserves non bloquantes dans le rapport ; arbitrages de la Boss : langage JavaScript pour P2, audio par `audio-director`, T-024 juste après T-031
 - **Contexte / références** : Décision du propriétaire du 2026-11-23 : ESTRAN accepté à l'essai. Périmètre, portes d'arrêt et « on ne fait pas » dans production/validations/T-004.md.
 
 ### T-029 : Noyau jouable : marée, menace, île, boucle de jeu
@@ -357,6 +358,7 @@
   - [ ] Au moins 15 tests unitaires (marée, menace, déterminisme : même graine, mêmes entrées, même état final) ; test de parité : deux réglages de rendu donnent un journal de simulation identique
   - [ ] Au moins 2 scénarios Playwright : un joueur automate qui gagne et un qui perd, sans erreur ni avertissement dans la console ; `npm run all` vert depuis un dépôt propre
   - [ ] Rendu provisoire accepté (celui du prototype) : T-030 s'en charge
+  - [ ] Langage : **JavaScript ES2022** comme le prototype (arbitrage de la Boss, T-028) ; aucune nouvelle dépendance ni compilateur TypeScript pour P2 ; le passage à TypeScript strict est évalué après P2 (T-034, ADR §2)
 - **Contexte / références** : `prototypes/estran-poc/` (T-027), `docs/tech/ADR_PIVOT_WEB.md` (pile et langage), `docs/design/GDD.md`. Pas de nouvelles dépendances sans mise à jour de `docs/legal/LICENCES.md` (T-024).
 
 ### T-030 : Ambiance visuelle stylisée, niveaux de qualité et mesures de performance
@@ -381,7 +383,7 @@
   - [ ] Niveau mesuré : aucun écrêtage (crête sous −1 dBFS) sur un parcours complet rendu hors ligne ; démarrage de l'audio sur un geste du joueur, sans erreur de console
   - [ ] Option de sous-titres des bruits (texte court, par exemple « bruit dans l'eau, à gauche »), désactivée par défaut, servant l'accessibilité
   - [ ] `NOTES_AUDIO_P2.md` : ce qui est fait, ce qui reste, hypothèses sur ce qui fait peur
-- **Contexte / références** : au moins la moitié de la peur est portée par l'audio (`production/validations/T-004.md` R3). La direction audio complète (T-009) vient après P2.
+- **Contexte / références** : **codée par `audio-director`** (arbitrage de la Boss, T-028) ; sa fiche parle encore de MetaSounds et de Wwise : la Coordination lui transmet `docs/tech/ADR_PIVOT_WEB.md` et `production/DECISIONS.md` (Web Audio seulement). Au moins la moitié de la peur est portée par l'audio (`production/validations/T-004.md` R3). La direction audio complète (T-009) vient après P2.
 
 ### T-032 : Tests automatisés et rapport de la porte P2
 - **Assigné à** : `qa-lead` · **Dépend de** : T-030, T-031 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
