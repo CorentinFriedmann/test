@@ -33,7 +33,7 @@
 | T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
-| T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | EN REVUE BOSS |
+| T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
 
 ---
 
@@ -297,7 +297,7 @@
 - **Contexte / références** : réserve bloquante de `production/validations/T-015.md` (retours 1 et 2 et point stratégique). Les effectifs de `CONCEPTS.md` X.10 sont ceux d'un studio classique ; ils ne sont pas modifiés. Le périmètre réduit ne se chiffre pas avant que le propriétaire ait donné son enveloppe. **Réponse du propriétaire (2026-11-23, `production/DECISIONS.md`)** : aucun apport financier en dehors de l'abonnement Claude ; il travaille seul et il est débutant en Unreal ; sortie sur PC d'abord, consoles ensuite.
 
 ### T-027 : Pivot technique web : pile, pipeline autonome et prototype de faisabilité
-- **Assigné à** : `technical-director` · **Dépend de** : T-026 · **Jalon** : M0 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `technical-director` · **Dépend de** : T-026 · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** :
   - `docs/tech/ADR_PIVOT_WEB.md`
   - `docs/tech/PIPELINE_WEB.md`
