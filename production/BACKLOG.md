@@ -21,7 +21,7 @@
 | T-012 | Plan de portage et de certification | platform-engineer | T-003 | À FAIRE |
 | T-013 | Stratégie de test et de qualité | qa-lead | T-003, T-006 | À FAIRE |
 | T-014 | Principes UX/UI et accessibilité | ui-ux-designer | T-006 | À FAIRE |
-| T-015 | Chiffrage des 3 concepts et pistes de financement | business-affairs | T-001, T-002, T-003, T-019, T-021 | EN COURS |
+| T-015 | Chiffrage des 3 concepts et pistes de financement | business-affairs | T-001, T-002, T-003, T-019, T-021 | EN REVUE BOSS |
 | T-016 | Moodboards et key art du concept retenu | concept-artist | T-005 | À FAIRE |
 | T-017 | Plan de localisation | localization-manager | T-002, T-008, T-022 | À FAIRE |
 | T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | À FAIRE |
@@ -158,7 +158,7 @@
   - [ ] Plan d'accessibilité (sous-titres, daltonisme, difficulté, aides motrices) inspiré des Xbox Accessibility Guidelines
 
 ### T-015 : Chiffrage des 3 concepts et pistes de financement
-- **Assigné à** : `business-affairs` · **Dépend de** : T-001, T-002, T-003, T-019, T-021 · **Jalon** : M0 · **Statut** : EN COURS
+- **Assigné à** : `business-affairs` · **Dépend de** : T-001, T-002, T-003, T-019, T-021 · **Jalon** : M0 · **Statut** : EN REVUE BOSS
 - **Livrables** : `docs/business/BUDGET.md`, `docs/business/FINANCEMENT.md`
 - **Critères d'acceptation** :
   - [ ] Fourchette de budget et durée de production pour chacun des 3 concepts, avec les postes de coût détaillés
