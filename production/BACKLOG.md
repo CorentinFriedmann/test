@@ -1,6 +1,7 @@
 # Backlog de production
 
-> Tenu par `producer`. Statuts : À FAIRE · EN COURS · EN REVUE BOSS · VALIDÉ · VALIDÉ AVEC RÉSERVES · À CORRIGER · BLOQUÉ.
+> Tenu par `producer`. Statuts : À FAIRE · EN COURS · EN REVUE BOSS · VALIDÉ · VALIDÉ AVEC RÉSERVES · À CORRIGER · BLOQUÉ · ABANDONNÉ (voir `studio/WORKFLOW.md`).
+> **Essai ESTRAN « une marée » (voie web)** : chemin critique jusqu'à la porte P2 = T-005, T-006, T-029, T-030, T-031, T-024, T-032, T-033, dans cet ordre, un agent à la fois. Tout le reste est hors chemin P2 (voir `production/ROADMAP.md`).
 > Seule la `boss` peut poser `VALIDÉ` ou `À CORRIGER`.
 
 ## Vue d'ensemble : Sprint 0 (Jalon M0 Concept, puis début de M1)
@@ -11,30 +12,37 @@
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026, T-027 | VALIDÉ |
-| T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
-| T-006 | GDD v1 | game-designer | T-005 | À FAIRE |
-| T-007 | Bible artistique | art-director | T-005 | À FAIRE |
-| T-008 | Bible narrative | narrative-designer | T-005 | À FAIRE |
-| T-009 | Direction audio | audio-director | T-005 | À FAIRE |
-| T-010 | Roadmap et plan de production | producer | T-006, T-007 | À FAIRE |
-| T-011 | Squelette du projet UE5 et pipeline CI | build-engineer | T-003 | À FAIRE |
-| T-012 | Plan de portage et de certification | platform-engineer | T-003 | À FAIRE |
-| T-013 | Stratégie de test et de qualité | qa-lead | T-003, T-006 | À FAIRE |
-| T-014 | Principes UX/UI et accessibilité | ui-ux-designer | T-006 | À FAIRE |
+| T-005 | Piliers et pitch final (ESTRAN « une marée ») | game-director | T-004 | À FAIRE |
+| T-006 | GDD « une marée » et tranche P2 | game-designer | T-005 | À FAIRE |
+| T-007 | Bible artistique (rendu stylisé atmosphérique) | art-director | T-005, T-033 | À FAIRE |
+| T-008 | Bible narrative (textes, sans voix) | narrative-designer | T-005, T-033 | À FAIRE |
+| T-009 | Direction audio (synthèse Web Audio, sans doublage) | audio-director | T-031, T-033 | À FAIRE |
+| T-010 | Plan de la tranche verticale et registre des risques | producer | T-033 | À FAIRE |
+| T-011 | Squelette du projet UE5 et pipeline CI | build-engineer | T-003 | ABANDONNÉ |
+| T-012 | Plan de portage et de certification | platform-engineer | T-003 | ABANDONNÉ |
+| T-013 | Stratégie de test et de qualité (web) | qa-lead | T-032 | À FAIRE |
+| T-014 | Principes UX/UI et accessibilité (web) | ui-ux-designer | T-033 | À FAIRE |
 | T-015 | Chiffrage des 3 concepts et pistes de financement | business-affairs | T-001, T-002, T-003, T-019, T-021 | VALIDÉ AVEC RÉSERVES |
-| T-016 | Moodboards et key art du concept retenu | concept-artist | T-005 | À FAIRE |
-| T-017 | Plan de localisation | localization-manager | T-002, T-008, T-022 | À FAIRE |
-| T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | À FAIRE |
+| T-016 | Moodboards et key art du concept retenu | concept-artist | T-007 | À FAIRE |
+| T-017 | Plan de localisation (FR et EN) | localization-manager | T-008 | À FAIRE |
+| T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | ABANDONNÉ |
 | T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | VALIDÉ AVEC RÉSERVES |
 | T-022 | Données de marché par région et par langue | marketing-publishing | aucune | À CORRIGER |
 | T-023 | Révision v1.1 des trois concepts | game-director | aucune | VALIDÉ |
-| T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
+| T-024 | Registre des licences et règles d'usage de l'IA générative (voie web) | business-affairs | aucune | À FAIRE |
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
 | T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
-| T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | EN COURS |
+| T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | EN REVUE BOSS |
+| T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | À FAIRE |
+| T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | À FAIRE |
+| T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | À FAIRE |
+| T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | À FAIRE |
+| T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024 | À FAIRE |
+| T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
+| T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
 
 ---
 
@@ -77,89 +85,100 @@
   - [x] **Proposition présentée à l'humain propriétaire du projet pour accord final**
 - **Contexte / références** : poids et critères éliminatoires de la grille marché fixés dans `production/validations/T-002.md` (décision 3). La proposition indique le niveau de confiance des données de marché (T-020 faite ou non).
 
-### T-005 : Piliers et pitch final
-- **Assigné à** : `game-director` · **Dépend de** : T-004 · **Jalon** : M1 · **Statut** : À FAIRE
+### T-005 : Piliers et pitch final (ESTRAN « une marée »)
+- **Assigné à** : `game-director` · **Dépend de** : T-004 (VALIDÉ) · **Jalon** : Essai · P2 (chemin critique, 1re tâche) · **Statut** : À FAIRE
 - **Livrables** : `docs/vision/PITCH.md`, `docs/vision/PILIERS.md`
 - **Critères d'acceptation** :
-  - [ ] Pitch en une phrase, en un paragraphe et en une page
-  - [ ] 3 à 5 piliers de design avec des exemples de « on fait / on ne fait pas »
-  - [ ] Titre provisoire et vérification sommaire d'antériorité du nom
+  - [ ] Pitch en une phrase (30 mots au plus), en un paragraphe et en une page, pour ESTRAN version « une marée » (voir `production/validations/T-004.md` §6)
+  - [ ] La **règle de la marée** et la **règle de la menace** (« bruit dans l'eau, lumière du phare ») énoncées chacune en 3 phrases au plus, compréhensibles sans image : elles servent de test de compréhension à la porte P2
+  - [ ] 3 à 5 piliers de design, chacun avec au moins un « on fait » et un « on ne fait pas » ; la liste « on ne fait pas » de T-004 §6 est reprise telle quelle et n'est pas élargie
+  - [ ] Rendu stylisé atmosphérique (pas de photoréalisme) et jeu solo sur PC (navigateur) affirmés ; aucune mention d'Unreal, de consoles ou de voix humaine enregistrée
+  - [ ] Titre provisoire ; vérification d'antériorité sommaire, ou mention « non vérifié » si l'accès réseau manque
+- **Contexte / références** : `production/DECISIONS.md`, `docs/vision/PERIMETRE_SOLO.md` §2.1. Adaptée à la voie web (anciens critères : photoréalisme, plateformes consoles).
 
-### T-006 : GDD v1
-- **Assigné à** : `game-designer` · **Revue de pôle** : game-director · **Dépend de** : T-005 · **Jalon** : M1 · **Statut** : À FAIRE
-- **Livrables** : `docs/design/GDD.md`, `docs/design/data/*.csv`
+### T-006 : GDD « une marée » et tranche P2
+- **Assigné à** : `game-designer` · **Revue de pôle** : game-director · **Dépend de** : T-005 · **Jalon** : Essai · P2 (chemin critique) · **Statut** : À FAIRE
+- **Livrables** : `docs/design/GDD.md`, `docs/design/data/maree.csv`, `docs/design/data/menace.csv`
 - **Critères d'acceptation** :
-  - [ ] Boucles de gameplay (30 s / 5 min / 1 h), contrôles manette et clavier/souris
-  - [ ] Systèmes principaux spécifiés (entrées, sorties, règles, cas limites)
-  - [ ] Progression et économie chiffrées dans des tableaux CSV
-  - [ ] Périmètre du Vertical Slice défini
+  - [ ] Règle de marée spécifiée avec des chiffres : hauteur d'eau en fonction du temps (courbe dans `maree.csv`), zones qui se recouvrent, effet sur le déplacement, durée totale de la tranche P2 entre 5 et 10 minutes
+  - [ ] Règle de menace spécifiée avec des chiffres (`menace.csv`) : déclencheurs du « bruit dans l'eau », distance et direction audibles, effet de la lumière du phare et de la lampe, conditions de défaite ; rien de ce qui touche à la logique ne dépend des réglages de rendu (règle de parité de T-023)
+  - [ ] Boucles de jeu à 30 s et à 5 min ; objectif, victoire et défaite de la tranche P2 ; au moins 8 cas limites listés (lampe éteinte, marée au maximum, joueur immobile, etc.)
+  - [ ] Contrôles clavier et souris, et manette via l'API Gamepad du navigateur ; HUD minimal défini (sans texte d'explication de la règle : c'est ce que la porte P2 teste)
+  - [ ] Brief d'ambiance en une page : 5 couleurs de palette et 3 moments d'éclairage (aube, jour gris, nuit), servant de référence à T-030 en attendant T-007
+  - [ ] Questionnaire de la porte P2 : 5 questions de compréhension et d'inquiétude (« qu'est-ce qui vous fait peur », « que faites-vous quand vous entendez un bruit dans l'eau », etc.) avec la réponse attendue
+  - [ ] Périmètre de la tranche verticale (après P2) défini en une section, sans dépasser T-004 §6
+- **Contexte / références** : adaptée de « GDD v1 » (critères d'origine : manette et clavier, économie en CSV, systèmes complets). Seule la tranche P2 est spécifiée en détail ; le reste du jeu est décrit au niveau d'un plan.
 
-### T-007 : Bible artistique
-- **Assigné à** : `art-director` · **Dépend de** : T-005 · **Jalon** : M1 · **Statut** : À FAIRE
+### T-007 : Bible artistique (rendu stylisé atmosphérique)
+- **Assigné à** : `art-director` · **Dépend de** : T-005, T-033 · **Jalon** : Essai · après P2 · **Statut** : À FAIRE
 - **Livrables** : `docs/art/BIBLE_ARTISTIQUE.md`, `docs/art/NOMMAGE_ASSETS.md`
 - **Critères d'acceptation** :
-  - [ ] Direction visuelle, palettes, ambiances lumineuses, références
-  - [ ] Standards de photoréalisme : PBR calibré, texel density, échelle, Nanite ou LOD
-  - [ ] Budgets d'assets alignés sur `docs/tech/BUDGETS.md`
-  - [ ] Convention de nommage et arborescence de `game/Content/`
+  - [ ] Direction visuelle stylisée atmosphérique (low-poly éclairé, brouillard, grain, écume), palettes, ambiances lumineuses ; remplace toute norme de photoréalisme (PBR calibré, Nanite, texel density)
+  - [ ] Budgets d'assets alignés sur les budgets web de `docs/tech/ADR_PIVOT_WEB.md` §4 (ou sur `docs/tech/BUDGETS.md` une fois T-034 faite)
+  - [ ] Origine de chaque asset : procédural par défaut ; tout asset tiers passe par `docs/legal/LICENCES.md` (T-024)
+  - [ ] Convention de nommage et arborescence des assets sous `game/`
+- **Contexte / références** : adaptée (rendu stylisé, décision du 2026-11-23). Reportée après P2 : T-006 fournit le brief d'ambiance suffisant pour le prototype.
 
-### T-008 : Bible narrative
-- **Assigné à** : `narrative-designer` · **Dépend de** : T-005 · **Jalon** : M1 · **Statut** : À FAIRE
+### T-008 : Bible narrative (textes, sans voix)
+- **Assigné à** : `narrative-designer` · **Dépend de** : T-005, T-033 · **Jalon** : Essai · après P2 · **Statut** : À FAIRE
 - **Livrables** : `docs/narrative/BIBLE_NARRATIVE.md`
 - **Critères d'acceptation** :
-  - [ ] Univers, thèmes, structure en actes, personnages principaux
-  - [ ] Ton cohérent avec les piliers ; classification d'âge visée (PEGI) anticipée
-  - [ ] Format des textes prêt pour la localisation (tables de chaînes)
+  - [ ] Univers, thèmes, 4 marées sur 2 jours, 2 à 3 personnages présents par textes, photos et enregistrements (pas de visages animés)
+  - [ ] Ton cohérent avec les piliers ; classification d'âge visée anticipée
+  - [ ] Aucune voix humaine enregistrée par défaut : radio et cassettes en texte et sons, ou voix de synthèse selon T-024
+  - [ ] Format des textes prêt pour la localisation (fichiers JSON de chaînes avec ID, contexte et limite de longueur)
+- **Contexte / références** : adaptée (pas de comédiens ni de doublage, voir `production/validations/T-004.md` §6). Reportée après P2.
 
-### T-009 : Direction audio
-- **Assigné à** : `audio-director` · **Dépend de** : T-005 · **Jalon** : M1 · **Statut** : À FAIRE
+### T-009 : Direction audio (synthèse Web Audio, sans doublage)
+- **Assigné à** : `audio-director` · **Dépend de** : T-031, T-033 · **Jalon** : Essai · après P2 · **Statut** : À FAIRE
 - **Livrables** : `docs/audio/DIRECTION_AUDIO.md`
 - **Critères d'acceptation** :
-  - [ ] Identité sonore et musicale, références
-  - [ ] Choix du middleware (MetaSounds ou Wwise) justifié, coût de licence inclus
-  - [ ] Budgets audio (voix simultanées, mémoire) et plan de doublage et de localisation
+  - [ ] Identité sonore et références, partant de ce qui a fonctionné dans le prototype P2 (T-031 et avis de la porte P2)
+  - [ ] Choix technique : Web Audio API et synthèse procédurale ; MetaSounds et Wwise supprimés ; aucun coût de licence
+  - [ ] Budgets audio web (voix simultanées, mémoire, taille du fichier jouable)
+  - [ ] Plan voix : aucune voix enregistrée par défaut, option de voix de synthèse soumise à T-024 ; pas de plan de doublage
+- **Contexte / références** : adaptée à la voie web. La partie audio de P2 est faite par T-031.
 
-### T-010 : Roadmap et plan de production
-- **Assigné à** : `producer` · **Dépend de** : T-006, T-007 · **Jalon** : M1 · **Statut** : À FAIRE
-- **Livrables** : `production/ROADMAP.md`, `production/RISQUES.md`, mise à jour de ce backlog
+### T-010 : Plan de la tranche verticale et registre des risques
+- **Assigné à** : `producer` · **Dépend de** : T-033 (résultat de P2) · **Jalon** : Essai · après P2 · **Statut** : À FAIRE
+- **Livrables** : `production/RISQUES.md`, mise à jour de `production/ROADMAP.md` et de ce backlog
 - **Critères d'acceptation** :
-  - [ ] Jalons M1 à M6 datés avec leurs contenus
-  - [ ] Backlog du jalon M1 (Vertical Slice) découpé en tâches avec critères d'acceptation
-  - [ ] Registre des risques (probabilité, impact, mitigation, responsable)
+  - [ ] Registre des risques (probabilité, impact, mitigation, responsable), partant des risques R1 à R9 de `production/validations/T-004.md` §8
+  - [ ] Si P2 est passée : tâches de la tranche verticale découpées (une tâche, un agent, une session) avec critères mesurables ; durée estimée avec marge, et seuil de dérive P4 (+50 %) repris
+  - [ ] Aucune date ferme tant que la durée réelle de P2 n'est pas connue
+- **Contexte / références** : adaptée. La feuille de route des portes P1 à P4 est livrée par T-028 (`production/ROADMAP.md`) ; cette tâche ne la refait pas, elle la prolonge après P2.
 
 ### T-011 : Squelette du projet UE5 et pipeline CI
-- **Assigné à** : `build-engineer` · **Revue de pôle** : technical-director · **Dépend de** : T-003 · **Jalon** : M1 · **Statut** : À FAIRE
-- **Livrables** : `game/` (projet UE5 avec ses modules), `.gitattributes`, `.gitignore`, `ci/`, `docs/tech/BUILD.md`
-- **Critères d'acceptation** :
-  - [ ] Structure de projet conforme à `ARCHITECTURE.md`
-  - [ ] Git LFS configuré pour les binaires (uasset, umap, textures, audio)
-  - [ ] Pipeline CI documenté : compilation, tests d'automatisation, packaging Win64
-  - [ ] Procédure reproductible pour un poste développeur
+- **Assigné à** : `build-engineer` · **Dépend de** : T-003 · **Statut** : ABANDONNÉ (par T-028, 2026-11-23, avec l'accord de la Boss à la revue de T-028)
+- **Raison** : Unreal Engine n'est plus le moteur (`production/DECISIONS.md`, 2026-11-23, voie web).
+- **Remplacée par** : pipeline web déjà établi par T-027 (`docs/tech/PIPELINE_WEB.md`) ; code du jeu en T-029 ; empaquetage en T-033.
+- Critères d'origine supprimés (historique git).
 
 ### T-012 : Plan de portage et de certification
-- **Assigné à** : `platform-engineer` · **Dépend de** : T-003 · **Jalon** : M1 · **Statut** : À FAIRE
-- **Livrables** : `docs/tech/PLATEFORMES.md`
-- **Critères d'acceptation** :
-  - [ ] Démarches pour devenir développeur PlayStation, Xbox (ID@Xbox) et Steamworks, avec les actions humaines requises
-  - [ ] Couche d'abstraction plateforme prévue dans l'architecture
-  - [ ] Checklist de pré-certification (TRC / XR) sans contenu sous NDA
-  - [ ] Plan Steam Deck Verified
+- **Assigné à** : `platform-engineer` · **Dépend de** : T-003 · **Statut** : ABANDONNÉ (par T-028, 2026-11-23, avec l'accord de la Boss à la revue de T-028)
+- **Raison** : Consoles hors périmètre (PC d'abord, `production/DECISIONS.md`) ; la certification n'a pas d'objet sans console.
+- **Remplacée par** : aucune pour l'instant. Après la porte P3 : une tâche de plan Steam (Electron, Steam Deck « Jouable ») sera créée si l'essai continue ; la démo itch.io est couverte par T-033.
+- Critères d'origine supprimés (historique git).
 
-### T-013 : Stratégie de test et de qualité
-- **Assigné à** : `qa-lead` · **Dépend de** : T-003, T-006 · **Jalon** : M1 · **Statut** : À FAIRE
+### T-013 : Stratégie de test et de qualité (web)
+- **Assigné à** : `qa-lead` · **Dépend de** : T-032 · **Jalon** : Essai · après P2 · **Statut** : À FAIRE
 - **Livrables** : `docs/qa/STRATEGIE_TEST.md`, `production/BUGS.md`
 - **Critères d'acceptation** :
-  - [ ] Types de tests (unitaires, automatisation UE, Gauntlet, perf, régression, playtests)
-  - [ ] Classification des bugs (sévérité et priorité) et processus de triage
-  - [ ] Critères de sortie de chaque jalon (Alpha, Beta, Gold)
+  - [ ] Types de tests retenus : unitaires, Playwright (parcours et captures), cadence en navigateur headless et sur matériel réel (via le rapport de performance copié par le propriétaire), régression ; automatisation d'Unreal et Gauntlet supprimées
+  - [ ] Limites des mesures logicielles du cloud écrites (ADR §4.3) ; test humain = la démo publique, faute de testeurs (risque R5)
+  - [ ] Classification des bugs (sévérité et priorité) et processus de triage ; `production/BUGS.md` repris tel que créé par T-032
+  - [ ] Critères de sortie des portes P3 (démo) et de la version finale
+- **Contexte / références** : adaptée ; s'appuie sur ce que T-032 a mis en place.
 
-### T-014 : Principes UX/UI et accessibilité
-- **Assigné à** : `ui-ux-designer` · **Dépend de** : T-006 · **Jalon** : M1 · **Statut** : À FAIRE
+### T-014 : Principes UX/UI et accessibilité (web)
+- **Assigné à** : `ui-ux-designer` · **Dépend de** : T-033 · **Jalon** : Essai · après P2 · **Statut** : À FAIRE
 - **Livrables** : `docs/ux/UX_UI.md`
 - **Critères d'acceptation** :
-  - [ ] Arborescence des menus, principes du HUD, lisibilité sur TV à 3 m et sur Steam Deck
-  - [ ] Glyphes de boutons par plateforme et remappage des contrôles
-  - [ ] Plan d'accessibilité (sous-titres, daltonisme, difficulté, aides motrices) inspiré des Xbox Accessibility Guidelines
+  - [ ] Arborescence des menus et principes du HUD, lisibilité sur écran de PC et sur Steam Deck (1280 × 800)
+  - [ ] Clavier et souris, manette (API Gamepad) ; glyphes de boutons clavier et manette ; remappage des contrôles
+  - [ ] Plan d'accessibilité : sous-titres des bruits, daltonisme, difficulté, aides motrices ; glyphes PlayStation et Xbox supprimés
+  - [ ] S'appuie sur les retours de la porte P2 (le HUD minimal a-t-il suffi ?)
+- **Contexte / références** : adaptée (consoles et TV à 3 m hors périmètre).
 
 ### T-015 : Chiffrage des 3 concepts et pistes de financement
 - **Assigné à** : `business-affairs` · **Dépend de** : T-001, T-002, T-003, T-019, T-021 · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
@@ -172,31 +191,30 @@
 - **Contexte / références** : décisions de la Boss sur T-002 (`production/validations/T-002.md`, décisions 1 et 2). Scénario de base : sortie simultanée sur PC, PS5 et Xbox Series X|S, avec la certification, les kits de développement et les tests consoles chiffrés. Les chiffres [Mémoire] et « non vérifié » de l'étude ne servent que d'hypothèses de sensibilité nommées.
 
 ### T-016 : Moodboards et key art du concept retenu
-- **Assigné à** : `concept-artist` · **Revue de pôle** : art-director · **Dépend de** : T-005 · **Jalon** : M1 · **Statut** : À FAIRE
+- **Assigné à** : `concept-artist` · **Revue de pôle** : art-director · **Dépend de** : T-007 · **Jalon** : Essai · avant la porte P3 · **Statut** : À FAIRE
 - **Livrables** : `docs/art/concepts/MOODBOARD_univers.md`, `docs/art/concepts/KEY_ART.md`
 - **Critères d'acceptation** :
-  - [ ] 3 pistes d'ambiance visuelle avec des références sourcées et commentées
-  - [ ] Color keys pour au moins 3 lieux ou moments clés du jeu
-  - [ ] Brief détaillé du key art (composition, lumière, personnage, logo), utilisable pour la capsule Steam
-  - [ ] Licence et origine de chaque image consignées
+  - [ ] 3 pistes d'ambiance stylisée avec références sourcées et commentées
+  - [ ] Color keys pour au moins 3 lieux ou moments du jeu, réalisables avec le moteur web (capture d'écran du prototype comme base)
+  - [ ] Brief du key art et de la capsule (3 secondes pour comprendre « la mer efface le chemin »), utilisable pour la page itch.io puis Steam
+  - [ ] Licence et origine de chaque image consignées (T-024) ; image générée par IA : règles de T-024
+- **Contexte / références** : adaptée (stylisé, pas de MetaHuman). Nécessaire avant la démo publique (P3), pas avant P2.
 
-### T-017 : Plan de localisation
-- **Assigné à** : `localization-manager` · **Dépend de** : T-002, T-008, T-022 · **Jalon** : M1 · **Statut** : À FAIRE
+### T-017 : Plan de localisation (FR et EN)
+- **Assigné à** : `localization-manager` · **Dépend de** : T-008 · **Jalon** : Essai · avant la porte P3 · **Statut** : À FAIRE
 - **Livrables** : `docs/loc/PLAN_LOCALISATION.md`, `docs/loc/PIPELINE.md`
 - **Critères d'acceptation** :
-  - [ ] Langues cibles et niveau par langue (texte, sous-titres, doublage), justifiés par le marché
-  - [ ] Pipeline String Tables / fichiers PO décrit, avec les règles d'ID et de contexte
-  - [ ] Estimation du volume (mots, lignes de voix) et du coût, signalée comme estimation
-  - [ ] Plan de pseudo-localisation et de LQA
+  - [ ] Langues cibles : français et anglais d'abord, autres langues justifiées par le marché ; texte et sous-titres seulement (pas de doublage)
+  - [ ] Pipeline par fichiers JSON de chaînes (ID, contexte, limite de longueur) ; String Tables et fichiers PO d'Unreal supprimés
+  - [ ] Estimation du volume en mots, signalée comme estimation
+  - [ ] Plan de pseudo-localisation et de relecture linguistique
+- **Contexte / références** : adaptée. La donnée par région (T-022, À CORRIGER) n'est plus un prérequis : le plan peut se fonder sur FR et EN seulement, et T-022 n'est relancée qu'avec un accès réseau (voir T-020).
 
 ### T-018 : Services en ligne et télémétrie
-- **Assigné à** : `online-engineer` · **Revue de pôle** : technical-director · **Dépend de** : T-003, T-005 · **Jalon** : M1 · **Statut** : À FAIRE
-- **Livrables** : `docs/tech/ONLINE.md`, `docs/tech/TELEMETRIE.md`
-- **Critères d'acceptation** :
-  - [ ] Liste de ce qui est en ligne et hors ligne, et comportement du jeu sans réseau
-  - [ ] Services choisis (EOS, Steamworks, services des plateformes) avec leurs coûts
-  - [ ] Plan de télémétrie : événements, consentement, minimisation et conservation des données (RGPD)
-  - [ ] Stratégie de patchs et de mises à jour
+- **Assigné à** : `online-engineer` · **Dépend de** : T-003, T-005 · **Statut** : ABANDONNÉ (par T-028, 2026-11-23, avec l'accord de la Boss à la revue de T-028)
+- **Raison** : Jeu solo, hors ligne, sans serveur (`production/validations/T-004.md` §6) ; plus d'EOS ni de services de plateforme.
+- **Remplacée par** : aucune. Une éventuelle télémétrie de la démo (avec consentement) sera décidée à la porte P3.
+- Critères d'origine supprimés (historique git).
 
 ### T-019 : Corrections et compléments de l'étude de marché
 - **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
@@ -225,6 +243,7 @@
   - [ ] Aucune connexion à un compte développeur et aucun abonnement payant à un outil de données sans l'accord de l'humain propriétaire ; conditions d'utilisation des sites respectées
   - [ ] Journal des modifications : chiffres confirmés, corrigés ou retirés
 - **Contexte / références** : réserve de T-002 (retour 12). Tâche bloquée tant que l'humain propriétaire du projet n'a pas décidé d'autoriser l'accès en lecture aux sources (sections 0 et 12 de l'étude) ou fourni lui-même les pages et les exports. Obligatoire avant tout usage des chiffres hors du studio (dossier de financement, éditeur, investisseur).
+  **Mise à jour T-028 (2026-11-23)** : reste **BLOQUÉE** tant que le propriétaire n'a pas décidé de l'accès réseau (question ouverte de `production/DECISIONS.md`). Hors chemin P2 ; à faire avant l'étude de prix et la porte P3. Ne bloque aucun travail.
 
 ### T-021 : Données de marché par concept et par genre
 - **Assigné à** : `marketing-publishing` · **Dépend de** : T-001, T-019 · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
@@ -248,6 +267,7 @@
   - [x] Points d'attention par région (classification, conditions de distribution) signalés sans conclusion juridique, pour relecture par un juriste
 - **Contexte / références** : réserve de T-002 (retour 11). Prérequis de T-017.
 - **Validation** : `production/validations/T-022.md` (cycle 1, 2026-11-20 : REFUSÉ, retours 1 à 8 et seuil d'acceptation du cycle 2)
+- **Mise à jour T-028 (2026-11-23)** : le statut reste posé par la Boss. Hors chemin P2 et ne bloque plus T-017 (qui se limite à FR et EN) ; le cycle 2 exige un accès réseau (voir T-020). Gelée jusqu'à la décision du propriétaire sur l'accès réseau, ou jusqu'à la porte P3.
 
 ### T-023 : Révision v1.1 des trois concepts
 - **Assigné à** : `game-director` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : VALIDÉ
@@ -263,16 +283,16 @@
   - [ ] Faits datés ou corrigés : Hellblade II (section 1.2), carton du trailer d'ESTRAN (A.12) ; test de sensibilité de la grille étendu aux notes (section 6.1)
 - **Contexte / références** : réserves de la validation de T-001, retours 1 à 11 (`production/validations/T-001.md`). À valider avant T-004. Les effectifs et les durées des sections X.10, sur lesquels T-015 s'appuie, ne changent pas, sauf erreur à signaler à `business-affairs`.
 
-### T-024 : Registre des licences et règles d'usage de l'IA générative
-- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
+### T-024 : Registre des licences et règles d'usage de l'IA générative (voie web)
+- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : Essai · avant T-033 (prérequis de tout import d'asset tiers) · **Statut** : À FAIRE
 - **Livrables** : `docs/legal/LICENCES.md`
 - **Critères d'acceptation** :
-  - [ ] Registre au format défini (asset ou outil, origine, licence et version des conditions, date de consultation, usage commercial autorisé, plateformes, attribution, obligations, preuve d'acquisition), prêt à recevoir chaque asset tiers comme l'exige `CLAUDE.md`
-  - [ ] Conditions en vigueur résumées, avec la source officielle et la date de consultation : contrat de licence d'Unreal Engine (redevances, conditions pour les consoles), licences de Fab et statut des Megascans depuis la migration vers Fab, licence MetaHuman (y compris pour des visages créés à partir de scans de comédiens) ; coûts et redevances transmis à T-015
-  - [ ] Obligations de divulgation de l'IA générative par boutique (Steam, PlayStation, Xbox, Epic), d'après les seules informations publiques, et règle interne : ce que les agents IA du studio peuvent produire pour le jeu livré, et comment c'est tracé
-  - [ ] Clauses types à prévoir dans les contrats des comédiens : cession des droits à l'image et à la voix, consentement explicite à la réplique numérique et à l'animation faciale générée depuis l'audio, cadre syndical éventuel selon le pays des comédiens
-  - [ ] Mention explicite : brouillon à faire valider par un juriste ; aucune acceptation de conditions, aucun compte créé et aucun achat sans l'accord de l'humain propriétaire du projet ; les pages inaccessibles sont signalées « non vérifié »
-- **Contexte / références** : réserve de la validation de T-001 (retour 12 ; `docs/vision/CONCEPTS.md`, section 8). Aucune tâche ne couvrait ce registre. Prérequis à toute importation d'asset tiers dans `game/` ou `docs/art/` ; alimente T-015 (coûts de licence) et T-004 (critère 11 de la grille marché).
+  - [ ] Registre au format défini (asset ou outil, origine, licence et version, date de consultation, usage commercial autorisé, plateformes, attribution, obligations, preuve d'acquisition), prêt à recevoir chaque asset tiers comme l'exige `CLAUDE.md`
+  - [ ] Pré-rempli avec les dépendances réelles de `prototypes/estran-poc/` et de `game/` : three.js (MIT), esbuild (MIT), Playwright (Apache-2.0, outil de test seulement), avec leurs obligations d'attribution (texte de licence dans la version publiée)
+  - [ ] Règles de distribution : itch.io (HTML5) et Steam via Electron (empaquetage et certificat de signature), conditions résumées avec source officielle et date de consultation, ou « non vérifié » si la page est inaccessible
+  - [ ] Obligations de divulgation de l'IA générative sur Steam et itch.io, d'après les seules informations publiques, et règle interne : ce que les agents IA peuvent produire pour le jeu livré, et comment c'est tracé ; voix de synthèse : conditions et consentement
+  - [ ] Mention explicite : brouillon à faire valider par un juriste ; aucune acceptation de conditions, aucun compte et aucun achat sans l'accord du propriétaire (qui crée lui-même le compte vendeur au moment de vendre)
+- **Contexte / références** : réserve de T-001 (retour 12), confirmée par la Boss : prérequis de toute importation d'asset tiers. Adaptée : contrat d'Unreal, Fab, Megascans, MetaHuman, clauses de comédiens retirés (sans objet en voie web et sans voix humaine).
 
 ### T-025 : Finitions de l'étude de marché v2 (scénarios, sources, étiquettes)
 - **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M0 · **Statut** : À FAIRE
@@ -286,6 +306,7 @@
   - [ ] Section 9 : rapport de 0,752 reformulé en indices relatifs (volume de wishlists, indice d'achats), sans laisser croire à un taux de conversion de 75 %
   - [ ] Aucune nouvelle donnée de marché sans source ; aucune page ouverte hors de l'accès réseau autorisé
 - **Contexte / références** : réserves de la validation de T-019, retours 1 à 6 (`production/validations/T-019.md`). Non bloquante pour T-015 : `business-affairs` applique directement les décisions 1 à 3 de cette validation. À faire avant T-020, qui modifie le même fichier.
+  **Mise à jour T-028 (2026-11-23)** : hors chemin P2 ; à faire avant la décision de prix (porte P3). Les mentions Unreal et consoles de l'étude sont à relire à cette occasion (ADR §7.1) ; le prix de travail est maintenant 9,99 à 14,99 USD (`production/validations/T-004.md` §1).
 
 ### T-026 : Scénario « studio IA + petite équipe humaine » pour les 3 concepts
 - **Assigné à** : `business-affairs` · **Dépend de** : T-015 · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
@@ -314,7 +335,7 @@
 - **Contexte / références** : Décision du propriétaire du 2026-11-23 (production/DECISIONS.md, voie « les agents font tout »). Remplace Unreal Engine 5 comme référence. Prérequis de T-004.
 
 ### T-028 : Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls)
-- **Assigné à** : `producer` · **Dépend de** : T-004, T-027 · **Jalon** : M1 · **Statut** : EN COURS
+- **Assigné à** : `producer` · **Dépend de** : T-004, T-027 · **Jalon** : M1 · **Statut** : EN REVUE BOSS
 - **Livrables** :
   - `production/BACKLOG.md`
   - `production/ROADMAP.md`
@@ -325,3 +346,84 @@
   - [ ] production/ROADMAP.md : étapes de l'essai (P1 à P4 de production/validations/T-004.md), ce que le propriétaire verra et décidera à chaque porte, sans date ferme
   - [ ] Respect de production/DECISIONS.md (le propriétaire ne fait rien, budget limité à l'abonnement Claude, mode économe) et des réserves non bloquantes des validations précédentes, reprises quand elles concernent le plan
 - **Contexte / références** : Décision du propriétaire du 2026-11-23 : ESTRAN accepté à l'essai. Périmètre, portes d'arrêt et « on ne fait pas » dans production/validations/T-004.md.
+
+### T-029 : Noyau jouable : marée, menace, île, boucle de jeu
+- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Livrables** : `game/` (copie de départ de `prototypes/estran-poc/`, mêmes versions figées, dépôt autonome avec `npm run all`), `game/tests/unit/`, `game/tests/e2e/`
+- **Critères d'acceptation** :
+  - [ ] Simulation à pas fixe (60 Hz) séparée du rendu, sans dépendance au rendu ; marée lue depuis `maree.csv`, menace depuis `menace.csv` (valeurs de T-006, pas de valeurs en dur)
+  - [ ] Île générée de façon procédurale et déterministe à partir d'une graine ; un jeu complet de la tranche P2 dure 5 à 10 minutes de temps de simulation
+  - [ ] Déplacement, lampe, déclencheurs du « bruit dans l'eau » (événement émis par la simulation, consommé plus tard par T-031), victoire, défaite, recommencer ; HUD minimal défini par T-006, sans texte qui explique la règle
+  - [ ] Au moins 15 tests unitaires (marée, menace, déterminisme : même graine, mêmes entrées, même état final) ; test de parité : deux réglages de rendu donnent un journal de simulation identique
+  - [ ] Au moins 2 scénarios Playwright : un joueur automate qui gagne et un qui perd, sans erreur ni avertissement dans la console ; `npm run all` vert depuis un dépôt propre
+  - [ ] Rendu provisoire accepté (celui du prototype) : T-030 s'en charge
+- **Contexte / références** : `prototypes/estran-poc/` (T-027), `docs/tech/ADR_PIVOT_WEB.md` (pile et langage), `docs/design/GDD.md`. Pas de nouvelles dépendances sans mise à jour de `docs/legal/LICENCES.md` (T-024).
+
+### T-030 : Ambiance visuelle stylisée, niveaux de qualité et mesures de performance
+- **Assigné à** : `graphics-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Livrables** : `game/src/render/`, `game/tests/e2e/render.spec.*`, `game/captures/`, `docs/tech/PERF_P2.md`
+- **Critères d'acceptation** :
+  - [ ] Eau dont le niveau suit la simulation (marée visible sans HUD), brouillard, faisceau du phare, lampe du joueur, écume et grain, selon le brief d'ambiance de T-006
+  - [ ] Trois niveaux de qualité (haut, moyen, bas) qui ne changent jamais la logique ni ce que le joueur peut savoir de la menace (règle de parité de T-023) ; test de parité vert
+  - [ ] Écran de mesure : cadence moyenne, 95e centile du temps de frame, nombre d'appels de dessin et de triangles, exportables en JSON par un bouton « copier le rapport de performance » (utilisable par le propriétaire sur son PC pour la porte P1)
+  - [ ] Rapport `PERF_P2.md` : mesures des 3 niveaux en navigateur headless, avec les limites du rendu logiciel écrites ; écarts aux budgets de `docs/tech/ADR_PIVOT_WEB.md` §4 listés
+  - [ ] Au moins 6 captures d'écran (3 moments d'éclairage × 2 niveaux de qualité) dans `game/captures/` ; la menace reste lisible au niveau bas
+  - [ ] Aucune erreur de console ; `npm run all` vert
+- **Contexte / références** : réserve de T-027 et porte P1 : la fluidité sur un vrai PC reste à confirmer par le propriétaire (« fluide » ou « saccadé »). Si P1 est « saccadé », un correctif est créé hors de cette tâche.
+
+### T-031 : Audio procédural : bruit dans l'eau et ambiance
+- **Assigné à** : `audio-director` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Livrables** : `game/src/audio/`, `game/tests/e2e/audio.spec.*`, `docs/audio/NOTES_AUDIO_P2.md`
+- **Critères d'acceptation** :
+  - [ ] Tout en synthèse Web Audio, sans fichier audio ni voix ; ambiance (mer, vent) qui varie avec le niveau de la marée
+  - [ ] Au moins 3 variantes de « bruit dans l'eau », spatialisées : la direction se perçoit au casque (test : le panoramique calculé suit la position de la source dans un test sur `OfflineAudioContext`)
+  - [ ] Signal de danger lié à la lumière du phare ; volume général et coupure du son disponibles
+  - [ ] Niveau mesuré : aucun écrêtage (crête sous −1 dBFS) sur un parcours complet rendu hors ligne ; démarrage de l'audio sur un geste du joueur, sans erreur de console
+  - [ ] Option de sous-titres des bruits (texte court, par exemple « bruit dans l'eau, à gauche »), désactivée par défaut, servant l'accessibilité
+  - [ ] `NOTES_AUDIO_P2.md` : ce qui est fait, ce qui reste, hypothèses sur ce qui fait peur
+- **Contexte / références** : au moins la moitié de la peur est portée par l'audio (`production/validations/T-004.md` R3). La direction audio complète (T-009) vient après P2.
+
+### T-032 : Tests automatisés et rapport de la porte P2
+- **Assigné à** : `qa-lead` · **Dépend de** : T-030, T-031 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Livrables** : `game/tests/p2/`, `docs/qa/RAPPORT_P2.md`, `production/BUGS.md`
+- **Critères d'acceptation** :
+  - [ ] Deux joueurs automates sur 20 graines chacun : l'un suit la règle (bruit puis lumière du phare), l'autre l'ignore ; le premier réussit dans au moins 90 % des parties, le second échoue dans au moins 90 % ; sinon la règle est signalée comme non discriminante
+  - [ ] Durée de partie entre 5 et 10 minutes de temps de simulation, mesurée sur ces 40 parties
+  - [ ] 0 erreur et 0 avertissement de console sur l'ensemble, `npm run all` vert depuis un dépôt propre, reproductible deux fois de suite
+  - [ ] Tableau de performances de T-030 repris, avec ses limites ; captures jointes
+  - [ ] Bugs classés par sévérité et priorité dans `production/BUGS.md` ; chaque bug bloquant la porte P2 est signalé à la Coordination pour une tâche de correction
+  - [ ] Questionnaire humain de T-006 (5 questions) mis en forme avec la réponse attendue, et conclusion écrite : P2 « prête à être jugée » ou « non prête », avec la raison
+  - [ ] Aucun avis de joueur inventé : la partie humaine de P2 est présentée comme **en attente** du propriétaire
+- **Contexte / références** : porte P2 de `production/validations/T-004.md` §7 : rapport automatisé **et** au moins un avis humain extérieur. Le premier est produit ici, le second à l'étape publiée de T-033.
+
+### T-033 : Version jouable P2 en un seul fichier HTML, prête à publier
+- **Assigné à** : `build-engineer` · **Dépend de** : T-032, T-024 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Livrables** : `game/dist/estran-p2.html`, `production/RAPPORT_P2.md`, mise à jour de `docs/legal/LICENCES.md` et de `docs/tech/PIPELINE_WEB.md` (étapes de la version P2)
+- **Critères d'acceptation** :
+  - [ ] Un seul fichier HTML autonome, d'au plus 3 Mo, sans requête réseau au chargement (vérifié par Playwright) ; fonctionne au clavier et à la souris ; manette si prévue par T-006
+  - [ ] Écran de départ en français : touches et rien d'autre (la règle ne s'explique pas) ; bouton « copier le rapport de performance » (T-030) et formulaire des 5 questions de P2 avec copie du texte à renvoyer
+  - [ ] Textes de licences des dépendances inclus dans la version publiée (T-024) ; aucun asset tiers non enregistré
+  - [ ] `RAPPORT_P2.md` d'une page, pour le propriétaire : ce qu'il y a à jouer (5 à 10 min), quoi répondre (P1 : « fluide » ou « saccadé » ; P2 : les 5 réponses), lien de publication ; rien d'autre à faire
+  - [ ] Tests Playwright de la version assemblée (démarrage, une partie automate, aucune erreur de console) verts depuis un dépôt propre
+  - [ ] Prête à publier : la Coordination la publie via l'outil Artifact et reporte le lien dans le rapport de remise et dans `production/DECISIONS.md` (questions ouvertes) ; la tâche ne prétend pas que P2 est passée
+- **Contexte / références** : décision du propriétaire du 2026-11-23 (il ne fait rien lui-même : il joue et répond). Cette version sert aussi à répondre à la question P1 encore ouverte.
+
+### T-034 : Mise à jour des documents techniques pour la voie web
+- **Assigné à** : `technical-director` · **Dépend de** : T-027 · **Jalon** : Essai · peut suivre P2 (ne la bloque pas) · **Statut** : À FAIRE
+- **Livrables** : `docs/tech/ARCHITECTURE.md`, `docs/tech/BUDGETS.md`, `docs/tech/NORMES_CODE.md` (anciennes versions archivées sous `docs/tech/archive/`)
+- **Critères d'acceptation** :
+  - [ ] Les trois documents réécrits selon `docs/tech/ADR_PIVOT_WEB.md` §7.1 : modules, pas fixe, sauvegarde, abstraction plateforme (navigateur / Electron) ; budgets web de l'ADR §4 sans Series S ni PS5, avec mesure sur GPU réel ; normes de code web (TypeScript strict si retenu, ESLint et Prettier figés, pas d'allocation dans la boucle, libération des ressources GPU, tests)
+  - [ ] Ce qui a été appris par T-029 à T-032 est reporté (écarts de budget, structure réelle de `game/`)
+  - [ ] Aucune mention d'Unreal, de Lumen, de Nanite ni de MetaHuman hors des sections « archive » ; vérifié par une recherche et listé dans la remise
+  - [ ] Les points de §7.1 qui relèvent d'autres rôles sont transmis par écrit : `business-affairs` (documents `docs/business/`), `game-director` (`CONCEPTS.md`, `PERIMETRE_SOLO.md`), Coordination (`CLAUDE.md`, `studio/ORGANIGRAMME.md`)
+- **Contexte / références** : ADR §7.1. Non bloquante pour P2 : T-029 à T-033 suivent l'ADR directement.
+
+### T-035 : Mise à jour des fiches d'agents pour la voie web
+- **Assigné à** : `technical-director` · **Dépend de** : T-034 · **Jalon** : Essai · peut suivre P2 · **Statut** : À FAIRE
+- **Livrables** : fiches modifiées dans `.claude/agents/`, `studio/equipe.json` si les titres changent
+- **Critères d'acceptation** :
+  - [ ] Les fiches de la liste de l'ADR §7.2 (`technical-director`, `graphics-programmer`, `gameplay-programmer`, `technical-artist`, `environment-artist`, `level-designer`, `character-artist`, `animator`, `build-engineer`, `online-engineer`, `platform-engineer`, `qa-lead`, et relecture légère de `art-director`, `game-designer`, `narrative-designer`, `localization-manager`, `business-affairs`, `boss`) adaptées à la pile web et au rendu stylisé
+  - [ ] Aucune mention d'Unreal, Lumen, Nanite, MetaHuman, Blueprints, GAS ni de consoles dans les fiches, sauf la mention « hors périmètre » ; vérifié par une recherche listée dans la remise
+  - [ ] Rôle, outils et nom des fiches inchangés ; la fiche `producer` n'est pas modifiée ; si elle doit l'être, une note est transmise à la Coordination
+  - [ ] Chaque fiche renvoie vers `production/DECISIONS.md`
+- **Contexte / références** : ADR §7.2. Non bloquante pour P2. Si la session ne suffit pas, le `producer` découpe en deux tâches.
