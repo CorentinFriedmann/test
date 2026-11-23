@@ -640,7 +640,7 @@ partir de MetaHuman puis personnalisés ; des objets d'époque photographiés et
 | Jeu | Ce qu'il partage avec nous | Ce qui nous en distingue |
 |---|---|---|
 | *The Operator* (2024, studio à vérifier) | Le jeu d'enquête par interrogatoire, où l'on questionne et où l'on déduit | Un visage photoréaliste en gros plan comme interface, contre une enquête menée surtout par documents et par interface ; une couche de signes qui varie selon le stress ; des embranchements aux conséquences durables |
-| *Who's Lila?* (2024, studio à vérifier) | Le visage comme interface de jeu | Un visage photoréaliste capté sur de vrais comédiens ; un interrogatoire contextuel et déductif, non un défi d'expressions ; une nuit de garde à vue qui structure le récit |
+| *Who's Lila?* (2022, Garage Heathen selon T-021, non relu à la source) | Le visage comme interface de jeu | Un visage photoréaliste capté sur de vrais comédiens ; un interrogatoire contextuel et déductif, non un défi d'expressions ; une nuit de garde à vue qui structure le récit |
 
 **Références de design** (plus anciennes) :
 
@@ -942,3 +942,4 @@ leurs totaux (22 à 33, 36 à 53, 23 à 34 ETP ; 26 à 32, 34 à 42, 24 à 30 mo
 | 11. Sensibilité de la grille | Test sur les notes ajouté, avec la tâche qui peut faire bouger chaque note ; test sur les poids revu pour AVEUX | 6.1 |
 
 Retour 12 (licences et IA générative) : traité par la tâche T-024 (`business-affairs`), non par ce document.
+- 2026-11-23 · Coordination, sur demande de la Boss (validation T-021, retour 2) : date de *Who's Lila?* corrigée en C.9 (2022 au lieu de 2024), d'après `docs/business/MARCHE_PAR_CONCEPT.md` section 2.

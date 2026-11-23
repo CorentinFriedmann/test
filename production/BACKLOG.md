@@ -27,7 +27,7 @@
 | T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | À FAIRE |
 | T-019 | Corrections et compléments de l'étude de marché | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-020 | Vérification à la source des chiffres de l'étude de marché | marketing-publishing | T-019 | BLOQUÉ |
-| T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | EN REVUE BOSS |
+| T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | VALIDÉ AVEC RÉSERVES |
 | T-022 | Données de marché par région et par langue | marketing-publishing | aucune | À CORRIGER |
 | T-023 | Révision v1.1 des trois concepts | game-director | aucune | VALIDÉ |
 | T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
@@ -223,15 +223,16 @@
 - **Contexte / références** : réserve de T-002 (retour 12). Tâche bloquée tant que l'humain propriétaire du projet n'a pas décidé d'autoriser l'accès en lecture aux sources (sections 0 et 12 de l'étude) ou fourni lui-même les pages et les exports. Obligatoire avant tout usage des chiffres hors du studio (dossier de financement, éditeur, investisseur).
 
 ### T-021 : Données de marché par concept et par genre
-- **Assigné à** : `marketing-publishing` · **Dépend de** : T-001, T-019 · **Jalon** : M0 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `marketing-publishing` · **Dépend de** : T-001, T-019 · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** : `docs/business/MARCHE_PAR_CONCEPT.md`
 - **Critères d'acceptation** :
-  - [ ] Pour le genre de chacun des 3 concepts de T-001 : nombre de jeux sortis sur Steam par an (2024 à 2026), ventes ou revenus estimés des titres dominants, part des nouvelles IP, avec la source et le niveau de confiance de chaque chiffre
-  - [ ] Pour chaque concept : 5 jeux comparables sortis depuis 2022 (ventes estimées, notes, prix de lancement, plateformes, présence sur un abonnement)
-  - [ ] Bases installées PS5 et Xbox Series (communications officielles ou analystes) et part du Steam Deck
-  - [ ] Notes proposées pour chaque concept sur les critères 1, 3, 6 et 9 de la grille marché (section 10 de l'étude), argumentées ; la note finale reste celle de la Boss en T-004
-  - [ ] Les extractions impossibles sans accès réseau autorisé sont signalées « non vérifié », jamais estimées sans source
+  - [x] Pour le genre de chacun des 3 concepts de T-001 : nombre de jeux sortis sur Steam par an (2024 à 2026), ventes ou revenus estimés des titres dominants, part des nouvelles IP, avec la source et le niveau de confiance de chaque chiffre
+  - [x] Pour chaque concept : 5 jeux comparables sortis depuis 2022 (ventes estimées, notes, prix de lancement, plateformes, présence sur un abonnement)
+  - [x] Bases installées PS5 et Xbox Series (communications officielles ou analystes) et part du Steam Deck
+  - [x] Notes proposées pour chaque concept sur les critères 1, 3, 6 et 9 de la grille marché (section 10 de l'étude), argumentées ; la note finale reste celle de la Boss en T-004
+  - [x] Les extractions impossibles sans accès réseau autorisé sont signalées « non vérifié », jamais estimées sans source
 - **Contexte / références** : réserve de T-002 (retour 10). Alimente T-015 (scénarios par concept) et T-004.
+- **Validation** : `production/validations/T-021.md` (cycle 1, 2026-11-23, réserves non bloquantes dans le rapport)
 
 ### T-022 : Données de marché par région et par langue
 - **Assigné à** : `marketing-publishing` · **Dépend de** : aucune · **Jalon** : M1 · **Statut** : À CORRIGER
