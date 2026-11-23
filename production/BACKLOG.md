@@ -10,7 +10,7 @@
 | T-001 | Trois concepts de jeu et pitch | game-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | VALIDÉ AVEC RÉSERVES |
-| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023 | À FAIRE |
+| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026 | À FAIRE |
 | T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
 | T-006 | GDD v1 | game-designer | T-005 | À FAIRE |
 | T-007 | Bible artistique | art-director | T-005 | À FAIRE |
@@ -21,7 +21,7 @@
 | T-012 | Plan de portage et de certification | platform-engineer | T-003 | À FAIRE |
 | T-013 | Stratégie de test et de qualité | qa-lead | T-003, T-006 | À FAIRE |
 | T-014 | Principes UX/UI et accessibilité | ui-ux-designer | T-006 | À FAIRE |
-| T-015 | Chiffrage des 3 concepts et pistes de financement | business-affairs | T-001, T-002, T-003, T-019, T-021 | EN REVUE BOSS |
+| T-015 | Chiffrage des 3 concepts et pistes de financement | business-affairs | T-001, T-002, T-003, T-019, T-021 | VALIDÉ AVEC RÉSERVES |
 | T-016 | Moodboards et key art du concept retenu | concept-artist | T-005 | À FAIRE |
 | T-017 | Plan de localisation | localization-manager | T-002, T-008, T-022 | À FAIRE |
 | T-018 | Services en ligne et télémétrie | online-engineer | T-003, T-005 | À FAIRE |
@@ -32,6 +32,7 @@
 | T-023 | Révision v1.1 des trois concepts | game-director | aucune | VALIDÉ |
 | T-024 | Registre des licences et règles d'usage de l'IA générative | business-affairs | aucune | À FAIRE |
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
+| T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | À FAIRE |
 
 ---
 
@@ -65,7 +66,7 @@
   - [ ] Liste des risques techniques (stutter de shaders, mémoire Series S...) avec mitigations
 
 ### T-004 : Choix du concept (Go / No-Go)
-- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015, T-023 · **Jalon** : M0 · **Statut** : À FAIRE
+- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015, T-023, T-026 · **Jalon** : M0 · **Statut** : À FAIRE
 - **Livrables** : `production/validations/T-004.md`
 - **Critères d'acceptation** :
   - [ ] Un concept retenu, avec sa justification (marché, faisabilité technique, budget, vision)
@@ -158,7 +159,7 @@
   - [ ] Plan d'accessibilité (sous-titres, daltonisme, difficulté, aides motrices) inspiré des Xbox Accessibility Guidelines
 
 ### T-015 : Chiffrage des 3 concepts et pistes de financement
-- **Assigné à** : `business-affairs` · **Dépend de** : T-001, T-002, T-003, T-019, T-021 · **Jalon** : M0 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `business-affairs` · **Dépend de** : T-001, T-002, T-003, T-019, T-021 · **Jalon** : M0 · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** : `docs/business/BUDGET.md`, `docs/business/FINANCEMENT.md`
 - **Critères d'acceptation** :
   - [ ] Fourchette de budget et durée de production pour chacun des 3 concepts, avec les postes de coût détaillés
@@ -282,3 +283,13 @@
   - [ ] Section 9 : rapport de 0,752 reformulé en indices relatifs (volume de wishlists, indice d'achats), sans laisser croire à un taux de conversion de 75 %
   - [ ] Aucune nouvelle donnée de marché sans source ; aucune page ouverte hors de l'accès réseau autorisé
 - **Contexte / références** : réserves de la validation de T-019, retours 1 à 6 (`production/validations/T-019.md`). Non bloquante pour T-015 : `business-affairs` applique directement les décisions 1 à 3 de cette validation. À faire avant T-020, qui modifie le même fichier.
+
+### T-026 : Scénario « studio IA + petite équipe humaine » pour les 3 concepts
+- **Assigné à** : `business-affairs` · **Dépend de** : T-015 · **Jalon** : M0 · **Statut** : À FAIRE
+- **Livrables** : `docs/business/BUDGET_PETITE_EQUIPE.md`
+- **Critères d'acceptation** :
+  - [ ] Pour chaque concept, un périmètre réduit explicite (durée de jeu, taille du monde, ce qui est coupé ou remplacé par des assets sous licence) avec les effectifs humains et la durée, proposés par `game-director` ou `producer` et non inventés par `business-affairs`
+  - [ ] Budget et point mort recalculés avec le modèle de `BUDGET.md`, plus le coût d'exploitation des agents IA (abonnements, jetons, calcul) en ligne séparée
+  - [ ] Enveloppe de financement fournie par l'humain propriétaire, reprise telle quelle ; aucune hypothèse de fonds propres du propriétaire sans son accord
+  - [ ] Mention explicite : brouillon à faire valider par un expert-comptable
+- **Contexte / références** : réserve bloquante de `production/validations/T-015.md` (retours 1 et 2 et point stratégique). Les effectifs de `CONCEPTS.md` X.10 sont ceux d'un studio classique ; ils ne sont pas modifiés. Le périmètre réduit ne se chiffre pas avant que le propriétaire ait donné son enveloppe.
