@@ -14,6 +14,9 @@
 
 ## Questions encore ouvertes pour le propriétaire
 
+- **Rendu stylisé atmosphérique plutôt que photoréaliste** (conséquence de la voie web, validation T-027) : accord explicite demandé avant T-004.
+- Avis sur la fluidité du prototype publié (https://claude.ai/artifact/R7U9ExVcv6TRw3B2fzzBDE) : « fluide » ou « saccadé ».
+
 - Configuration de son PC : n'est plus bloquante (voie web) ; utile seulement pour savoir sur quoi il jouera aux versions d'essai.
 - Accès réseau pour vérifier les chiffres à la source (T-020) : non décidé.
 - Statut juridique pour vendre le jeu (auto-entreprise, société...) : à décider avant la mise en vente, avec un expert-comptable.
