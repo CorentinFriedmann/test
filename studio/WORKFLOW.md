@@ -17,6 +17,7 @@
 | `VALIDÉ` / `VALIDÉ AVEC RÉSERVES` | **boss uniquement** | Tâche terminée (les réserves deviennent de nouvelles tâches) |
 | `À CORRIGER` | **boss uniquement** | Refusée, retour à l'agent avec les retours numérotés |
 | `BLOQUÉ` | n'importe quel agent | Dépendance ou décision humaine manquante |
+| `ABANDONNÉ` | producer (avec l'accord de la Boss) | Tâche devenue sans objet après un changement de cap ; la raison et la tâche de remplacement sont indiquées dans sa section |
 
 ## Étapes détaillées
 

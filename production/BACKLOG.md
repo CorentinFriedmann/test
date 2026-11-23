@@ -10,7 +10,7 @@
 | T-001 | Trois concepts de jeu et pitch | game-director | aucune | VALIDÉ AVEC RÉSERVES |
 | T-002 | Étude de marché et positionnement | marketing-publishing | aucune | VALIDÉ AVEC RÉSERVES |
 | T-003 | Choix techniques, architecture et budgets | technical-director | aucune | VALIDÉ AVEC RÉSERVES |
-| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026, T-027 | BLOQUÉ |
+| T-004 | Choix du concept (Go / No-Go) | boss | T-001, T-002, T-003, T-015, T-023, T-026, T-027 | VALIDÉ |
 | T-005 | Piliers et pitch final | game-director | T-004 | À FAIRE |
 | T-006 | GDD v1 | game-designer | T-005 | À FAIRE |
 | T-007 | Bible artistique | art-director | T-005 | À FAIRE |
@@ -34,6 +34,7 @@
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
 | T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
+| T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | EN COURS |
 
 ---
 
@@ -67,13 +68,13 @@
   - [ ] Liste des risques techniques (stutter de shaders, mémoire Series S...) avec mitigations
 
 ### T-004 : Choix du concept (Go / No-Go)
-- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015, T-023, T-026, T-027 · **Jalon** : M0 · **Statut** : BLOQUÉ
+- **Assigné à** : `boss` · **Dépend de** : T-001, T-002, T-003, T-015, T-023, T-026, T-027 · **Jalon** : M0 · **Statut** : VALIDÉ
 - **Livrables** : `production/validations/T-004.md`, `docs/vision/DECISION_CONCEPT.md`
-- En attente de l'accord du propriétaire ; proposition : docs/vision/DECISION_CONCEPT.md
+- Accord du propriétaire le 2026-11-23 (à l'essai)
 - **Critères d'acceptation** :
-  - [ ] Un concept retenu, avec sa justification (marché, faisabilité technique, budget, vision)
-  - [ ] Périmètre cible fixé (durée de jeu, taille du monde, solo ou multijoueur)
-  - [ ] **Proposition présentée à l'humain propriétaire du projet pour accord final**
+  - [x] Un concept retenu, avec sa justification (marché, faisabilité technique, budget, vision)
+  - [x] Périmètre cible fixé (durée de jeu, taille du monde, solo ou multijoueur)
+  - [x] **Proposition présentée à l'humain propriétaire du projet pour accord final**
 - **Contexte / références** : poids et critères éliminatoires de la grille marché fixés dans `production/validations/T-002.md` (décision 3). La proposition indique le niveau de confiance des données de marché (T-020 faite ou non).
 
 ### T-005 : Piliers et pitch final
@@ -311,3 +312,16 @@
   - [ ] Faisabilité des 3 concepts dans cette pile et ce que devient le réalisme ; origine des assets (procéduraux, CC0, générés) avec les contraintes de licence et de réseau
   - [ ] Liste des documents et des fiches d'agents à mettre à jour (ARCHITECTURE, BUDGETS, NORMES_CODE, agents écrits pour Unreal)
 - **Contexte / références** : Décision du propriétaire du 2026-11-23 (production/DECISIONS.md, voie « les agents font tout »). Remplace Unreal Engine 5 comme référence. Prérequis de T-004.
+
+### T-028 : Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls)
+- **Assigné à** : `producer` · **Dépend de** : T-004, T-027 · **Jalon** : M1 · **Statut** : EN COURS
+- **Livrables** :
+  - `production/BACKLOG.md`
+  - `production/ROADMAP.md`
+- **Critères d'acceptation** :
+  - [ ] Chaque tâche existante devenue sans objet (Unreal Engine, consoles, équipe humaine) est passée au statut ABANDONNÉ, avec la raison et, le cas échéant, la tâche qui la remplace ; les tâches encore utiles sont adaptées (critères et livrables revus pour la voie web et le rendu stylisé) plutôt que recréées
+  - [ ] Un plan court jusqu'à la porte d'arrêt P2 (prototype jouable de 5 à 10 minutes d'ESTRAN « une marée ») : tâches dans l'ordre, une tâche par agent et par session, chacune avec des livrables et des critères d'acceptation mesurables, et des dépendances cohérentes
+  - [ ] Une tâche de mise à jour des documents techniques et des fiches d'agents pour la voie web (liste de docs/tech/ADR_PIVOT_WEB.md §7)
+  - [ ] production/ROADMAP.md : étapes de l'essai (P1 à P4 de production/validations/T-004.md), ce que le propriétaire verra et décidera à chaque porte, sans date ferme
+  - [ ] Respect de production/DECISIONS.md (le propriétaire ne fait rien, budget limité à l'abonnement Claude, mode économe) et des réserves non bloquantes des validations précédentes, reprises quand elles concernent le plan
+- **Contexte / références** : Décision du propriétaire du 2026-11-23 : ESTRAN accepté à l'essai. Périmètre, portes d'arrêt et « on ne fait pas » dans production/validations/T-004.md.

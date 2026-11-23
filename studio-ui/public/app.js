@@ -11,10 +11,10 @@
     { titre: 'En cours', statuts: ['EN COURS'] },
     { titre: '👑 En revue Boss', statuts: ['EN REVUE BOSS'] },
     { titre: 'À corriger', statuts: ['À CORRIGER'] },
-    { titre: 'Bloqué', statuts: ['BLOQUÉ'] },
+    { titre: 'Bloqué / abandonné', statuts: ['BLOQUÉ', 'ABANDONNÉ'] },
     { titre: '✅ Validé', statuts: FAITS },
   ];
-  const CLS = { 'À FAIRE': 'afaire', 'EN COURS': 'encours', 'EN REVUE BOSS': 'revue', 'VALIDÉ': 'valide', 'VALIDÉ AVEC RÉSERVES': 'reserves', 'À CORRIGER': 'corriger', 'BLOQUÉ': 'bloque', 'REFUSÉ': 'corriger', 'INCONNU': 'afaire' };
+  const CLS = { 'À FAIRE': 'afaire', 'EN COURS': 'encours', 'EN REVUE BOSS': 'revue', 'VALIDÉ': 'valide', 'VALIDÉ AVEC RÉSERVES': 'reserves', 'À CORRIGER': 'corriger', 'BLOQUÉ': 'bloque', 'ABANDONNÉ': 'abandon', 'REFUSÉ': 'corriger', 'INCONNU': 'afaire' };
   const MODES = [
     { id: 'acceptEdits', nom: 'Modifications acceptées (recommandé)', aide: "Les agents créent et modifient les fichiers du dépôt. Les commandes shell non pré-autorisées dans .claude/settings.json sont refusées." },
     { id: 'auto', nom: 'Auto', aide: 'Claude Code décide seul, avec ses garde-fous automatiques.' },

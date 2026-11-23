@@ -3,7 +3,7 @@
 // Analyse et modification de production/BACKLOG.md.
 // Le Markdown reste la source de vérité : les agents l'éditent aussi, le parseur est donc tolérant.
 
-const STATUTS = ['À FAIRE', 'EN COURS', 'EN REVUE BOSS', 'VALIDÉ', 'VALIDÉ AVEC RÉSERVES', 'À CORRIGER', 'BLOQUÉ'];
+const STATUTS = ['À FAIRE', 'EN COURS', 'EN REVUE BOSS', 'VALIDÉ', 'VALIDÉ AVEC RÉSERVES', 'À CORRIGER', 'BLOQUÉ', 'ABANDONNÉ'];
 const RESERVES_BOSS = ['VALIDÉ', 'VALIDÉ AVEC RÉSERVES', 'À CORRIGER'];
 const FAITS = ['VALIDÉ', 'VALIDÉ AVEC RÉSERVES'];
 
