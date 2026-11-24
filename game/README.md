@@ -5,8 +5,8 @@ Jeu web 3D (three.js 0.187.0, esbuild 0.28.2, JavaScript ES2022). Dépôt autono
 ```
 npm install        # ou npm ci
 npm run all        # npm ci + build (dist/estran.html) + tests unitaires (node --test) + scénarios Playwright
-npm run test:unit  # tests Node (60 : 40 passe a, 16 passe b, 4 rendu), sans navigateur
-npm run test:e2e   # scénarios navigateur : tests/e2e/run.cjs (jeu) puis tests/e2e/render.cjs (rendu, T-030), après npm run build
+npm run test:unit  # tests Node (passe a, passe b, rendu, audio T-031), sans navigateur
+npm run test:e2e   # scénarios navigateur : tests/e2e/run.cjs (jeu), render.cjs (rendu, T-030) puis audio.cjs (audio, T-031), après npm run build
 npm run captures   # reconstruit puis met à jour les captures VERSIONNÉES de captures/ (sur demande seulement)
 npm run sync-data  # recopie docs/design/data/*.csv dans data/ (source de vérité : docs)
 ```
@@ -40,3 +40,13 @@ npm run sync-data  # recopie docs/design/data/*.csv dans data/ (source de vérit
 - Mesure : F2 ou `?perf=1`. Cadence moyenne, frame moyenne, 95e centile, pire frame, appels de dessin, triangles, temps JS du dessin. Bouton « Copier le rapport de performance » : JSON dans le presse-papiers (ou zone de texte à copier à la main si le navigateur refuse). Les temps sont des intervalles entre frames (vsync compris), pas des temps GPU. Rapport et limites : `docs/tech/PERF_P2.md`.
 - Crochets de test ajoutés : `setPose` (caméra libre pour les captures), `probeLaisse` (pixels que la Laisse change dans la frame), `perfReport`, `perfSummary`, `perfReset`.
 - Captures : les tests écrivent dans `captures/.tmp/` (ignoré par git). `npm run captures` met à jour `captures/` : `estran-<nuit|aube|jour>-<high|medium|low>.jpg` (9), `estran-laisse*.png` et les captures de parcours de la passe b.
+
+## T-031 : audio procédural (Web Audio, sans fichier ni voix)
+
+- `src/audio/` : `spatial.js` (panoramique, gain et coupure selon la distance, secteur de direction : fonctions pures), `mix.js` (règles de mixage pures : ambiance selon la marée, niveau d'angoisse, ronronnement du phare, filtre général), `director.js` (événements et état de la simulation -> « cues », pur et déterministe), `caption-text.js` (textes des sous-titres), `settings.js` (volume, coupure, sous-titres ; `localStorage` facultatif), `engine.js` (synthèse sur tout `BaseAudioContext` : bruits blancs/roses/bruns générés, oscillateurs, `StereoPannerNode`, compresseur puis plafond doux à -1,4 dBFS), `index.js` (système branché sur le jeu), `offline.js` (rendu `OfflineAudioContext` pour les tests).
+- Entrée : `sim.subscribe` (événements) et `state` à chaque frame. Les distances audibles viennent de `threat_audible_radius` (remous) et `threat_cue_roar_radius` (grondement) dans `menace.csv`, appliquées avec `state.threat.dist`.
+- L'`AudioContext` n'est créé que sur un geste : clic d'entrée ou touche. Touches : **M** coupe le son, **K** active les sous-titres des bruits (désactivés par défaut). Volume, coupure et sous-titres aussi dans l'écran d'entrée/pause. Réglages mémorisés dans `localStorage` si possible.
+- `sim.subscribe` et le journal isolent chaque écouteur (`try/catch`) : une erreur est rangée dans `sim.listenerErrors` (50 au plus, hors télémétrie) et signalée par l'option `onListenerError` (le navigateur écrit un `console.error`). Elle ne casse jamais un pas de simulation.
+- Crochets de test ajoutés : `audioStats()`, `audio.{start,setVolume,setMuted,setCaptions}`, `audioOffline.{renderRun,renderPanTest}`.
+- Aucune lumière ni matériau n'est créé en cours de partie par l'audio (aucun code de rendu touché, hormis deux éléments DOM de sous-titres).
+- Détails, mesures et limites : `docs/audio/NOTES_AUDIO_P2.md`.

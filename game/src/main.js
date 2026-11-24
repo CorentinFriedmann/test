@@ -11,11 +11,16 @@ import { createView } from './render/scene.js';
 import { createHud } from './ui/hud.js';
 import { createInput } from './ui/input.js';
 import { hudModel } from './ui/hud-model.js';
+import { createAudioSystem } from './audio/index.js';
+import { createOfflineTools } from './audio/offline.js';
+import { createCaptions } from './ui/captions.js';
+import { bindAudioOptions } from './ui/audio-opts.js';
 
 const url = new URLSearchParams(location.search);
 const data = loadData();
 const seed = url.has('seed') ? Number(url.get('seed')) : param(data, 'sim_seed');
-const sim = createSim(data, { seed, threat: url.get('threat') !== '0' });
+// A listener (audio, view) that throws is reported here, outside the simulation, and never breaks a step.
+const sim = createSim(data, { seed, threat: url.get('threat') !== '0', onListenerError: (err, rec) => console.error(`[estran] listener error on "${rec.event}":`, err) });
 let quality = qualityFromUrl(location.search);
 const debugEnabled = url.get('debug') === '1';
 const moment = momentFromUrl(location.search);
@@ -37,9 +42,19 @@ const perf = createPerfPanel({
 });
 sim.subscribe((e) => { if (e.type === 'noise') view.addRing(e.x, e.z, e.r, sim.state.level); });
 const hud = createHud(document.getElementById('hud'));
+const captions = createCaptions(document.getElementById('captions'), document.getElementById('toast'));
+let storage = null;
+try { storage = window.localStorage; } catch { /* storage blocked: settings just do not persist */ }
+let syncOptions = () => {};
+const audio = createAudioSystem({ data, world: sim.world, storage, onCaption: (c) => captions.show(c), onChange: (st) => syncOptions(st) });
+const audioOffline = createOfflineTools(data, sim.world);
+const listenerNow = () => { const p = sim.state.player; return { x: p.x, z: p.z, yaw: bot ? p.yaw : input.yaw }; };
+sim.subscribe((e) => audio.onEvent(e, sim.state, listenerNow()));
 const stepper = createStepper(sim.env.dt, 3);
 const debugEl = document.getElementById('debug');
 const intro = document.getElementById('intro');
+syncOptions = bindAudioOptions(document.getElementById('opts'), audio, captions);
+syncOptions(audio.settings);
 
 let bot = null, botMode = null;
 let paused = true;      // true while the intro/pause overlay is up
@@ -58,21 +73,23 @@ function tickInput() { return bot ? bot() : input.tick(); }
 function tickOnce() { snapshotPrev(); sim.step(tickInput()); }
 
 function restart() {
-  sim.reset(); stepper.reset(); input.clear(); input.yaw = sim.state.player.yaw; snapshotPrev();
+  sim.reset(); audio.reset(); stepper.reset(); input.clear(); input.yaw = sim.state.player.yaw; snapshotPrev();
   if (bot) bot = createBot(sim, botMode);
   hud.showObjective('Lisez les trois échelles de marée.', 6000);
 }
-function pause() { if (paused) return; paused = true; input.clear(); intro.classList.remove('hidden'); }
+function pause() { if (paused) return; paused = true; input.clear(); audio.suspend(); intro.classList.remove('hidden'); }
 function resume() {
-  intro.classList.add('hidden'); input.clear(); stepper.reset();
+  intro.classList.add('hidden'); input.clear(); stepper.reset(); audio.resume();
   if (paused) hud.showObjective('Lisez les trois échelles de marée.', 6000);
   paused = false;
 }
-intro.addEventListener('click', () => { resume(); view.dom.requestPointerLock?.(); });
+intro.addEventListener('click', () => { audio.start(); resume(); view.dom.requestPointerLock?.(); });
 document.addEventListener('pointerlockchange', () => { if (document.pointerLockElement !== view.dom && !manual && !sim.state.outcome) pause(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 addEventListener('keydown', (e) => {
   if (e.code === 'F2') { perf.toggle(); e.preventDefault(); }
+  if (e.code === 'KeyM' && !e.repeat) { captions.toast(audio.toggleMute() ? 'Son coupé' : 'Son activé'); }
+  if (e.code === 'KeyK' && !e.repeat) { audio.setCaptions(!audio.settings.captions); captions.toast(audio.settings.captions ? 'Sous-titres des bruits : oui' : 'Sous-titres des bruits : non'); }
   if (!debugEnabled) return;
   if (e.code === 'F3') { debugEl.style.display = debugEl.style.display === 'block' ? 'none' : 'block'; e.preventDefault(); }
   if (e.code === 'KeyT') speed = speed === 1 ? 6 : 1;
@@ -94,6 +111,7 @@ function frame(now) {
   const t0 = performance.now();
   view.draw(st, poseOverride || pose, st.t, Math.min(dt, 0.1));
   hud.update(hudModel(st, sim.world, data));
+  if (!paused) audio.update(st, { x: pose.x, z: pose.z, yaw: pose.yaw });
   meter.record(dt * 1000, performance.now() - t0);
   frames++; fpsAcc += dt;
   if (fpsAcc >= 1) { fps = frames / fpsAcc; frames = 0; fpsAcc = 0; }
@@ -113,7 +131,7 @@ window.__estran = {
     return {
       tick: st.tick, t: st.t, level: st.level, trend: st.trend, outcome: st.outcome, cause: st.cause, readCount: st.readCount,
       player: { x: p.x, z: p.z, yaw: p.yaw, ground: p.ground, d: p.d, band: p.band, speedMult: p.speedMult },
-      drown: st.drown, lamp: { on: st.lamp.on, battery: st.lamp.battery },
+      drown: st.drown, drownLimit: st.drownLimit, lamp: { on: st.lamp.on, battery: st.lamp.battery },
       lighthouse: { charge: st.lighthouse.charge, winding: st.lighthouse.winding ? st.lighthouse.winding.ticks / st.lighthouse.winding.total : 0 },
       noise: { ...st.noise }, cold: st.cold, grabs: st.grabs,
       threat: st.threat ? { active: st.threat.active, mode: st.threat.mode, x: st.threat.x, z: st.threat.z, dist: st.threat.dist, heard: st.threat.heard, lit: st.threat.lit } : null,
@@ -122,6 +140,10 @@ window.__estran = {
     };
   },
   getTelemetry: () => sim.telemetry(),
+  /** Audio hooks for the tests: settings and voice counters, listener errors, offline rendering (OfflineAudioContext). */
+  audioStats: () => ({ ...audio.stats(), listenerErrors: sim.listenerErrors.length }),
+  audio: { start: () => audio.start(), setVolume: (v) => audio.setVolume(v), setMuted: (b) => audio.setMuted(b), setCaptions: (b) => audio.setCaptions(b) },
+  audioOffline,
   getWorld: () => ({ seed, start: sim.world.start, lighthouse: sim.world.lighthouse, crank: sim.world.crank, stations: sim.world.stations, debris: sim.world.debris }),
   /** Subscribes to the simulation journal events (noise, threat_state, grab...). Same stream the audio (T-031) will use. */
   subscribe: (fn) => sim.subscribe(fn),

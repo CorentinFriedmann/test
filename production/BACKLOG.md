@@ -38,7 +38,7 @@
 | T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | VALIDÉ AVEC RÉSERVES |
 | T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | VALIDÉ AVEC RÉSERVES |
 | T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | VALIDÉ AVEC RÉSERVES |
-| T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | EN COURS |
+| T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | EN REVUE BOSS |
 | T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | À FAIRE |
 | T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024 | À FAIRE |
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
@@ -376,7 +376,7 @@
 - **Réserves reprises de T-029** (revue TD) : période du faisceau lue depuis `lighthouse_beam_period` et non `simTime / 8` (`scene.js` l.177), constantes visuelles rangées en configuration ; rendu en lecture seule de `getState()` ; rejouer la parité avec le scénario `prudent` et `?debug=1`.
 
 ### T-031 : Audio procédural : bruit dans l'eau et ambiance
-- **Assigné à** : `audio-director` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : EN COURS
+- **Assigné à** : `audio-director` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
 - **Livrables** : `game/src/audio/`, `game/tests/e2e/audio.spec.*`, `docs/audio/NOTES_AUDIO_P2.md`
 - **Critères d'acceptation** :
   - [ ] Tout en synthèse Web Audio, sans fichier audio ni voix ; ambiance (mer, vent) qui varie avec le niveau de la marée

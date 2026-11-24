@@ -35,6 +35,9 @@ export function createSim(data, opts = {}) {
   const crank = { x: world.lighthouse.x + worldParam(data, 'lighthouse_crank_distance'), z: world.lighthouse.z };
   world.crank = crank;
   const listeners = [];
+  // Listener faults (audio, view...) are recorded here, outside the journal and the telemetry, and never reach the simulation.
+  const listenerErrors = [];
+  const MAX_LISTENER_ERRORS = 50;
 
   let st, events, samples, threat;
 
@@ -63,7 +66,13 @@ export function createSim(data, opts = {}) {
   const log = (type, extra = {}) => {
     const e = { t: round4(st.t), type, ...extra };
     events.push(e);
-    for (const fn of listeners) fn({ ...e });
+    for (const fn of listeners.slice()) {
+      try { fn({ ...e }); } catch (err) {
+        const rec = { t: e.t, event: type, message: String(err && err.message || err) };
+        if (listenerErrors.length < MAX_LISTENER_ERRORS) listenerErrors.push(rec);
+        if (typeof opts.onListenerError === 'function') { try { opts.onListenerError(err, rec); } catch { /* the reporter must not break the step either */ } }
+      }
+    }
   };
   function sample() {
     const p = st.player;
@@ -218,6 +227,8 @@ export function createSim(data, opts = {}) {
     world, env, data, seed,
     /** Subscribes to every journal event (noise, threat_state, grab...). Returns the unsubscribe function. */
     subscribe(fn) { listeners.push(fn); return () => { const i = listeners.indexOf(fn); if (i >= 0) listeners.splice(i, 1); }; },
+    /** Errors thrown by listeners (kept apart from the deterministic journal; capped at 50). */
+    get listenerErrors() { return listenerErrors; },
     get state() { return st; },
     step, reset,
     telemetry() {

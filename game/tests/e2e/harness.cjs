@@ -17,7 +17,7 @@ function check(name, ok, detail = '') {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  (' + detail + ')' : ''}`);
 }
 
-async function openPage(browser, query = '') {
+async function openPage(browser, query = '', opts = {}) {
   const page = await browser.newPage({ viewport: { width: 960, height: 540 } });
   const problems = [];
   // Chromium's software GL driver (SwiftShader) emits this performance notice by itself; it is not produced by the game.
@@ -26,7 +26,8 @@ async function openPage(browser, query = '') {
   page.on('pageerror', (e) => problems.push(`pageerror: ${e}`));
   await page.goto(base + query);
   await page.waitForFunction(() => window.__estran, null, { timeout: 20000 });
-  await page.evaluate(() => { window.__estran.hideIntro(); window.__estran.setManual(true); });
+  // opts.gesture: a real click on the intro (user activation, as a player would), so that the audio can start.
+  if (opts.gesture) { await page.click('#intro'); await page.evaluate(() => window.__estran.setManual(true)); } else await page.evaluate(() => { window.__estran.hideIntro(); window.__estran.setManual(true); });
   const api = {
     page, problems,
     st: () => page.evaluate(() => window.__estran.getState()),

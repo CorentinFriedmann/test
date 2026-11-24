@@ -46,6 +46,12 @@
   #card.on { display: flex; }
   #card-text { font-size: 30px; letter-spacing: .06em; }
   #card-hint { font-size: 14px; border: 1.5px solid var(--dim); border-radius: 6px; padding: 3px 11px; color: var(--dim); }
+  #captions { position: fixed; left: 0; right: 0; bottom: 21%; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; }
+  .cap { background: rgba(5,9,13,.72); padding: 3px 12px; border-radius: 4px; font-size: 16px; letter-spacing: .02em; }
+  #toast { position: fixed; top: 18px; left: 50%; transform: translateX(-50%); font-size: 14px; opacity: 0; transition: opacity .3s; pointer-events: none; text-shadow: 0 0 6px #000; }
+  #toast.on { opacity: .9; }
+  #opts { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; color: var(--dim); cursor: default; }
+  #opts label { cursor: pointer; display: flex; align-items: center; gap: 8px; }
   #debug { position: fixed; left: 12px; bottom: 10px; font: 12px/1.4 monospace; white-space: pre; text-shadow: 0 0 4px #000; pointer-events: none; display: none; }
   #intro { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
            background: rgba(0,0,0,.6); cursor: pointer; font-size: 16px; line-height: 1.8; }
@@ -56,7 +62,12 @@
 <body>
 <div id="hud"></div>
 <div id="debug"></div>
-<div id="intro"><div><b style="font-size:28px;letter-spacing:.2em">ESTRAN</b><br><br>Cliquez pour jouer<br><small>ZQSD / WASD · souris · Maj · F · E (maintenir) · R</small></div></div>
+<div id="captions" aria-live="polite"></div>
+<div id="toast" role="status"></div>
+<div id="intro"><div><b style="font-size:28px;letter-spacing:.2em">ESTRAN</b><br><br>Cliquez pour jouer<br><small>ZQSD / WASD · souris · Maj · F · E (maintenir) · R · M (son) · K (sous-titres)</small>
+<div id="opts"><label>Volume <input id="opt-vol" type="range" min="0" max="100" value="80"></label>
+<label><input id="opt-mute" type="checkbox"> Son coupé</label>
+<label><input id="opt-cap" type="checkbox"> Sous-titres des bruits</label></div></div></div>
 <!--APP-->
 </body>
 </html>
