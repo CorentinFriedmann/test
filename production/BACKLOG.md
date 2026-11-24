@@ -36,8 +36,8 @@
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
 | T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
 | T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | VALIDÉ AVEC RÉSERVES |
-| T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | EN REVUE BOSS |
-| T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | À FAIRE |
+| T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | VALIDÉ AVEC RÉSERVES |
+| T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | EN COURS |
 | T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | À FAIRE |
 | T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | À FAIRE |
 | T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024 | À FAIRE |
@@ -350,7 +350,7 @@
 - **Contexte / références** : Décision du propriétaire du 2026-11-23 : ESTRAN accepté à l'essai. Périmètre, portes d'arrêt et « on ne fait pas » dans production/validations/T-004.md.
 
 ### T-029 : Noyau jouable : marée, menace, île, boucle de jeu
-- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : VALIDÉ AVEC RÉSERVES (`production/validations/T-029.md`, 2026-11-24)
 - **Livrables** : `game/` (copie de départ de `prototypes/estran-poc/`, mêmes versions figées, dépôt autonome avec `npm run all`), `game/tests/unit/`, `game/tests/e2e/`
 - **Critères d'acceptation** :
   - [ ] Simulation à pas fixe (30 Hz, `sim_step` de `menace.csv` ; arbitrage T-006) séparée du rendu, sans dépendance au rendu ; marée lue depuis `maree.csv`, menace depuis `menace.csv` (valeurs de T-006, pas de valeurs en dur)
@@ -363,7 +363,7 @@
 - **Contexte / références** : `prototypes/estran-poc/` (T-027), `docs/tech/ADR_PIVOT_WEB.md` (pile et langage), `docs/design/GDD.md`. Pas de nouvelles dépendances sans mise à jour de `docs/legal/LICENCES.md` (T-024).
 
 ### T-030 : Ambiance visuelle stylisée, niveaux de qualité et mesures de performance
-- **Assigné à** : `graphics-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Assigné à** : `graphics-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : EN COURS
 - **Livrables** : `game/src/render/`, `game/tests/e2e/render.spec.*`, `game/captures/`, `docs/tech/PERF_P2.md`
 - **Critères d'acceptation** :
   - [ ] Eau dont le niveau suit la simulation (marée visible sans HUD), brouillard, faisceau du phare, lampe du joueur, écume et grain, selon le brief d'ambiance de T-006
@@ -373,6 +373,7 @@
   - [ ] Au moins 6 captures d'écran (3 moments d'éclairage × 2 niveaux de qualité) dans `game/captures/` ; la menace reste lisible au niveau bas
   - [ ] Aucune erreur de console ; `npm run all` vert
 - **Contexte / références** : réserve de T-027 et porte P1 : la fluidité sur un vrai PC reste à confirmer par le propriétaire (« fluide » ou « saccadé »). Si P1 est « saccadé », un correctif est créé hors de cette tâche.
+- **Réserves reprises de T-029** (revue TD) : période du faisceau lue depuis `lighthouse_beam_period` et non `simTime / 8` (`scene.js` l.177), constantes visuelles rangées en configuration ; rendu en lecture seule de `getState()` ; rejouer la parité avec le scénario `prudent` et `?debug=1`.
 
 ### T-031 : Audio procédural : bruit dans l'eau et ambiance
 - **Assigné à** : `audio-director` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
@@ -385,6 +386,7 @@
   - [ ] Option de sous-titres des bruits (texte court, par exemple « bruit dans l'eau, à gauche »), désactivée par défaut, servant l'accessibilité
   - [ ] `NOTES_AUDIO_P2.md` : ce qui est fait, ce qui reste, hypothèses sur ce qui fait peur
 - **Contexte / références** : **codée par `audio-director`** (arbitrage de la Boss, T-028) ; sa fiche parle encore de MetaSounds et de Wwise : la Coordination lui transmet `docs/tech/ADR_PIVOT_WEB.md` et `production/DECISIONS.md` (Web Audio seulement). Au moins la moitié de la peur est portée par l'audio (`production/validations/T-004.md` R3). La direction audio complète (T-009) vient après P2.
+- **Réserve reprise de T-029** : `try/catch` par écouteur dans `sim.subscribe`/`log()` (erreur journalisée hors simulation) avant de brancher l'audio. Appliquer `threat_audible_radius` et `threat_cue_roar_radius` avec `state.threat.dist`.
 
 ### T-032 : Tests automatisés et rapport de la porte P2
 - **Assigné à** : `qa-lead` · **Dépend de** : T-030, T-031 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
@@ -398,6 +400,7 @@
   - [ ] Questionnaire humain de T-006 (5 questions) mis en forme avec la réponse attendue, et conclusion écrite : P2 « prête à être jugée » ou « non prête », avec la raison
   - [ ] Aucun avis de joueur inventé : la partie humaine de P2 est présentée comme **en attente** du propriétaire
 - **Contexte / références** : porte P2 de `production/validations/T-004.md` §7 : rapport automatisé **et** au moins un avis humain extérieur. Le premier est produit ici, le second à l'étape publiée de T-033.
+- **Point repris de T-029 (écart 6 du GDD)** : mesurer sur les 40 parties le temps passé par la Laisse à moins de 15 m et le nombre de saisies de l'automate qui suit la règle ; signaler si la peur n'existe pas avant 160 s (charge du phare sous 20 %).
 
 ### T-033 : Version jouable P2 en un seul fichier HTML, prête à publier
 - **Assigné à** : `build-engineer` · **Dépend de** : T-032, T-024 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
