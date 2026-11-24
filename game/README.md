@@ -5,8 +5,9 @@ Jeu web 3D (three.js 0.187.0, esbuild 0.28.2, JavaScript ES2022). Dépôt autono
 ```
 npm install        # ou npm ci
 npm run all        # npm ci + build (dist/estran.html) + tests unitaires (node --test) + scénarios Playwright
-npm run test:unit  # tests Node (56 : 40 de la passe a, 16 de la passe b), sans navigateur
-npm run test:e2e   # scénarios navigateur (après npm run build)
+npm run test:unit  # tests Node (60 : 40 passe a, 16 passe b, 4 rendu), sans navigateur
+npm run test:e2e   # scénarios navigateur : tests/e2e/run.cjs (jeu) puis tests/e2e/render.cjs (rendu, T-030), après npm run build
+npm run captures   # reconstruit puis met à jour les captures VERSIONNÉES de captures/ (sur demande seulement)
 npm run sync-data  # recopie docs/design/data/*.csv dans data/ (source de vérité : docs)
 ```
 
@@ -14,7 +15,7 @@ npm run sync-data  # recopie docs/design/data/*.csv dans data/ (source de vérit
 - `src/data/` : lecture des CSV de `data/` (embarqués par `scripts/gen-data.mjs`). Aucune valeur d'équilibrage en dur.
 - `src/render/` : scène three.js et niveaux de qualité (`?q=low|high`), qui n'influencent jamais la simulation.
 - `src/ui/` : HUD (modèle pur + DOM) et saisies.
-- Options d'URL : `?seed=N`, `?q=low|high`, `?debug=1` (F3 : chiffres, T : temps x6).
+- Options d'URL : `?seed=N`, `?q=low|medium|high`, `?moment=night|dawn|day`, `?perf=1` (écran de mesure, aussi F2), `?debug=1` (F3 : chiffres, T : temps x6).
 - Crochets de test : `window.__estran` (`getState`, `getTelemetry`, `setBot`, `advance`, `setQuality`, `restart`...).
 - `data/monde.csv` appartient au jeu : paramètres de génération du terrain et règles absentes des tableaux du GDD.
 
@@ -28,3 +29,14 @@ npm run sync-data  # recopie docs/design/data/*.csv dans data/ (source de vérit
 - Automates : `prudent` (revient a la manivelle apres chaque releve, gagne), `noisy` (releve S1 puis court vers la Laisse, 2 saisies, defaite).
 - URL : `?threat=0` desactive la Laisse (comparaisons, pas de jeu normal). Crochets de test ajoutes : `subscribe`, `lookAt`.
 - Coupes de la Boss respectees : pas d'haptique, pas de marche lente au stick (la touche C reste), pas de silhouette de faisceau.
+
+## T-030 : ambiance stylisée, niveaux de qualité, mesures
+
+- `src/render/quality.js` : tables des 3 niveaux (`low`, `medium`, `high`), des 3 moments d'éclairage du GDD §12 (`night` par défaut, `dawn`, `day`) et constantes visuelles (`LOOK`). Rien d'autre n'est réglé en dur dans `scene.js`.
+- `src/render/shaders.js` : GLSL maison (aucun asset, aucune dépendance) : eau (niveau = `st.level`, rivage et écume lus dans une texture des hauteurs du terrain, reflets de la lampe et du faisceau), Laisse, perturbation de l'eau, grain et vignette (un triangle plein écran dessiné après la scène).
+- `src/render/laisse.js` : forme sombre à capuche et lanières, anneau d'eau troublée. Visible **seulement** si `threat.lit > 0` (règle de la simulation, 0,5 s), ou toujours avec `?debug=1`.
+- Faisceau : cap lu depuis `lighthouse_beam_period` (même formule que `threat.js`). Après une victoire, l'éclairage glisse vers l'aube en 2,5 s (rendu seul).
+- Les niveaux ne changent que le coût et la finition : résolution (0,8 / 1 / 1,5-2), anti-crénelage (haut seulement, au chargement), détail des rochers, relief du sable, octaves de l'eau, reflets, grain (absent en bas), finesse de la Laisse. Identiques sur les 3 niveaux : brouillard, nombre et place des rochers, lumières, règle de visibilité de la Laisse. Les lumières ne sont jamais retirées (intensité 0 plutôt) pour éviter une recompilation de shader (saccade).
+- Mesure : F2 ou `?perf=1`. Cadence moyenne, frame moyenne, 95e centile, pire frame, appels de dessin, triangles, temps JS du dessin. Bouton « Copier le rapport de performance » : JSON dans le presse-papiers (ou zone de texte à copier à la main si le navigateur refuse). Les temps sont des intervalles entre frames (vsync compris), pas des temps GPU. Rapport et limites : `docs/tech/PERF_P2.md`.
+- Crochets de test ajoutés : `setPose` (caméra libre pour les captures), `probeLaisse` (pixels que la Laisse change dans la frame), `perfReport`, `perfSummary`, `perfReset`.
+- Captures : les tests écrivent dans `captures/.tmp/` (ignoré par git). `npm run captures` met à jour `captures/` : `estran-<nuit|aube|jour>-<high|medium|low>.jpg` (9), `estran-laisse*.png` et les captures de parcours de la passe b.

@@ -10,9 +10,11 @@
     "sync-data": "node scripts/sync-data.mjs",
     "build": "node scripts/build.mjs",
     "test:unit": "node scripts/gen-data.mjs && node --test \"tests/unit/*.test.js\"",
-    "test:e2e": "node tests/e2e/run.cjs",
+    "test:e2e": "node tests/e2e/run.cjs && node tests/e2e/render.cjs",
     "test": "npm run test:unit && npm run test:e2e",
-    "all": "npm ci && npm run build && npm test"
+    "all": "npm ci && npm run build && npm test",
+    "captures": "node scripts/build.mjs && node scripts/captures.mjs",
+    "test:render": "node tests/e2e/render.cjs"
   },
   "dependencies": {
     "three": "0.187.0"

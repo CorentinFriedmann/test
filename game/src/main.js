@@ -4,7 +4,9 @@ import { loadData, param } from './data/load.js';
 import { createSim } from './sim/sim.js';
 import { createStepper } from './sim/stepper.js';
 import { createBot } from './sim/bot.js';
-import { QUALITY, qualityFromUrl } from './render/quality.js';
+import { QUALITY, qualityFromUrl, momentFromUrl } from './render/quality.js';
+import { createPerfMeter } from './render/perfstats.js';
+import { createPerfPanel } from './ui/perf.js';
 import { createView } from './render/scene.js';
 import { createHud } from './ui/hud.js';
 import { createInput } from './ui/input.js';
@@ -16,7 +18,23 @@ const seed = url.has('seed') ? Number(url.get('seed')) : param(data, 'sim_seed')
 const sim = createSim(data, { seed, threat: url.get('threat') !== '0' });
 let quality = qualityFromUrl(location.search);
 const debugEnabled = url.get('debug') === '1';
-const view = createView(sim, quality, { showThreat: debugEnabled, flicker: param(data, 'lighthouse_charge_flicker') });
+const moment = momentFromUrl(location.search);
+const view = createView(sim, quality, {
+  showThreat: debugEnabled, flicker: param(data, 'lighthouse_charge_flicker'),
+  beamPeriod: param(data, 'lighthouse_beam_period'), beamReach: param(data, 'lighthouse_beam_reach'),
+  moment, momentFixed: url.has('moment'),
+});
+const meter = createPerfMeter(600);
+const perf = createPerfPanel({
+  meter, visible: url.get('perf') === '1',
+  getContext: () => {
+    const i = view.info(), mem = performance.memory;
+    return {
+      quality, moment, seed, tick: sim.state.tick, pixelRatio: view.pixelRatio(), bufferW: view.dom.width, bufferH: view.dom.height, gpu: view.gpuName(),
+      drawCalls: i.drawCalls, triangles: i.triangles, geometries: i.geometries, textures: i.textures, heapMB: mem ? Math.round(mem.usedJSHeapSize / 1048576) : null,
+    };
+  },
+});
 sim.subscribe((e) => { if (e.type === 'noise') view.addRing(e.x, e.z, e.r, sim.state.level); });
 const hud = createHud(document.getElementById('hud'));
 const stepper = createStepper(sim.env.dt, 3);
@@ -29,6 +47,7 @@ let manual = false;     // test mode: real-time stepping off, ticks only through
 let speed = 1;          // debug x6 / test fast-forward: more ticks per frame, same tick length
 let prev = { x: 0, z: 0, ground: 0 };
 let fps = 0, frames = 0, fpsAcc = 0;
+let poseOverride = null; // test only: a free camera for the captures (render side, the simulation is untouched)
 
 const input = createInput(view.dom, () => { if (sim.state.outcome) restart(); });
 input.yaw = sim.state.player.yaw;
@@ -53,6 +72,7 @@ intro.addEventListener('click', () => { resume(); view.dom.requestPointerLock?.(
 document.addEventListener('pointerlockchange', () => { if (document.pointerLockElement !== view.dom && !manual && !sim.state.outcome) pause(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 addEventListener('keydown', (e) => {
+  if (e.code === 'F2') { perf.toggle(); e.preventDefault(); }
   if (!debugEnabled) return;
   if (e.code === 'F3') { debugEl.style.display = debugEl.style.display === 'block' ? 'none' : 'block'; e.preventDefault(); }
   if (e.code === 'KeyT') speed = speed === 1 ? 6 : 1;
@@ -71,8 +91,10 @@ function frame(now) {
     x: prev.x + (p.x - prev.x) * a, z: prev.z + (p.z - prev.z) * a, ground: prev.ground + (p.ground - prev.ground) * a,
     yaw: bot ? p.yaw : input.yaw, pitch: input.pitch, eye: p.eyeHeight,
   };
-  view.draw(st, pose, st.t);
+  const t0 = performance.now();
+  view.draw(st, poseOverride || pose, st.t, Math.min(dt, 0.1));
   hud.update(hudModel(st, sim.world, data));
+  meter.record(dt * 1000, performance.now() - t0);
   frames++; fpsAcc += dt;
   if (fpsAcc >= 1) { fps = frames / fpsAcc; frames = 0; fpsAcc = 0; }
   if (debugEnabled && debugEl.style.display === 'block') {
@@ -96,7 +118,7 @@ window.__estran = {
       noise: { ...st.noise }, cold: st.cold, grabs: st.grabs,
       threat: st.threat ? { active: st.threat.active, mode: st.threat.mode, x: st.threat.x, z: st.threat.z, dist: st.threat.dist, heard: st.threat.heard, lit: st.threat.lit } : null,
       stations: st.stations.map((s) => ({ id: s.id, read: s.read, readable: s.readable, progress: s.progress })),
-      quality, paused, speed, fps, ...view.info(),
+      quality, moment, paused, speed, fps, ...view.info(),
     };
   },
   getTelemetry: () => sim.telemetry(),
@@ -106,7 +128,13 @@ window.__estran = {
   /** Test only: aims the camera at a point (no effect while a bot drives the yaw). */
   lookAt: (x, z, pitch = -0.1) => { const p = sim.state.player; input.yaw = Math.atan2(-(x - p.x), -(z - p.z)); input.pitch = pitch; },
   hideIntro: () => { resume(); },
-  setQuality: (q) => { if (QUALITY[q]) { quality = q; view.setQuality(q); } },
+  setQuality: (q) => { if (QUALITY[q]) { quality = q; view.setQuality(q); meter.reset(); } },
+  /** Render-only probes: pixels changed by the Laisse in the current frame; the performance report as an object. */
+  probeLaisse: () => view.probeLaisse(),
+  setPose: (p) => { poseOverride = p; },
+  perfReport: () => perf.report(),
+  perfSummary: () => meter.summary(),
+  perfReset: () => meter.reset(),
   setBot: (mode) => { botMode = mode; bot = mode ? createBot(sim, mode) : null; },
   setManual: (b) => { manual = b; },
   setSpeed: (n) => { speed = n; },

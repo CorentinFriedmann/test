@@ -1,49 +1,5 @@
-// Headless browser scenarios (Playwright + Chromium, software WebGL). Usage: node tests/e2e/run.cjs (after npm run build).
-// The page is driven through window.__estran: scripted players (bots) feed the same sim.step() as the keyboard.
-const { chromium } = require('playwright');
-const path = require('node:path');
-const fs = require('node:fs');
-
-const root = path.resolve(__dirname, '..', '..');
-const base = 'file://' + path.join(root, 'dist/estran.html');
-const outDir = path.join(root, 'captures');
-fs.mkdirSync(outDir, { recursive: true });
-
-const results = [];
-function check(name, ok, detail = '') {
-  results.push({ name, ok });
-  console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  (' + detail + ')' : ''}`);
-}
-
-async function openPage(browser, query = '') {
-  const page = await browser.newPage({ viewport: { width: 960, height: 540 } });
-  const problems = [];
-  // Chromium's software GL driver (SwiftShader) emits this performance notice by itself; it is not produced by the game.
-  const driverNoise = /GL Driver Message .*GPU stall due to ReadPixels/;
-  page.on('console', (m) => { if ((m.type() === 'error' || m.type() === 'warning') && !driverNoise.test(m.text())) problems.push(`${m.type()}: ${m.text()}`); });
-  page.on('pageerror', (e) => problems.push(`pageerror: ${e}`));
-  await page.goto(base + query);
-  await page.waitForFunction(() => window.__estran, null, { timeout: 20000 });
-  await page.evaluate(() => { window.__estran.hideIntro(); window.__estran.setManual(true); });
-  const api = {
-    page, problems,
-    st: () => page.evaluate(() => window.__estran.getState()),
-    tel: () => page.evaluate(() => window.__estran.getTelemetry()),
-    frames: (n = 2) => page.evaluate((n) => new Promise((r) => { let i = 0; const f = () => (++i >= n ? r() : requestAnimationFrame(f)); f(); }), n),
-    // Advances the simulation (fixed ticks) until pred(state) is true or maxTicks elapsed; renders a frame every `chunk` ticks.
-    async until(pred, maxTicks = 20000, chunk = 30) {
-      let s = await api.st();
-      for (let n = 0; n < maxTicks && !pred(s) && !s.outcome; n += chunk) {
-        await page.evaluate((c) => window.__estran.advance(c), chunk);
-        await api.frames(1);
-        s = await api.st();
-      }
-      return s;
-    },
-    shot: (name) => page.screenshot({ path: path.join(outDir, name) }),
-  };
-  return api;
-}
+// Headless browser scenarios (gameplay, parity, scripted players). Usage: node tests/e2e/run.cjs (after npm run build).
+const { chromium, check, results, openPage } = require('./harness.cjs');
 
 (async () => {
   const browser = await chromium.launch();
@@ -83,6 +39,7 @@ async function openPage(browser, query = '') {
     check('Tide gauge follows the level (high water, nearly full)', (await g.page.evaluate(() => parseFloat(document.getElementById('gauge-fill').style.height))) > 95, `level=${high.level.toFixed(2)}`);
     const end = await g.until((s) => !!s.outcome, 20000, 60);
     await g.frames(2);
+    await g.page.waitForTimeout(2800); // the victory dawn blends in over 2.5 s of real time
     await g.shot('estran-victoire.png');
     check('Win scenario: bot reads the 3 ladders and wins', end.outcome === 'victory' && end.readCount === 3, `t=${end.t.toFixed(1)} s`);
     const card = await g.page.evaluate(() => document.getElementById('card').classList.contains('on') && document.getElementById('card-text').textContent);
