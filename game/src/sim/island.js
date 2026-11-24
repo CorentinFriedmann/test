@@ -72,5 +72,28 @@ export function generateIsland(data, env, seed) {
     if (!chosen) throw new Error(`island: no valid position for ladder ${st.id} (seed ${seed})`);
     placed.push({ id: st.id, x: chosen.x, z: chosen.z, ground: heightAt(chosen.x, chosen.z), altitude: st.altitude, interval });
   }
-  return { ...base, seed, start, stations: placed, mapRadius: env.mapRadius, islandRadius: W('island_radius') };
+  const debris = placeDebris(data, env, heightAt, lh, start, placed, seed);
+  return { ...base, seed, start, stations: placed, debris, mapRadius: env.mapRadius, islandRadius: W('island_radius') };
+}
+
+/** Debris (buckets, crates) lying on the foreshore: ground altitude and distance ring from monde.csv, own seeded generator. */
+function placeDebris(data, env, heightAt, lh, start, stations, seed) {
+  const W = (id) => worldParam(data, id);
+  const count = param(data, 'debris_count');
+  const gMin = W('debris_ground_min'), gMax = W('debris_ground_max'), dMin = W('debris_dist_min'), dMax = W('debris_dist_max');
+  const sep = W('debris_min_separation'), clear = W('debris_station_clearance');
+  const rng = mulberry32((seed ^ hashStr('debris')) >>> 0);
+  const out = [];
+  for (let i = 0; i < 20000 && out.length < count; i++) {
+    const a = rng() * Math.PI * 2, dist = dMin + (dMax - dMin) * rng();
+    const x = lh.x + Math.cos(a) * dist, z = lh.z + Math.sin(a) * dist;
+    if (hypot(x, z) > env.mapRadius - 10) continue;
+    const g = heightAt(x, z);
+    if (g < gMin || g > gMax) continue;
+    if (out.some((o) => hypot(o.x - x, o.z - z) < sep)) continue;
+    if (stations.some((s) => hypot(s.x - x, s.z - z) < clear)) continue;
+    out.push({ x, z, ground: g });
+  }
+  if (out.length < count) throw new Error(`island: only ${out.length}/${count} debris could be placed (seed ${seed})`);
+  return out;
 }

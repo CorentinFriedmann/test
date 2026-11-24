@@ -23,3 +23,24 @@ place_S2_haute_dist_max,40,m,FIXE,GDD 8 : distance au phare
 place_S3_jusant_dist_min,35,m,FIXE,GDD 8 : distance au phare
 place_S3_jusant_dist_max,50,m,FIXE,GDD 8 : distance au phare
 drown_recovery_s,4,s,A_REGLER,GDD 3 : duree de vidage complet du compteur de souffle des que d < 1.40
+lighthouse_crank_distance,3.2,m,A_REGLER,passe b : distance de la manivelle au centre du phare (cote du depart du joueur) ; absente de phare dans menace.csv
+noise_event_period_s,0.5,s,A_REGLER,passe b : periode des evenements bruit emis pour l'audio (T-031) tant que le rayon de bruit est positif
+debris_noise_duration_s,1.0,s,FIXE,GDD 6.1 : duree de l'impulsion de bruit d'un debris heurte (la note de menace.csv la donne sans parametre)
+debris_ground_min,-0.30,m,A_REGLER,passe b : altitude minimale du sol ou un debris peut etre pose (estran)
+debris_ground_max,0.50,m,A_REGLER,passe b : altitude maximale du sol ou un debris peut etre pose
+debris_dist_min,18,m,A_REGLER,passe b : distance minimale d'un debris au phare (hors du halo)
+debris_dist_max,55,m,A_REGLER,passe b : distance maximale d'un debris au phare
+debris_min_separation,9,m,A_REGLER,passe b : distance minimale entre deux debris
+debris_station_clearance,6,m,A_REGLER,passe b : distance minimale d'un debris a une echelle
+threat_spawn_depth_max,1.00,m,FIXE,GDD 6.2 : profondeur maximale de la case d'apparition (menace.csv ne donne que le minimum)
+threat_spawn_tries,64,count,A_REGLER,passe b : tirages de points d'apparition par tentative
+threat_spawn_retry_s,1.0,s,FIXE,GDD 9 cas 8 : delai entre deux tentatives d'apparition
+threat_spawn_relax_after_s,10,s,FIXE,GDD 9 cas 8 : au bout de ce delai sans point valide la distance minimale est assouplie
+threat_spawn_dist_relaxed,35,m,FIXE,GDD 9 cas 8 : distance minimale apres assouplissement
+threat_perceive_refresh_s,0.5,s,A_REGLER,passe b : periode de renouvellement de la position percue (avec erreur) tant que le bruit est entendu
+threat_arrive_radius,1.0,m,A_REGLER,passe b : distance a laquelle la Laisse considere un point comme atteint
+threat_bank_stand_dist,2.0,m,FIXE,GDD 6.2 : distance minimale au joueur en attente au bord
+threat_waypoint_tries,30,count,A_REGLER,passe b : tirages d'un point de ronde valide
+threat_steer_step_deg,30,deg,A_REGLER,passe b : pas angulaire de contournement des obstacles (eau trop basse, halo)
+threat_steer_max_deg,90,deg,A_REGLER,passe b : ecart angulaire maximal de contournement
+threat_lit_duration_s,0.5,s,FIXE,GDD 7.1 : duree d'eclairage de la silhouette quand le faisceau ou la lampe touche la Laisse

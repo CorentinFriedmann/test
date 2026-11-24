@@ -13,12 +13,13 @@ import { hudModel } from './ui/hud-model.js';
 const url = new URLSearchParams(location.search);
 const data = loadData();
 const seed = url.has('seed') ? Number(url.get('seed')) : param(data, 'sim_seed');
-const sim = createSim(data, { seed });
+const sim = createSim(data, { seed, threat: url.get('threat') !== '0' });
 let quality = qualityFromUrl(location.search);
-const view = createView(sim, quality);
+const debugEnabled = url.get('debug') === '1';
+const view = createView(sim, quality, { showThreat: debugEnabled, flicker: param(data, 'lighthouse_charge_flicker') });
+sim.subscribe((e) => { if (e.type === 'noise') view.addRing(e.x, e.z, e.r, sim.state.level); });
 const hud = createHud(document.getElementById('hud'));
 const stepper = createStepper(sim.env.dt, 3);
-const debugEnabled = url.get('debug') === '1';
 const debugEl = document.getElementById('debug');
 const intro = document.getElementById('intro');
 
@@ -84,19 +85,26 @@ requestAnimationFrame(frame);
 
 // Test hooks (read-mostly; they drive the same simulation through the same step()).
 window.__estran = {
-  version: 'estran-0.1.0-passe-a',
+  version: 'estran-0.2.0-passe-b',
   getState: () => {
     const st = sim.state, p = st.player;
     return {
       tick: st.tick, t: st.t, level: st.level, trend: st.trend, outcome: st.outcome, cause: st.cause, readCount: st.readCount,
       player: { x: p.x, z: p.z, yaw: p.yaw, ground: p.ground, d: p.d, band: p.band, speedMult: p.speedMult },
       drown: st.drown, lamp: { on: st.lamp.on, battery: st.lamp.battery },
+      lighthouse: { charge: st.lighthouse.charge, winding: st.lighthouse.winding ? st.lighthouse.winding.ticks / st.lighthouse.winding.total : 0 },
+      noise: { ...st.noise }, cold: st.cold, grabs: st.grabs,
+      threat: st.threat ? { active: st.threat.active, mode: st.threat.mode, x: st.threat.x, z: st.threat.z, dist: st.threat.dist, heard: st.threat.heard, lit: st.threat.lit } : null,
       stations: st.stations.map((s) => ({ id: s.id, read: s.read, readable: s.readable, progress: s.progress })),
       quality, paused, speed, fps, ...view.info(),
     };
   },
   getTelemetry: () => sim.telemetry(),
-  getWorld: () => ({ seed, start: sim.world.start, lighthouse: sim.world.lighthouse, stations: sim.world.stations }),
+  getWorld: () => ({ seed, start: sim.world.start, lighthouse: sim.world.lighthouse, crank: sim.world.crank, stations: sim.world.stations, debris: sim.world.debris }),
+  /** Subscribes to the simulation journal events (noise, threat_state, grab...). Same stream the audio (T-031) will use. */
+  subscribe: (fn) => sim.subscribe(fn),
+  /** Test only: aims the camera at a point (no effect while a bot drives the yaw). */
+  lookAt: (x, z, pitch = -0.1) => { const p = sim.state.player; input.yaw = Math.atan2(-(x - p.x), -(z - p.z)); input.pitch = pitch; },
   hideIntro: () => { resume(); },
   setQuality: (q) => { if (QUALITY[q]) { quality = q; view.setQuality(q); } },
   setBot: (mode) => { botMode = mode; bot = mode ? createBot(sim, mode) : null; },

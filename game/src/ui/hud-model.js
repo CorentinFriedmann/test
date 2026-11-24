@@ -1,5 +1,12 @@
+import { param } from '../data/load.js';
+
 // Pure HUD model (GDD 11): numbers and states only, never explanatory text.
 const KIND = { 1: 'rise', 0: 'peak', '-1': 'fall' };
+
+const ring = (state) => {
+  const r = state.reading ?? state.lighthouse.winding;
+  return { active: r !== null, progress: r ? r.ticks / r.total : 0 };
+};
 
 export function hudModel(state, world, data) {
   const lo = data.tide[0].level, hi = Math.max(...data.tide.map((r) => r.level));
@@ -10,7 +17,9 @@ export function hudModel(state, world, data) {
       status: s.read ? 'read' : s.readable ? 'now' : 'todo',
     })),
     lamp: { on: state.lamp.on, frac: state.lamp.battery / state.lamp.total },
-    ring: { active: state.reading !== null, progress: state.reading ? state.reading.ticks / state.reading.total : 0 },
+    ring: ring(state),
+    lighthouse: { frac: state.lighthouse.charge / param(data, 'lighthouse_charge_start'), low: state.lighthouse.charge < param(data, 'lighthouse_charge_flicker') },
+    cold: state.cold / param(data, 'threat_grab_cold_duration'),
     drown: state.drownLimit > 0 ? state.drown / state.drownLimit : 0,
     card: state.outcome === null ? null : state.outcome === 'victory' ? 'victory' : state.cause === 'window_missed' ? 'missed' : 'sea',
   };

@@ -12,6 +12,8 @@ export function createEnv(data) {
     dt: 1 / hz,
     speeds: { slow: param(data, 'player_speed_slow'), walk: param(data, 'player_speed_walk'), run: param(data, 'player_speed_run') },
     smoothS: param(data, 'player_speed_smooth'),
+    /** Depth from which the player is "in the water" (first band that slows walking: the ford). */
+    wetDepth: data.bands.find((b) => b.speedMult < 1)?.depthMin ?? Infinity,
     mapRadius: worldParam(data, 'map_radius'),
     /** Breath counter drain, in counter-seconds per second (GDD 3: full counter empties in drown_recovery_s). */
     drownDrainRate: (data.bands.find((b) => b.drownTimerS > 0)?.drownTimerS ?? 0) / worldParam(data, 'drown_recovery_s'),

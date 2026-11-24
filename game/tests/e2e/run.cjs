@@ -164,6 +164,66 @@ async function openPage(browser, query = '') {
     await g.page.close();
   }
 
+  // ---- 7. Prudent bot: wins despite the Laisse by rewinding the lighthouse (pass b) ----
+  {
+    const g = await openPage(browser, '?q=high');
+    await g.page.evaluate(() => { window.__ev = []; window.__estran.subscribe((e) => window.__ev.push(e)); window.__estran.setBot('prudent'); });
+    const spawned = await g.until((s) => !!s.threat && s.threat.active);
+    check('The Laisse appears with the rising tide (t ~ 57 s)', spawned.t > 56 && spawned.t < 58.5, `t=${spawned.t.toFixed(1)}`);
+    const wind = await g.until((s) => s.lighthouse.winding > 0.4 && s.readCount >= 1);
+    const ringOn = await g.page.evaluate(() => document.getElementById('ring').classList.contains('active'));
+    await g.frames(2);
+    await g.shot('estran-phare-manivelle.png');
+    check('HUD ring fills while rewinding the lighthouse; lighthouse gauge shown', ringOn && (await g.page.evaluate(() => !!document.getElementById('phare-fill'))), `progress=${wind.lighthouse.winding.toFixed(2)}`);
+    const dim = await g.until((s) => s.t >= 150);
+    const w = await g.page.evaluate(() => parseFloat(document.getElementById('phare-fill').style.width));
+    check('Lighthouse gauge tracks the charge (kept high by the crank)', Math.abs(w - dim.lighthouse.charge) < 0.2 && dim.lighthouse.charge > 20, `charge=${dim.lighthouse.charge.toFixed(1)}`);
+    const end = await g.until((s) => !!s.outcome, 20000, 60);
+    await g.frames(2);
+    const ev = await g.page.evaluate(() => window.__ev);
+    check('Prudent scenario: victory without a single grab', end.outcome === 'victory' && end.grabs === 0, `t=${end.t.toFixed(1)}`);
+    check('The beam repelled the Laisse and the lighthouse was rewound at least twice', ev.some((e) => e.type === 'threat_state' && e.source === 'beam') && ev.filter((e) => e.type === 'lighthouse_wound').length >= 2);
+    check('Noise events reach the subscription hook and the telemetry (type, position, intensity)', ev.some((e) => e.type === 'noise' && typeof e.x === 'number' && typeof e.z === 'number' && e.r > 0) && (await g.tel()).events.some((e) => e.type === 'noise'));
+    check('No console error or warning during the prudent run', g.problems.length === 0, g.problems.slice(0, 3).join(' | '));
+    await g.page.close();
+  }
+
+  // ---- 8. Noisy bot: seized twice, defeat ----
+  {
+    const g = await openPage(browser, '?q=high');
+    await g.page.evaluate(() => window.__estran.setBot('noisy'));
+    const first = await g.until((s) => s.grabs >= 1, 20000, 15);
+    await g.frames(2);
+    const cold = await g.page.evaluate(() => parseFloat(document.getElementById('vignette-cold').style.opacity));
+    await g.shot('estran-saisie.png');
+    check('First grab: blue cold vignette, speed effect running, Laisse falling back', first.grabs === 1 && cold > 0.4 && first.cold > 8 && first.threat.mode === 'flee', `opacity=${cold} cold=${first.cold.toFixed(1)}`);
+    const end = await g.until((s) => !!s.outcome, 20000, 15);
+    await g.frames(2);
+    const card = await g.page.evaluate(() => document.getElementById('card-text').textContent);
+    const tel = await g.tel();
+    const grabs = tel.events.filter((e) => e.type === 'grab');
+    check('Noisy scenario: second grab within 45 s is the defeat, card "La mer a gagné."', end.outcome === 'defeat' && end.cause === 'seized' && card === 'La mer a gagné.' && grabs.length === 2 && grabs[1].t - grabs[0].t <= 45, `grabs at ${grabs.map((e) => e.t).join(' and ')}`);
+    check('Journal shows the Laisse states (inquire, hunt) before the grabs', ['inquire', 'hunt'].every((m) => tel.events.some((e) => e.type === 'threat_state' && e.to === m)));
+    check('No console error or warning during the noisy run', g.problems.length === 0, g.problems.slice(0, 3).join(' | '));
+    await g.page.close();
+  }
+
+  // ---- 9. Capture of the Laisse in the lamp light ----
+  {
+    const g = await openPage(browser, '?q=high');
+    await g.page.evaluate(() => window.__estran.setBot('noisy'));
+    const near = await g.until((s) => s.threat && s.threat.active && s.threat.mode === 'hunt' && s.threat.dist < 10, 20000, 6);
+    await g.page.evaluate(() => { const s = window.__estran.getState(); window.__estran.setBot(null); window.__estran.lookAt(s.threat.x, s.threat.z, -0.12); });
+    await g.page.keyboard.press('KeyF');
+    await g.page.evaluate(() => window.__estran.advance(4));
+    await g.frames(3);
+    const lit = await g.st();
+    await g.shot('estran-laisse.png');
+    check('The Laisse is lit by the lamp (silhouette visible) at close range', lit.lamp.on && lit.threat.lit > 0 && lit.threat.dist < 12, `dist=${lit.threat.dist.toFixed(1)} mode=${near.threat.mode}`);
+    check('No console error or warning on the capture run', g.problems.length === 0, g.problems.slice(0, 3).join(' | '));
+    await g.page.close();
+  }
+
   await browser.close();
   const failed = results.filter((r) => !r.ok).length;
   console.log(failed ? `${failed} check(s) FAILED` : `ALL ${results.length} E2E CHECKS PASSED`);

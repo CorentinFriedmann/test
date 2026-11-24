@@ -2,7 +2,7 @@
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Color, FogExp2, PlaneGeometry, Mesh, MeshStandardMaterial, CylinderGeometry, ConeGeometry,
   BoxGeometry, SpotLight, DirectionalLight, AmbientLight, HemisphereLight, Group, CanvasTexture, RepeatWrapping, Float32BufferAttribute,
-  MeshBasicMaterial, AdditiveBlending, DoubleSide, MathUtils, SRGBColorSpace,
+  MeshBasicMaterial, AdditiveBlending, DoubleSide, MathUtils, SRGBColorSpace, RingGeometry, CapsuleGeometry,
 } from 'three';
 import { hash2 } from '../sim/rng.js';
 import { QUALITY } from './quality.js';
@@ -21,7 +21,7 @@ function makeWaterTexture() {
   return t;
 }
 
-export function createView(sim, quality) {
+export function createView(sim, quality, opts = {}) {
   const q = QUALITY[quality];
   const { world } = sim;
   const renderer = new WebGLRenderer({ antialias: q.antialias, powerPreference: 'high-performance' });
@@ -84,17 +84,56 @@ export function createView(sim, quality) {
   add(new CylinderGeometry(0.9, 0.9, 1.6, 16), new MeshBasicMaterial({ color: 0xfff1c8 }), 21.1);
   add(new ConeGeometry(1.5, 1.4, 16), new MeshStandardMaterial({ color: 0x1b1d20 }), 22.6);
   const beamPivot = new Group(); beamPivot.position.y = 21.1; lighthouse.add(beamPivot);
+  const beamMats = [];
   const beamLight = new SpotLight(0xfff0cc, 9000, 140, MathUtils.degToRad(9), 0.5, 1.6);
   beamLight.target.position.set(0, -1.5, 40);
   beamPivot.add(beamLight, beamLight.target);
   {
     const L = 70, R = 5;
-    const cone = new Mesh(new ConeGeometry(R, L, 24, 1, true), new MeshBasicMaterial({
-      color: 0xffe9b0, transparent: true, opacity: 0.16, blending: AdditiveBlending, depthWrite: false, side: DoubleSide, fog: true }));
+    const coneMat = new MeshBasicMaterial({
+      color: 0xffe9b0, transparent: true, opacity: 0.16, blending: AdditiveBlending, depthWrite: false, side: DoubleSide, fog: true });
+    beamMats.push(coneMat);
+    const cone = new Mesh(new ConeGeometry(R, L, 24, 1, true), coneMat);
     cone.geometry.translate(0, -L / 2, 0);
     cone.rotation.x = -Math.PI / 2 - 0.04;
     beamPivot.add(cone);
   }
+
+  // Crank at the foot of the tower (hold E to rewind the lighthouse). Pass b.
+  const crank = new Group(); crank.position.set(world.crank.x, world.plateauHeight, world.crank.z); scene.add(crank);
+  const crankMat = new MeshStandardMaterial({ color: 0x9a7b3c, roughness: 0.6, metalness: 0.4 });
+  const crankPost = new Mesh(new CylinderGeometry(0.12, 0.14, 1.0, 10), crankMat); crankPost.position.y = 0.5; crank.add(crankPost);
+  const crankArm = new Group(); crankArm.position.y = 1.0; crank.add(crankArm);
+  const arm = new Mesh(new BoxGeometry(0.7, 0.08, 0.08), crankMat); arm.position.x = 0.3; crankArm.add(arm);
+  const knob = new Mesh(new CylinderGeometry(0.06, 0.06, 0.25, 8), crankMat); knob.position.set(0.65, -0.1, 0); crankArm.add(knob);
+
+  // Debris on the foreshore (crates and buckets): hitting one makes a loud noise.
+  {
+    const crate = new MeshStandardMaterial({ color: 0x6b5236, roughness: 0.9 }), bucket = new MeshStandardMaterial({ color: 0x4d6a78, roughness: 0.7 });
+    world.debris.forEach((d, i) => {
+      const m = i % 2 ? new Mesh(new CylinderGeometry(0.28, 0.22, 0.45, 12), bucket) : new Mesh(new BoxGeometry(0.7, 0.55, 0.55), crate);
+      m.position.set(d.x, d.ground + 0.25, d.z); m.rotation.y = i * 1.7; scene.add(m);
+    });
+  }
+
+  // La Laisse: provisional dark silhouette (T-030 replaces it). Visible only while lit by the beam or the lamp (GDD 9 case 1),
+  // or always with ?debug=1. Its position is smoothed for display only; the simulation keeps its own 30 Hz position.
+  const laisseMat = new MeshStandardMaterial({ color: 0x0b1118, roughness: 0.5, emissive: 0x16222e });
+  const laisse = new Group(); laisse.visible = false; scene.add(laisse);
+  { const body = new Mesh(new CapsuleGeometry(0.45, 1.3, 4, 10), laisseMat); body.position.y = 0.9; laisse.add(body);
+    const head = new Mesh(new ConeGeometry(0.3, 0.6, 8), laisseMat); head.position.y = 2.0; laisse.add(head); }
+  const laisseShown = { x: 0, z: 0, init: false };
+
+  // Water rings under the player's footsteps (radius proportional to the noise, capped at 8 m: GDD 11).
+  const rings = [];
+  {
+    const geo = new RingGeometry(0.92, 1, 40).rotateX(-Math.PI / 2);
+    for (let i = 0; i < 8; i++) {
+      const m = new Mesh(geo, new MeshBasicMaterial({ color: 0xbfe0f0, transparent: true, opacity: 0, depthWrite: false, side: DoubleSide }));
+      m.visible = false; scene.add(m); rings.push({ m, age: 1e9, max: 1, life: 1 });
+    }
+  }
+  let ringNext = 0;
 
   // Ladders: a post with graduations; the colour tells read / unread.
   const ladders = world.stations.map((s) => {
@@ -127,10 +166,40 @@ export function createView(sim, quality) {
   return {
     renderer, camera, dom: renderer.domElement,
     /** pose: interpolated {x, z, ground, yaw, pitch, eye}; st: simulation state (read only). */
+    /** Spawns a ripple (render only). */
+    addRing(x, z, noiseR, level) {
+      const r = rings[ringNext++ % rings.length];
+      r.age = 0; r.life = 1.2; r.max = Math.min(8, Math.max(1, noiseR)); r.m.position.set(x, level + 0.03, z); r.m.visible = true;
+    },
     draw(st, pose, simTime) {
       water.position.y = st.level;
       waterTex.offset.x = simTime * 0.004; waterTex.offset.y = simTime * 0.0025;
       beamPivot.rotation.y = (simTime / 8) * Math.PI * 2;
+      {
+        // Lighthouse wear: below the flicker threshold the beam flickers and dims; at 0 it is off (cosmetic, deterministic in the sim clock).
+        const c = st.lighthouse.charge, low = c < opts.flicker;
+        const k = c <= 0 ? 0 : low ? (c / opts.flicker) * (hash2(Math.floor(simTime * 14), 3, 9) > 0.35 ? 1 : 0.15) : 1;
+        beamLight.intensity = 9000 * k; beamMats[0].opacity = 0.16 * k;
+      }
+      crankArm.rotation.y = st.lighthouse.winding ? (st.lighthouse.winding.ticks / st.lighthouse.winding.total) * Math.PI * 8 : 0;
+      // The Laisse.
+      {
+        const th = st.threat;
+        if (th && th.active) {
+          if (!laisseShown.init) { laisseShown.x = th.x; laisseShown.z = th.z; laisseShown.init = true; }
+          laisseShown.x += (th.x - laisseShown.x) * 0.5; laisseShown.z += (th.z - laisseShown.z) * 0.5;
+          laisse.position.set(laisseShown.x, st.level - 1.1, laisseShown.z);
+          laisse.visible = th.lit > 0 || opts.showThreat === true;
+          laisseMat.emissive.setHex(th.lit > 0 ? 0x2a3a4a : 0x4a1010);
+        } else { laisse.visible = false; laisseShown.init = false; }
+      }
+      for (const r of rings) {
+        if (!r.m.visible) continue;
+        r.age += 1 / 60;
+        const u = r.age / r.life;
+        if (u >= 1) { r.m.visible = false; continue; }
+        r.m.scale.setScalar(0.3 + r.max * u); r.m.material.opacity = 0.5 * (1 - u);
+      }
       lamp.visible = st.lamp.on;
       st.stations.forEach((s, i) => ladders[i].mat.color.setHex(s.read ? 0x6fd0c4 : 0xd9c98a));
       camera.position.set(pose.x, pose.ground + pose.eye, pose.z);
