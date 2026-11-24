@@ -37,7 +37,7 @@
 | T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
 | T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | VALIDÉ AVEC RÉSERVES |
 | T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | VALIDÉ AVEC RÉSERVES |
-| T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | EN COURS |
+| T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | EN REVUE BOSS |
 | T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | À FAIRE |
 | T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | À FAIRE |
 | T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024 | À FAIRE |
@@ -363,7 +363,7 @@
 - **Contexte / références** : `prototypes/estran-poc/` (T-027), `docs/tech/ADR_PIVOT_WEB.md` (pile et langage), `docs/design/GDD.md`. Pas de nouvelles dépendances sans mise à jour de `docs/legal/LICENCES.md` (T-024).
 
 ### T-030 : Ambiance visuelle stylisée, niveaux de qualité et mesures de performance
-- **Assigné à** : `graphics-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : EN COURS
+- **Assigné à** : `graphics-programmer` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
 - **Livrables** : `game/src/render/`, `game/tests/e2e/render.spec.*`, `game/captures/`, `docs/tech/PERF_P2.md`
 - **Critères d'acceptation** :
   - [ ] Eau dont le niveau suit la simulation (marée visible sans HUD), brouillard, faisceau du phare, lampe du joueur, écume et grain, selon le brief d'ambiance de T-006

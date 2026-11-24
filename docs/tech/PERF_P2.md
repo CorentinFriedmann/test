@@ -23,7 +23,7 @@ La seule mesure qui compte est celle du propriétaire sur son PC (porte P1) : `?
 
 Lecture : le temps JS du dessin est négligeable aux trois niveaux (moins de 1,2 ms) ; tout le coût est du remplissage logiciel (shader d'eau plein écran, MSAA, résolution). Pour mémoire, le prototype de T-027 faisait 11 à 15 i/s au même format avec une scène plus simple : le niveau haut est donc **plus lourd que le prototype sous SwiftShader**, le niveau bas à peu près équivalent. Ce n'est pas un résultat de GPU.
 
-Fichier brut des mesures : lancer `npm run test:render` ; `captures/.tmp/perf.json` (ignoré par git) contient les trois rapports complets et les comptes de la vue large.
+Fichier brut des mesures : lancer `npm run test:render` ; `captures/.tmp/perf.json` (ignoré par git ; `captures/perf.json` après `npm run captures`) contient les trois rapports complets et les comptes de la vue large.
 
 ### Comptes indépendants du GPU (vue large de nuit : phare, faisceau, rochers, eau dans le champ)
 

@@ -1,0 +1,144 @@
+{
+  "realTime": {
+    "high": {
+      "report": "estran-perf",
+      "version": 1,
+      "date": "2026-11-24T14:36:26.267Z",
+      "quality": "high",
+      "moment": "night",
+      "seed": 2026,
+      "tick": 189,
+      "url": "?q=high&perf=1",
+      "resolution": {
+        "css": [
+          960,
+          540
+        ],
+        "pixelRatio": 1,
+        "buffer": [
+          960,
+          540
+        ]
+      },
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.8103.78 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "window": {
+        "frames": 48,
+        "note": "derniers frames (max 600), partie en cours ; les temps sont des intervalles entre frames (vsync inclus), pas des temps GPU"
+      },
+      "avgFps": 4.7,
+      "avgFrameMs": 211.8,
+      "p50FrameMs": 216.6,
+      "p95FrameMs": 250,
+      "p99FrameMs": 258.9,
+      "maxFrameMs": 266.7,
+      "hitchesOver33ms": 48,
+      "cpuDrawAvgMs": 1.07,
+      "cpuDrawP95Ms": 2.39,
+      "drawCalls": 5,
+      "triangles": 59923,
+      "geometries": 6,
+      "textures": 3,
+      "jsHeapMB": 11
+    },
+    "medium": {
+      "report": "estran-perf",
+      "version": 1,
+      "date": "2026-11-24T14:36:40.976Z",
+      "quality": "medium",
+      "moment": "night",
+      "seed": 2026,
+      "tick": 311,
+      "url": "?q=medium&perf=1",
+      "resolution": {
+        "css": [
+          960,
+          540
+        ],
+        "pixelRatio": 1,
+        "buffer": [
+          960,
+          540
+        ]
+      },
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.8103.78 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "window": {
+        "frames": 80,
+        "note": "derniers frames (max 600), partie en cours ; les temps sont des intervalles entre frames (vsync inclus), pas des temps GPU"
+      },
+      "avgFps": 7.9,
+      "avgFrameMs": 126.66,
+      "p50FrameMs": 133.3,
+      "p95FrameMs": 150,
+      "p99FrameMs": 150,
+      "maxFrameMs": 150,
+      "hitchesOver33ms": 80,
+      "cpuDrawAvgMs": 0.82,
+      "cpuDrawP95Ms": 1.2,
+      "drawCalls": 7,
+      "triangles": 55159,
+      "geometries": 6,
+      "textures": 3,
+      "jsHeapMB": 11
+    },
+    "low": {
+      "report": "estran-perf",
+      "version": 1,
+      "date": "2026-11-24T14:36:55.079Z",
+      "quality": "low",
+      "moment": "night",
+      "seed": 2026,
+      "tick": 391,
+      "url": "?q=low&perf=1",
+      "resolution": {
+        "css": [
+          960,
+          540
+        ],
+        "pixelRatio": 0.8,
+        "buffer": [
+          768,
+          432
+        ]
+      },
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.8103.78 Safari/537.36",
+      "hardwareConcurrency": 4,
+      "window": {
+        "frames": 220,
+        "note": "derniers frames (max 600), partie en cours ; les temps sont des intervalles entre frames (vsync inclus), pas des temps GPU"
+      },
+      "avgFps": 21.9,
+      "avgFrameMs": 45.6,
+      "p50FrameMs": 50,
+      "p95FrameMs": 50.1,
+      "p99FrameMs": 66.6,
+      "maxFrameMs": 66.7,
+      "hitchesOver33ms": 163,
+      "cpuDrawAvgMs": 0.67,
+      "cpuDrawP95Ms": 1,
+      "drawCalls": 5,
+      "triangles": 52243,
+      "geometries": 6,
+      "textures": 3,
+      "jsHeapMB": 11
+    }
+  },
+  "wideNightView": {
+    "high": {
+      "drawCalls": 37,
+      "triangles": 61577
+    },
+    "medium": {
+      "drawCalls": 37,
+      "triangles": 56765
+    },
+    "low": {
+      "drawCalls": 37,
+      "triangles": 53873
+    }
+  }
+}
