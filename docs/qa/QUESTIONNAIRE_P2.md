@@ -3,6 +3,8 @@
 > Source : `docs/design/GDD.md` §13, 8 questions validées en T-036. Mise en forme : `qa-lead`, T-032.
 > **Répondant : le propriétaire, seul.** Réponses avec vos mots, sans relire le pitch ni le GDD, en 5 minutes au plus.
 > **Ne lisez pas la dernière section (« Réponses attendues ») avant d'avoir répondu à tout.**
+> Dans la version publiée (`game/dist/estran-p2.html`), ce questionnaire est un formulaire (bouton « Questionnaire » de l'écran de départ) **sans** la section « Réponses attendues » ; il copie vos réponses en texte à coller dans la conversation (T-033).
+> Alignement T-037 : le faisceau protège le phare et ses abords (portée 40 m), plus les échelles lointaines ; les formulations ci-dessous n'affirment rien de plus large.
 
 ## Avant de jouer
 
@@ -80,8 +82,8 @@ Une réponse est « comprise » si l'**idée-clé** figure dans la réponse. Aut
 |---|---|---|
 | 1 | L'eau monte et redescend selon un cycle (jauge). Il faut être **hors de l'eau** : zone sèche, plateforme du phare, qui rétrécit. L'eau ralentit et peut noyer. Les échelles ne se lisent qu'à certains moments | oui (compris / non compris) |
 | 2 | **Le bruit** (marcher vite, courir, éclabousser, heurter des objets), plus que la vue. Immobile ou lent, on est moins entendu | oui |
-| 3 | Le faisceau **repousse** la chose, mais le phare **s'éteint** à l'usure ; il faut le **remonter** à la manivelle avant de ressortir | oui |
-| 4 | Se figer ou ralentir, écouter la direction, rejoindre une zone sèche ou la lumière, allumer la lampe de près ; **ne pas courir** | oui |
+| 3 | Le faisceau **repousse** la chose **près du phare et de ses abords** (il ne couvre plus les échelles lointaines, où seul le silence protège), mais le phare **s'éteint** à l'usure ; il faut le **remonter** à la manivelle avant de ressortir | oui |
+| 4 | Se figer ou ralentir, écouter la direction, rejoindre une zone sèche ou le voisinage du phare, allumer la lampe de près ; **ne pas courir** | oui |
 | 5 | Un moment d'écoute ou d'attente (remous, grondement, silence) plutôt qu'une apparition visible. Note **3 ou plus**. Notez la cause citée | oui (note >= 3) |
 | 6 | « Casque oui/non » et « faible / correct / fort » | information de réglage (volume maître), sans seuil |
 | 7 | Le son porte **au moins la moitié** de la peur : sans son, la peur baisse nettement et l'écoute des remous manque | suivi, non éliminatoire : « moins de la moitié » rouvre le son (retour à T-031) sans bloquer P3 |

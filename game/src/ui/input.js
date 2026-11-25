@@ -5,7 +5,7 @@ export function createInput(target, onRestart) {
   const keys = new Set();
   let yaw = 0, pitch = -0.05, lampPressed = false, locked = false;
   addEventListener('keydown', (e) => {
-    if (e.repeat) return;
+    if (e.repeat || e.target?.tagName === 'TEXTAREA') return;
     keys.add(e.code);
     if (e.code === 'KeyF') lampPressed = true;
     if (e.code === 'KeyR') onRestart();

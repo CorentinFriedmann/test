@@ -5,7 +5,7 @@ const path = require('node:path');
 const fs = require('node:fs');
 
 const root = path.resolve(__dirname, '..', '..');
-const base = 'file://' + path.join(root, 'dist/estran.html');
+const base = 'file://' + path.join(root, 'dist/estran-p2.html');
 // Captures written by the tests go to an ignored folder, so that `npm test` never modifies versioned files.
 // `npm run captures` sets ESTRAN_CAPTURE_DIR=captures to refresh the versioned screenshots on demand.
 const outDir = process.env.ESTRAN_CAPTURE_DIR ? path.resolve(root, process.env.ESTRAN_CAPTURE_DIR) : path.join(root, 'captures', '.tmp');
@@ -24,7 +24,8 @@ async function openPage(browser, query = '', opts = {}) {
   const driverNoise = /GL Driver Message .*GPU stall due to ReadPixels/;
   page.on('console', (m) => { if ((m.type() === 'error' || m.type() === 'warning') && !driverNoise.test(m.text())) problems.push(`${m.type()}: ${m.text()}`); });
   page.on('pageerror', (e) => problems.push(`pageerror: ${e}`));
-  await page.goto(base + query);
+  // ?test=1 exposes window.__estran, which the published P2 build hides by default.
+  await page.goto(base + (query ? `${query}&test=1` : '?test=1'));
   await page.waitForFunction(() => window.__estran, null, { timeout: 20000 });
   // opts.gesture: a real click on the intro (user activation, as a player would), so that the audio can start.
   if (opts.gesture) { await page.click('#intro'); await page.evaluate(() => window.__estran.setManual(true)); } else await page.evaluate(() => { window.__estran.hideIntro(); window.__estran.setManual(true); });

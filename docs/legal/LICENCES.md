@@ -33,7 +33,7 @@ Les licences des paquets ci-dessous ont été lues **hors réseau** dans `game/n
 
 | Asset ou outil | Origine | Licence et version | Consulté le | Usage commercial | Plateformes | Attribution | Obligations | Preuve d'acquisition | Embarqué |
 |---|---|---|---|---|---|---|---|---|---|
-| `three` 0.187.0 | npm, dépôt three.js | MIT (`"license": "MIT"`) ; « Copyright © 2010-2026 three.js authors » | 2026-11-25 | Oui | Web, Electron | Oui : conserver l'avis de copyright et le texte MIT dans la version publiée | Texte MIT intégral joint à toute copie substantielle | `game/node_modules/three/LICENSE`, `package.json`, `package-lock.json` | **Oui** (code inclus dans `dist/estran.html`) |
+| `three` 0.187.0 | npm, dépôt three.js | MIT (`"license": "MIT"`) ; « Copyright © 2010-2026 three.js authors » | 2026-11-25 | Oui | Web, Electron | Oui : conserver l'avis de copyright et le texte MIT dans la version publiée | Texte MIT intégral joint à toute copie substantielle | `game/node_modules/three/LICENSE`, `package.json`, `package-lock.json` | **Oui** (code inclus dans `dist/estran-p2.html`, avec avis et texte MIT, section 5) |
 | `esbuild` 0.28.2 | npm, Evan Wallace | MIT ; « Copyright (c) 2020 Evan Wallace » | 2026-11-25 | Oui | Outil de build | Non requise pour le jeu : le code d'esbuild n'est pas copié dans le bundle (voir note ci-dessous) | Aucune pour la sortie du build | `game/node_modules/esbuild/LICENSE.md`, `package.json` | Non |
 | `@esbuild/linux-x64` 0.28.2 | npm (binaire d'esbuild) | MIT (`package.json`) ; pas de fichier LICENSE dans le paquet | 2026-11-25 | Oui | Outil de build | Non | Aucune pour la sortie | `game/node_modules/@esbuild/linux-x64/package.json` | Non |
 | Playwright (`playwright` et `playwright-core`) 1.63.0 | npm, Microsoft | Apache-2.0 | 2026-11-25 | Oui | Outil de test seulement | Non requise (rien n'est distribué) | Si jamais redistribué : texte Apache-2.0 et mentions NOTICE | `/opt/node-tools/node_modules/playwright/LICENSE`, `package.json` | Non |
@@ -53,14 +53,19 @@ Notes :
 |---|---|---|---|---|---|---|---|---|---|
 | (vide) | | | | | | | | | |
 
-## 5. Obligation d'attribution pour three.js (à appliquer par T-033)
+## 5. Obligation d'attribution pour three.js (appliquée par T-033)
 
-Constat dans le dépôt : `game/scripts/build.mjs` utilise `legalComments: 'none'` (ligne 16), donc **l'avis MIT de three.js est actuellement retiré du fichier `dist/estran.html`**. Cela ne respecte pas la condition MIT (conserver l'avis de copyright et le texte de permission). À corriger par T-033, au choix ou en cumulant :
+**Constat initial (2026-11-25, avant T-033)** : `game/scripts/build.mjs` utilisait `legalComments: 'none'`, donc l'avis MIT de three.js était retiré du fichier assemblé. Cela ne respectait pas la condition MIT (conserver l'avis de copyright et le texte de permission).
 
-1. **Commentaire de licence conservé** : mettre `legalComments: 'inline'` (ou `'eof'`) dans esbuild, **et/ou** ajouter une `banner` qui insère en tête du `<script>` le texte MIT complet de `game/node_modules/three/LICENSE` (copyright « three.js authors » inclus). C'est la solution minimale.
-2. **Écran « Crédits et licences »** dans le jeu : ligne « Rendu 3D : three.js (MIT), © 2010-2026 three.js authors » avec le texte MIT complet accessible (dépliant). Recommandé en plus, car visible par les joueurs et les plateformes.
-3. Pour Electron (Steam) : fournir aussi un fichier `LICENSES` dans le paquet (voir section 6).
-4. Test de non-régression à ajouter par `qa-lead` : le fichier `dist/estran.html` contient la chaîne « three.js authors » et « Permission is hereby granted ».
+**Correction appliquée par T-033** (fichier assemblé : `game/dist/estran-p2.html`) :
+
+1. `game/scripts/build.mjs` utilise `legalComments: 'inline'` : les commentaires `@license` de three.js (« Copyright 2010-2026 three.js authors », `SPDX-License-Identifier: MIT`) restent dans le code embarqué.
+2. Le build lit `game/node_modules/three/LICENSE` et en insère le **texte MIT complet** dans la page (balise `<script type="text/plain" id="licence-three">`). Le build échoue si ce fichier ne contient pas « three.js authors » et « Permission is hereby granted ».
+3. Écran **« Crédits et licences »** dans le jeu (écran de départ et de pause) : « Rendu 3D : three.js (licence MIT), © 2010-2026 three.js authors », mention qu'aucun asset tiers n'est utilisé, et le texte MIT complet dans un dépliant.
+4. Test de non-régression `game/tests/e2e/p2.cjs` (lancé par `npm test`) : le fichier assemblé contient « three.js authors » et « Permission is hereby granted », ainsi que le texte complet de `LICENSE` ; l'écran de crédits les affiche.
+5. Pour Electron (Steam), non fait ici : fournir aussi un fichier `LICENSES` dans le paquet (voir section 6) et ajouter **Electron et Chromium** au registre si l'empaquetage est abordé (non vérifié, hors périmètre de T-033).
+
+Reste à faire par un juriste : confirmer que ces mentions suffisent pour la vente (voir section 8).
 
 ## 6. Règles de distribution
 
@@ -71,7 +76,7 @@ Constat dans le dépôt : `game/scripts/build.mjs` utilise `legalComments: 'none
 | Point | Statut |
 |---|---|
 | Conditions générales des créateurs et du partage de revenus | **Non vérifié** (source à lire : documentation créateurs d'itch.io, section HTML5 et conditions de service) |
-| Format HTML5 (archive zip contenant un `index.html`, taille et dimensions maximales) | **Non vérifié** ; à confronter au fichier unique `dist/estran.html` (T-033) |
+| Format HTML5 (archive zip contenant un `index.html`, taille et dimensions maximales) | **Non vérifié** ; à confronter au fichier unique `dist/estran-p2.html` (T-033) |
 | Pourcentage prélevé par itch.io et frais de paiement | **Non vérifié** (la part est réglable par le créateur d'après mes connaissances générales, à confirmer) |
 | Compte créateur et informations fiscales | **Non vérifié** ; compte à créer par le propriétaire (section 9) |
 | Divulgation de l'IA générative | Voir 7.1 |
@@ -145,4 +150,5 @@ En langage simple. C'est la seule partie qui vous concerne ; tout le reste est f
 
 | Date | Auteur | Changement |
 |---|---|---|
+| 2026-11-25 | build-engineer | T-033 : avis et texte MIT de three.js conservés dans `dist/estran-p2.html`, écran « Crédits et licences », test de non-régression ; `dist/estran.html` devient `dist/estran-p2.html` |
 | 2026-11-25 | business-affairs | Création (T-024) : dépendances réelles, règles de distribution (non vérifiées, réseau fermé), IA générative, aide au propriétaire |

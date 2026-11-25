@@ -10,7 +10,7 @@
     "sync-data": "node scripts/sync-data.mjs",
     "build": "node scripts/build.mjs",
     "test:unit": "node scripts/gen-data.mjs && node --test \"tests/unit/*.test.js\"",
-    "test:e2e": "node tests/e2e/run.cjs && node tests/e2e/render.cjs && node tests/e2e/audio.cjs",
+    "test:e2e": "node tests/e2e/p2.cjs && node tests/e2e/run.cjs && node tests/e2e/render.cjs && node tests/e2e/audio.cjs",
     "test:p2": "node scripts/gen-data.mjs && node --test \"tests/p2/*.test.js\"",
     "p2:report": "node tests/p2/run.mjs",
     "p2:audio-cpu": "node tests/p2/audio-cpu.cjs",
@@ -18,6 +18,7 @@
     "all": "npm ci && npm run build && npm test",
     "captures": "node scripts/build.mjs && node scripts/captures.mjs",
     "test:render": "node tests/e2e/render.cjs",
+    "test:p2file": "node tests/e2e/p2.cjs",
     "test:audio": "node tests/e2e/audio.cjs"
   },
   "dependencies": {

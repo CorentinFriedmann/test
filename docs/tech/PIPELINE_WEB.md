@@ -56,3 +56,23 @@ Installation, build et tests exécutés dans cette session : build en 537 Kio, *
 3. Harnais de simulation sans rendu (logique de marée, sauvegarde, énigmes) testé en Node pur : c'est la partie la plus fiable et la plus rapide.
 4. Empaquetage Electron ou Tauri en CI (ADR §5) ; la signature et les comptes restent côté propriétaire.
 5. Budget de poids en CI : échec si le HTML dépasse un seuil.
+
+## 8. Version P2 : un seul fichier publiable (T-033)
+
+> Auteur : `build-engineer` · 2026-11-25. Le jeu est dans `game/` (pas dans `prototypes/estran-poc/`).
+
+| Étape | Commande (depuis `game/`) | Effet |
+|---|---|---|
+| Tout d'un coup | `npm run all` | `npm ci`, build, tests unitaires, tests P2 (automates), puis scénarios Playwright. Dure environ 15 à 40 minutes en rendu logiciel |
+| Build seul | `npm run build` | `scripts/build.mjs` : génère les données, bundle esbuild (minifié, IIFE, `legalComments: 'inline'`), insère le texte MIT de `node_modules/three/LICENSE` dans la page, écrit **`game/dist/estran-p2.html`** (environ 655 Kio, limite 3 Mo) |
+| Test de la version assemblée | `npm run test:p2file` | `tests/e2e/p2.cjs` : taille, licences, fichier autonome, écran de départ, formulaire des 8 questions, copie avec presse-papiers bloqué, stockage bloqué, aucune boîte de dialogue, aucune requête réseau, crochets cachés, une partie jouée par un automate, aucune erreur de console |
+| Autres scénarios | `npm run test:e2e` | `p2.cjs`, `run.cjs`, `render.cjs`, `audio.cjs` sur le même fichier |
+
+Règles de la version P2 :
+- **Fichier unique** `dist/estran-p2.html` (remplace `dist/estran.html`) : aucun script, style, image ni police externe ; aucune requête réseau au chargement (vérifié par Playwright : toute requête autre que le fichier lui-même fait échouer le test).
+- **Crochets de test** `window.__estran` : absents par défaut, présents seulement avec `?test=1`. Le harnais des tests (`tests/e2e/harness.cjs`) ajoute ce paramètre lui-même ; le joueur n'en a pas besoin.
+- **Cadre verrouillé de la page publiée** : aucun `alert`, `confirm` ni `prompt` ; copie par `navigator.clipboard.writeText` avec repli sur une zone de texte visible et sélectionnée ; `localStorage` toujours dans un `try/catch`.
+- **Licences** : voir `docs/legal/LICENCES.md` section 5 (avis `@license` conservés, texte MIT complet dans le fichier, écran « Crédits et licences », test de non-régression).
+- **Mesure** : seules les images jouées entrent dans le compteur de performance (pas celles de l'écran de départ), pour que « Copier le rapport de performance » depuis l'écran de départ décrive la partie.
+- **Publication** : non faite par ce pipeline. La Coordination publie `game/dist/estran-p2.html` comme page et reporte le lien dans `production/RAPPORT_P2.md`.
+- **Ce qui n'est pas vérifié** : le comportement réel dans le cadre verrouillé de la page publiée (presse-papiers, verrouillage du pointeur, audio) n'a été simulé que par Playwright en local ; il se confirme à la première ouverture de la page publiée.

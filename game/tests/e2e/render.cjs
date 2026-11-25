@@ -17,8 +17,8 @@ const VIEW = { x: 8, z: -22, ground: 2.0, eye: 1.7, tx: -45, tz: -40, pitch: -0.
 
   // ---- 1. Bundle weight
   {
-    const size = fs.statSync(path.join(root, 'dist/estran.html')).size;
-    check('Bundle dist/estran.html stays under 1.5 MB', size < 1.5 * 1048576, `${(size / 1024).toFixed(0)} KiB`);
+    const size = fs.statSync(path.join(root, 'dist/estran-p2.html')).size;
+    check('Bundle dist/estran-p2.html stays under 1.5 MB', size < 1.5 * 1048576, `${(size / 1024).toFixed(0)} KiB`);
   }
 
   // ---- 2. Lighting moments x quality levels (9 captures), no console problem

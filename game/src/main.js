@@ -15,6 +15,7 @@ import { createAudioSystem } from './audio/index.js';
 import { createOfflineTools } from './audio/offline.js';
 import { createCaptions } from './ui/captions.js';
 import { bindAudioOptions } from './ui/audio-opts.js';
+import { bindStartScreen } from './ui/p2.js';
 
 const url = new URLSearchParams(location.search);
 const data = loadData();
@@ -55,6 +56,9 @@ const debugEl = document.getElementById('debug');
 const intro = document.getElementById('intro');
 syncOptions = bindAudioOptions(document.getElementById('opts'), audio, captions);
 syncOptions(audio.settings);
+// P2 start screen: questionnaire, performance report copy, credits (reads the meter through perf.report()).
+bindStartScreen(document.getElementById('p2bar'), { build: typeof __ESTRAN_BUILD__ === 'string' ? __ESTRAN_BUILD__ : 'dev', getPerfReport: () => perf.report() });
+const typing = (e) => { const t = e.target; return !!t && (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && t.type === 'text')); };
 
 let bot = null, botMode = null;
 let paused = true;      // true while the intro/pause overlay is up
@@ -87,6 +91,7 @@ intro.addEventListener('click', () => { audio.start(); resume(); view.dom.reques
 document.addEventListener('pointerlockchange', () => { if (document.pointerLockElement !== view.dom && !manual && !sim.state.outcome) pause(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 addEventListener('keydown', (e) => {
+  if (typing(e) && e.code !== 'F2') return; // typing an answer never drives the game (F2 still closes the measurement screen)
   if (e.code === 'F2') { perf.toggle(); e.preventDefault(); }
   if (e.code === 'KeyM' && !e.repeat) { captions.toast(audio.toggleMute() ? 'Son coupé' : 'Son activé'); }
   if (e.code === 'KeyK' && !e.repeat) { audio.setCaptions(!audio.settings.captions); captions.toast(audio.settings.captions ? 'Sous-titres des bruits : oui' : 'Sous-titres des bruits : non'); }
@@ -112,7 +117,8 @@ function frame(now) {
   view.draw(st, poseOverride || pose, st.t, Math.min(dt, 0.1));
   hud.update(hudModel(st, sim.world, data));
   if (!paused) audio.update(st, { x: pose.x, z: pose.z, yaw: pose.yaw });
-  meter.record(dt * 1000, performance.now() - t0);
+  // Only played frames are measured: the report copied from the start screen then describes the game, not the menu.
+  if (!paused) meter.record(dt * 1000, performance.now() - t0);
   frames++; fpsAcc += dt;
   if (fpsAcc >= 1) { fps = frames / fpsAcc; frames = 0; fpsAcc = 0; }
   if (debugEnabled && debugEl.style.display === 'block') {
@@ -124,7 +130,8 @@ function frame(now) {
 requestAnimationFrame(frame);
 
 // Test hooks (read-mostly; they drive the same simulation through the same step()).
-window.__estran = {
+// Not exposed in the published P2 build unless the URL has ?test=1 (the tests open the page that way).
+if (url.get('test') === '1') window.__estran = {
   version: 'estran-0.2.0-passe-b',
   getState: () => {
     const st = sim.state, p = st.player;

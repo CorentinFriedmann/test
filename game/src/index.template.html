@@ -57,6 +57,27 @@
            background: rgba(0,0,0,.6); cursor: pointer; font-size: 16px; line-height: 1.8; }
   #intro.hidden { display: none; }
   #intro small { color: var(--dim); }
+  #intro { overflow-y: auto; align-items: flex-start; }
+  #intro > div { margin: auto; padding: 16px; max-width: 880px; }
+  #p2bar { margin-top: 18px; cursor: default; }
+  #p2bar textarea, .p2panel textarea { width: min(640px, 92vw); box-sizing: border-box; font: 12px/1.4 ui-monospace, monospace; background: #0b141b; color: var(--ink); border: 1px solid var(--dim); border-radius: 6px; padding: 6px; }
+  .p2btns { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; }
+  button { font: inherit; font-size: 14px; color: var(--ink); background: #10202b; border: 1px solid var(--dim); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  button:hover, button:focus-visible { border-color: var(--accent); outline: none; }
+  .p2msg { min-height: 1.4em; margin-top: 6px; font-size: 13px; color: var(--warn); }
+  .p2panel { position: fixed; inset: 0; z-index: 40; display: none; overflow-y: auto; background: #05090d; font-size: 15px; line-height: 1.5; text-align: left; }
+  .p2panel.on { display: block; }
+  .p2inner { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+  .p2inner h2 { letter-spacing: .1em; font-size: 22px; }
+  .p2note { color: var(--dim); }
+  .p2q { border: 1px solid #243442; border-radius: 8px; margin: 14px 0; padding: 8px 14px 12px; }
+  .p2q legend { padding: 0 6px; color: var(--accent); }
+  .p2row { margin-top: 8px; }
+  .p2lab { font-size: 13px; color: var(--dim); margin-bottom: 3px; }
+  .p2choices { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  .p2choices label { cursor: pointer; }
+  .p2panel textarea { width: 100%; }
+  #credits pre { white-space: pre-wrap; font: 12px/1.45 ui-monospace, monospace; color: var(--dim); }
 </style>
 </head>
 <body>
@@ -64,10 +85,16 @@
 <div id="debug"></div>
 <div id="captions" aria-live="polite"></div>
 <div id="toast" role="status"></div>
-<div id="intro"><div><b style="font-size:28px;letter-spacing:.2em">ESTRAN</b><br><br>Cliquez pour jouer<br><small>ZQSD / WASD · souris · Maj · F · E (maintenir) · R · M (son) · K (sous-titres)</small>
+<div id="intro"><div><b style="font-size:28px;letter-spacing:.2em">ESTRAN</b><br><br>Cliquez pour jouer<br>
+<small>ZQSD / WASD : se déplacer · souris : regarder · Maj : courir · C : marcher lentement · F : lampe · E (maintenir) : interagir<br>R : recommencer · M : couper le son · K : sous-titres des bruits · F2 : mesure de performance · Échap : pause</small>
 <div id="opts"><label>Volume <input id="opt-vol" type="range" min="0" max="100" value="80"></label>
 <label><input id="opt-mute" type="checkbox"> Son coupé</label>
-<label><input id="opt-cap" type="checkbox"> Sous-titres des bruits</label></div></div></div>
+<label><input id="opt-cap" type="checkbox"> Sous-titres des bruits</label></div>
+<div id="p2bar"><div class="p2btns"><button id="p2-form" type="button">Questionnaire (8 questions)</button>
+<button id="p2-perf" type="button">Copier le rapport de performance</button>
+<button id="p2-credits" type="button">Crédits et licences</button></div>
+<div id="p2-msg" class="p2msg" role="status"></div><textarea id="p2-out" readonly rows="8" style="display:none"></textarea></div></div></div>
+<script type="text/plain" id="licence-three"><!--LICENCE_THREE--></script>
 <!--APP-->
 </body>
 </html>

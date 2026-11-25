@@ -4,7 +4,7 @@ Jeu web 3D (three.js 0.187.0, esbuild 0.28.2, JavaScript ES2022). Dépôt autono
 
 ```
 npm install        # ou npm ci
-npm run all        # npm ci + build (dist/estran.html) + tests unitaires (node --test) + scénarios Playwright
+npm run all        # npm ci + build (dist/estran-p2.html) + tests unitaires (node --test) + scénarios Playwright
 npm run test:unit  # tests Node (passe a, passe b, rendu, audio T-031), sans navigateur
 npm run test:e2e   # scénarios navigateur : tests/e2e/run.cjs (jeu), render.cjs (rendu, T-030) puis audio.cjs (audio, T-031), après npm run build
 npm run captures   # reconstruit puis met à jour les captures VERSIONNÉES de captures/ (sur demande seulement)
@@ -16,7 +16,7 @@ npm run sync-data  # recopie docs/design/data/*.csv dans data/ (source de vérit
 - `src/render/` : scène three.js et niveaux de qualité (`?q=low|high`), qui n'influencent jamais la simulation.
 - `src/ui/` : HUD (modèle pur + DOM) et saisies.
 - Options d'URL : `?seed=N`, `?q=low|medium|high`, `?moment=night|dawn|day`, `?perf=1` (écran de mesure, aussi F2), `?debug=1` (F3 : chiffres, T : temps x6).
-- Crochets de test : `window.__estran` (`getState`, `getTelemetry`, `setBot`, `advance`, `setQuality`, `restart`...).
+- Crochets de test : `window.__estran` (`getState`, `getTelemetry`, `setBot`, `advance`, `setQuality`, `restart`...), **seulement avec `?test=1`** (T-033) ; les tests l'ajoutent eux-mêmes.
 - `data/monde.csv` appartient au jeu : paramètres de génération du terrain et règles absentes des tableaux du GDD.
 
 ## Passe b : bruit, la Laisse, phare
@@ -50,3 +50,10 @@ npm run sync-data  # recopie docs/design/data/*.csv dans data/ (source de vérit
 - Crochets de test ajoutés : `audioStats()`, `audio.{start,setVolume,setMuted,setCaptions}`, `audioOffline.{renderRun,renderPanTest}`.
 - Aucune lumière ni matériau n'est créé en cours de partie par l'audio (aucun code de rendu touché, hormis deux éléments DOM de sous-titres).
 - Détails, mesures et limites : `docs/audio/NOTES_AUDIO_P2.md`.
+
+## T-033 : version P2 en un seul fichier
+
+- `npm run build` écrit `dist/estran-p2.html` (fichier autonome, 3 Mo au plus, aucune requête réseau). `tests/e2e/p2.cjs` (`npm run test:p2file`) le vérifie.
+- Écran de départ : touches, volume, bouton « Copier le rapport de performance », formulaire des 8 questions (`src/ui/p2.js`, copie des réponses en texte), « Crédits et licences » (texte MIT de three.js inséré par le build). Les « réponses attendues » ne sont pas dans le jeu.
+- Copie : `navigator.clipboard` avec repli sur une zone de texte sélectionnée ; aucune boîte de dialogue du navigateur ; `localStorage` sous `try/catch`.
+- Détails : `docs/tech/PIPELINE_WEB.md` section 8, `docs/legal/LICENCES.md` section 5, `production/RAPPORT_P2.md`.
