@@ -67,7 +67,8 @@ export function createAudioSystem(opts) {
     setCaptions(b) { settings = sanitize({ ...settings, captions: !!b }); changed(); },
     stats() {
       return { started: !!engine, state: ctx ? ctx.state : 'none', ...settings, cues: { ...cueCounts }, played: engine ? { ...engine.stats.played } : {},
-        active: engine ? engine.stats.active : 0, dropped: engine ? engine.stats.dropped : 0, sampleRate: ctx ? ctx.sampleRate : 0 };
+        active: engine ? engine.stats.active : 0, dropped: engine ? engine.stats.dropped : 0,
+        droppedCritical: engine ? engine.stats.droppedCritical : 0, stolen: engine ? engine.stats.stolen : 0, droppedByPriority: engine ? [...engine.stats.droppedByPriority] : [0, 0, 0, 0], sampleRate: ctx ? ctx.sampleRate : 0 };
     },
   };
 }

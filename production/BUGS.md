@@ -7,7 +7,7 @@
 
 | ID | Titre | Sévérité | Priorité | Statut |
 |---|---|---|---|---|
-| BUG-001 | Audio : plafond de 28 voix atteint sur un parcours bruyant, `npm run all` rouge | **Bloquant pour P2** | P1 | OUVERT |
+| BUG-001 | Audio : plafond de 28 voix atteint sur un parcours bruyant, `npm run all` rouge | **Bloquant pour P2** | P1 | FERMÉ (T-038, 2026-11-25) |
 | BUG-002 | La règle ne punit que le joueur qui chasse la Laisse | Majeur (conception) | P1 (décision) | OUVERT |
 | BUG-003 | Aucune approche de la Laisse avant 160 s pour un joueur qui suit la règle | Majeur (conception) | P1 (décision) | OUVERT |
 | BUG-004 | Le démarrage de l'audio divise la cadence par deux sous rendu logiciel | Majeur, à confirmer | P2 | OUVERT |
@@ -15,7 +15,9 @@
 
 ---
 
-## BUG-001 : Audio, plafond de 28 voix atteint, `npm run all` rouge  (BLOQUANT POUR P2)
+## BUG-001 : Audio, plafond de 28 voix atteint, `npm run all` rouge  (FERMÉ par T-038)
+
+> **Fermé le 2026-11-25 (T-038, `audio-director`)** : priorité par type dans `src/audio/engine.js` (saisie, grondement, battement de coeur et remous proches jamais refusés ; coupe de 30 ms de la plus ancienne voix de priorité inférieure ; pas coupés ou refusés en premier). Vérifié : `audio.cjs` vert 3 fois de suite, `audio-cpu.cjs` 0 voix critique refusée, `npm run all` vert 2 fois de suite depuis `npm ci` (72 unitaires, 14 P2, 37 jeu, 26 rendu, 30 audio). Détail : `docs/audio/NOTES_AUDIO_P2.md`. BUG-004 reste ouvert.
 
 - **Sévérité** : Bloquant (empêche le critère « `npm run all` vert » de T-032) · **Priorité** : P1 · **Plateforme** : Chromium sans tête, Linux · **Build** : `d76a4b5` ; aussi reproduit au commit `994df01` (avant l'étape 1 de T-032), donc pas causé par les correctifs de rendu.
 - **Étapes de reproduction** :

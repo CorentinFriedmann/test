@@ -45,7 +45,7 @@ export function createOfflineTools(data, world) {
     const buf = await ctx.startRendering();
     const secs = [];
     for (let s = 0; s + 1 <= duration; s++) secs.push(measure(buf, Math.floor(s * sampleRate), Math.floor((s + 1) * sampleRate)).peak);
-    return { duration, sampleRate, ...measure(buf), played: eng.stats.played, dropped: eng.stats.dropped, peakPerSecondMax: Math.max(...secs) };
+    return { duration, sampleRate, ...measure(buf), played: eng.stats.played, dropped: eng.stats.dropped, droppedCritical: eng.stats.droppedCritical, stolen: eng.stats.stolen, peakPerSecondMax: Math.max(...secs) };
   }
 
   /**

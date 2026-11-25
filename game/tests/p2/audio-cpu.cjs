@@ -29,7 +29,7 @@ async function realTime(browser, withAudio) {
   const rep = await g.page.evaluate(() => window.__estran.perfReport());
   const audio = await g.page.evaluate(() => window.__estran.audioStats());
   const out = { withAudio, fps: rep.avgFps, avgFrameMs: rep.avgFrameMs, p95FrameMs: rep.p95FrameMs, cpuDrawAvgMs: rep.cpuDrawAvgMs, frames: rep.window.frames,
-    audioStarted: audio.started, audioState: audio.state, voicesPlayed: Object.values(audio.played || {}).reduce((a, b) => a + b, 0), dropped: audio.dropped, problems: g.problems.length };
+    audioStarted: audio.started, audioState: audio.state, voicesPlayed: Object.values(audio.played || {}).reduce((a, b) => a + b, 0), dropped: audio.dropped, droppedCritical: audio.droppedCritical, stolen: audio.stolen, droppedByPriority: audio.droppedByPriority, problems: g.problems.length };
   await g.page.close();
   return out;
 }
@@ -43,8 +43,11 @@ async function realTime(browser, withAudio) {
   const t0 = Date.now();
   const r = await g.page.evaluate((rec) => window.__estran.audioOffline.renderRun({ ...rec, limiter: true }), rec);
   const wallS = (Date.now() - t0) / 1000;
-  const C = { audioSeconds: +r.duration.toFixed(1), wallSeconds: +wallS.toFixed(2), coreShare: +(wallS / r.duration).toFixed(3), sampleRate: r.sampleRate, dropped: r.dropped, peakDb: +r.peakDb.toFixed(2) };
+  const C = { audioSeconds: +r.duration.toFixed(1), wallSeconds: +wallS.toFixed(2), coreShare: +(wallS / r.duration).toFixed(3), sampleRate: r.sampleRate, dropped: r.dropped, droppedCritical: r.droppedCritical, stolen: r.stolen, peakDb: +r.peakDb.toFixed(2) };
   console.log('C (offline)   ', JSON.stringify(C));
   await g.page.close(); await browser.close();
+  const crit = (B.droppedCritical || 0) + (B2.droppedCritical || 0) + (C.droppedCritical || 0);
+  console.log(crit === 0 ? 'OK: 0 critical voice refused' : `FAIL: ${crit} critical voice(s) refused`);
   fs.writeFileSync(path.join(outDir, 'p2-audio-cpu.json'), JSON.stringify({ A, B, A2, B2, C }, null, 2));
+  if (crit) process.exit(1);
 })().catch((e) => { console.error(e); process.exit(2); });

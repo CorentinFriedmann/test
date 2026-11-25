@@ -10,12 +10,28 @@ import { ambientMix, masterCutoff, towerHum, tideNorm, dreadLevel } from './mix.
 export const CEILING = 0.85; // asymptote of the soft ceiling: -1.4 dBFS, under the -1 dBFS target
 const MAX_VOICES = 28;
 
+// Voice priorities (T-038, BUG-001). At the ceiling a new voice may take the place of the oldest voice of a strictly lower
+// priority (the stolen voice is faded out in 30 ms: no click). A CRITICAL voice is never refused: if nothing of lower priority
+// is playing, it takes the oldest voice of its own priority. Anything else is refused when it finds no lower voice to take.
+export const PRIORITY = { LOW: 0, NORMAL: 1, HIGH: 2, CRITICAL: 3 };
+const STEAL_FADE = 0.03;
+/** Priority of a voice kind. Critical: grab, growl, roar, heartbeat, and swirls of a close Laisse (<= 65 % of audibleR). */
+export function priorityOf(kind, c, audibleR) {
+  if (kind === 'grab' || kind === 'growl' || kind === 'roar' || kind === 'heartbeat') return PRIORITY.CRITICAL;
+  if (kind === 'swirl') return c && c.dist !== undefined && c.dist <= 0.65 * audibleR ? PRIORITY.CRITICAL : PRIORITY.NORMAL;
+  if (kind.startsWith('lh_') || kind === 'end') return PRIORITY.HIGH;
+  if (kind === 'debris' || kind === 'flee_splash') return PRIORITY.NORMAL;
+  return PRIORITY.LOW; // step_*, interact, station, lamp
+}
+
 /** cfg: { tide: {min,max}, lighthouse: {x,z}, audibleR, roarR, flicker, seed, limiter (default true) } */
 export function createEngine(ctx, cfg) {
   const rng = mulberry32((cfg.seed ?? 7) >>> 0);
   const sr = ctx.sampleRate, nyq = sr / 2 - 200;
   const hz = (f) => Math.min(f, nyq);
-  const stats = { played: {}, dropped: 0, active: 0 };
+  const stats = { played: {}, dropped: 0, active: 0, stolen: 0, droppedCritical: 0, droppedByPriority: [0, 0, 0, 0] };
+  const live = new Set(); // voices counted in the voice budget (stolen ones are silent and already uncounted)
+  let seq = 0;
 
   // ---- noise buffers (generated, looped without a seam) ----
   function makeNoise(seconds, shaper) {
@@ -82,16 +98,35 @@ export function createEngine(ctx, cfg) {
   }
   let endTrack = null;
   const trackEnd = (node, at) => { if (!endTrack || at > endTrack.at) endTrack = { node, at }; };
-  function voice(kind, P, level, build) {
+  function voice(kind, P, level, build, cue) {
     if (P.gain * level < 0.002) return false;
-    if (stats.active >= MAX_VOICES) { stats.dropped++; return false; }
+    const pri = priorityOf(kind, cue, cfg.audibleR);
+    if (stats.active >= MAX_VOICES && !makeRoom(pri)) {
+      stats.dropped++; stats.droppedByPriority[pri]++; if (pri === PRIORITY.CRITICAL) stats.droppedCritical++;
+      return false;
+    }
     const out = outStage(P, level), t = now();
     endTrack = null;
     const cleanup = build(out.input, t);
     stats.active++; stats.played[kind] = (stats.played[kind] || 0) + 1;
     // The voice ends when its latest source ends (tracked by burst() and tone()); build() may return an extra cleanup function.
-    const release = () => { stats.active--; out.dispose(); if (typeof cleanup === 'function') cleanup(); };
-    if (endTrack) endTrack.node.onended = release; else setTimeout(release, 4000);
+    const v = { pri, seq: ++seq, stolen: false, done: false, out };
+    v.release = () => { if (v.done) return; v.done = true; live.delete(v); if (!v.stolen) stats.active--; out.dispose(); if (typeof cleanup === 'function') cleanup(); };
+    live.add(v);
+    if (endTrack) endTrack.node.onended = v.release; else setTimeout(v.release, 4000);
+    return true;
+  }
+  /** Frees one slot for a voice of priority `pri`: fades out the oldest voice of the lowest lower priority. False = refuse. */
+  function makeRoom(pri) {
+    let victim = null;
+    for (const v of live) {
+      if (v.stolen || !(v.pri < pri || (pri === PRIORITY.CRITICAL && v.pri === pri))) continue;
+      if (!victim || v.pri < victim.pri || (v.pri === victim.pri && v.seq < victim.seq)) victim = v;
+    }
+    if (!victim) return false;
+    victim.stolen = true; stats.active--; stats.stolen++;
+    const g = victim.out.input.gain, t = now();
+    g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(0, t + STEAL_FADE); // node disposed at its natural end
     return true;
   }
   /** Shaped noise burst. Returns the source node (its `onended` marks the end of the voice). */
@@ -156,7 +191,7 @@ export function createEngine(ctx, cfg) {
         const dur = big ? 1.6 : R(0.9, 1.3);
         tone(d, t, { f0: R(70, 95), f1: 55, dur, peak: 0.07, attack: dur * 0.35 }); // body of the wake
         return { node: burst(d, t, { f0: R(380, 480), f1: R(200, 260), q: 1.4, dur, peak: 0.2, attack: dur * 0.3 }) };
-      });
+      }, c);
     },
     flee_splash(c, L) {
       const P = place(c, L, 3, cfg.audibleR);
