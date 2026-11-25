@@ -38,12 +38,12 @@
 | T-028 | Replanification du backlog pour l'essai ESTRAN (voie web, agents seuls) | producer | T-004, T-027 | VALIDÉ AVEC RÉSERVES |
 | T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | VALIDÉ AVEC RÉSERVES |
 | T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | VALIDÉ AVEC RÉSERVES |
-| T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | EN REVUE BOSS |
+| T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | VALIDÉ AVEC RÉSERVES |
 | T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | À FAIRE |
 | T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024 | À FAIRE |
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
-| T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | À FAIRE |
+| T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | EN COURS |
 
 ---
 
@@ -376,7 +376,7 @@
 - **Réserves reprises de T-029** (revue TD) : période du faisceau lue depuis `lighthouse_beam_period` et non `simTime / 8` (`scene.js` l.177), constantes visuelles rangées en configuration ; rendu en lecture seule de `getState()` ; rejouer la parité avec le scénario `prudent` et `?debug=1`.
 
 ### T-031 : Audio procédural : bruit dans l'eau et ambiance
-- **Assigné à** : `audio-director` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `audio-director` · **Revue de pôle** : technical-director · **Dépend de** : T-029 · **Jalon** : Essai · P2 · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** : `game/src/audio/`, `game/tests/e2e/audio.spec.*`, `docs/audio/NOTES_AUDIO_P2.md`
 - **Critères d'acceptation** :
   - [ ] Tout en synthèse Web Audio, sans fichier audio ni voix ; ambiance (mer, vent) qui varie avec le niveau de la marée
@@ -386,6 +386,7 @@
   - [ ] Option de sous-titres des bruits (texte court, par exemple « bruit dans l'eau, à gauche »), désactivée par défaut, servant l'accessibilité
   - [ ] `NOTES_AUDIO_P2.md` : ce qui est fait, ce qui reste, hypothèses sur ce qui fait peur
 - **Contexte / références** : **codée par `audio-director`** (arbitrage de la Boss, T-028) ; sa fiche parle encore de MetaSounds et de Wwise : la Coordination lui transmet `docs/tech/ADR_PIVOT_WEB.md` et `production/DECISIONS.md` (Web Audio seulement). Au moins la moitié de la peur est portée par l'audio (`production/validations/T-004.md` R3). La direction audio complète (T-009) vient après P2.
+- **Validation** : `production/validations/T-031.md` (cycle 1, 2026-11-25) · R3 (audio = moitié de la peur) non vérifié : personne n'a écouté ; réserves reportées en T-032 et T-033.
 - **Réserve reprise de T-030** (Boss, non bloquante) : le rendu de la Laisse est un point de saccade possible ; ne pas ajouter de lumière ni de matériau en cours de partie dans le branchement audio/visuel du danger.
 - **Réserve reprise de T-029** : `try/catch` par écouteur dans `sim.subscribe`/`log()` (erreur journalisée hors simulation) avant de brancher l'audio. Appliquer `threat_audible_radius` et `threat_cue_roar_radius` avec `state.threat.dist`.
 
@@ -402,6 +403,7 @@
   - [ ] Aucun avis de joueur inventé : la partie humaine de P2 est présentée comme **en attente** du propriétaire
 - **Contexte / références** : porte P2 de `production/validations/T-004.md` §7 : rapport automatisé **et** au moins un avis humain extérieur. Le premier est produit ici, le second à l'étape publiée de T-033.
 - **Réserves reprises de T-030** (Boss, revue TD) : (1) précompiler le shader de la Laisse et des anneaux (`renderer.compile` avec visibilité forcée à la fin de `createView`) et ajouter un contrôle `renderer.info.programs.length` identique avant et après sa première apparition ; nuancer la phrase « tous les shaders sont compilés » de `PERF_P2.md` §4 ; (2) relier l'angle visible du faisceau à `lighthouse_beam_half_angle` (correctif court par `graphics-programmer`, avant la clôture de T-032).
+- **Réserves reprises de T-031** (Boss, non bloquantes) : (1) mesurer le coût CPU audio avec le panneau F2 sur un parcours bruyant ; (2) corriger la note audio (« pas sacrifiés en premier » est inexact : premier arrivé, premier servi au-delà de 28 voix) ou ajouter une priorité par type ; (3) dans le rapport, ne pas présenter R3 comme atteint : l'audio n'a pas été écouté.
 - **Point repris de T-029 (écart 6 du GDD)** : mesurer sur les 40 parties le temps passé par la Laisse à moins de 15 m et le nombre de saisies de l'automate qui suit la règle ; signaler si la peur n'existe pas avant 160 s (charge du phare sous 20 %).
 
 ### T-033 : Version jouable P2 en un seul fichier HTML, prête à publier
@@ -424,6 +426,7 @@
   - [ ] Ce qui a été appris par T-029 à T-032 est reporté (écarts de budget, structure réelle de `game/`)
   - [ ] Aucune mention d'Unreal, de Lumen, de Nanite ni de MetaHuman hors des sections « archive » ; vérifié par une recherche et listé dans la remise
   - [ ] Les points de §7.1 qui relèvent d'autres rôles sont transmis par écrit : `business-affairs` (documents `docs/business/`), `game-director` (`CONCEPTS.md`, `PERIMETRE_SOLO.md`), Coordination (`CLAUDE.md`, `studio/ORGANIGRAMME.md`)
+- **Réserves reprises de T-031** (Boss) : le questionnaire propriétaire doit inclure (a) l'écoute au casque, (b) une comparaison avec et sans son (touche M) pour juger R3, (c) le niveau sonore au premier contact (volume par défaut, environ -20 dBFS efficace), (d) le silence de la Laisse au bord, l'absence de musique, et le repérage devant/derrière (pan stéréo sans HRTF), (e) les sous-titres (touche K). Toute réponse non obtenue reste « en attente ».
 - **Contexte / références** : ADR §7.1. Non bloquante pour P2 : T-029 à T-033 suivent l'ADR directement.
 
 ### T-035 : Mise à jour des fiches d'agents pour la voie web
@@ -437,7 +440,7 @@
 - **Contexte / références** : ADR §7.2. Non bloquante pour P2. Si la session ne suffit pas, le `producer` découpe en deux tâches.
 
 ### T-036 : Seuil de la porte P2 adapté (GDD §13)
-- **Assigné à** : `game-designer` · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : À FAIRE (avant T-032)
+- **Assigné à** : `game-designer` · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : EN COURS
 - **Livrables** : `docs/design/GDD.md` §13 (paragraphe « Seuil de passage » remplacé)
 - **Critères d'acceptation** :
   - [ ] Seuil reformulé selon `production/validations/T-006.md` (arbitrage 1) : propriétaire seul répondant, plus les automates de T-032 ; testeurs extérieurs reportés à la démo P3
