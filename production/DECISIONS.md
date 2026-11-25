@@ -17,7 +17,7 @@
 
 ## Questions encore ouvertes pour le propriétaire
 
-- Avis sur la fluidité du prototype publié (https://claude.ai/artifact/R7U9ExVcv6TRw3B2fzzBDE) : « fluide » ou « saccadé ».
+- **Porte P2 (2026-11-25)** : prototype jouable publié à https://claude.ai/artifact/R7U9ExVcv6TRw3B2fzzBDE (même lien que le premier prototype). En attente : avis de fluidité P1 (« fluide », « saccadé » ou rapport F2) et réponses aux 8 questions (`production/RAPPORT_P2.md`). P2 n'est pas passée tant qu'elles ne sont pas reçues et évaluées.
 
 - Configuration de son PC : n'est plus bloquante (voie web) ; utile seulement pour savoir sur quoi il jouera aux versions d'essai.
 - Accès réseau pour vérifier les chiffres à la source (T-020) : non décidé.

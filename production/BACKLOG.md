@@ -40,7 +40,7 @@
 | T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | VALIDÉ AVEC RÉSERVES |
 | T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | VALIDÉ AVEC RÉSERVES |
 | T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | VALIDÉ AVEC RÉSERVES |
-| T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024, T-037, T-038 | EN REVUE BOSS |
+| T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024, T-037, T-038 | VALIDÉ AVEC RÉSERVES |
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
 | T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | VALIDÉ AVEC RÉSERVES |
@@ -409,7 +409,7 @@
 - **Point repris de T-029 (écart 6 du GDD)** : mesurer sur les 40 parties le temps passé par la Laisse à moins de 15 m et le nombre de saisies de l'automate qui suit la règle ; signaler si la peur n'existe pas avant 160 s (charge du phare sous 20 %).
 
 ### T-033 : Version jouable P2 en un seul fichier HTML, prête à publier
-- **Assigné à** : `build-engineer` · **Dépend de** : T-032, T-024 · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `build-engineer` · **Dépend de** : T-032, T-024 · **Jalon** : Essai · P2 · **Statut** : VALIDÉ AVEC RÉSERVES (`production/validations/T-033.md`, 2026-11-25) ; P2 non passée tant que le propriétaire n'a ni joué ni répondu
 - **Livrables** : `game/dist/estran-p2.html`, `production/RAPPORT_P2.md`, mise à jour de `docs/legal/LICENCES.md` et de `docs/tech/PIPELINE_WEB.md` (étapes de la version P2)
 - **Critères d'acceptation** :
   - [ ] Un seul fichier HTML autonome, d'au plus 3 Mo, sans requête réseau au chargement (vérifié par Playwright) ; fonctionne au clavier et à la souris ; manette si prévue par T-006

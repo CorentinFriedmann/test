@@ -2,7 +2,7 @@
 
 Vous ne faites rien d'autre que **jouer** et **répondre**. Comptez 15 à 20 minutes en tout.
 
-**Lien du jeu : (en attente, la Coordination l'ajoutera ici)**
+**Lien du jeu : https://claude.ai/artifact/R7U9ExVcv6TRw3B2fzzBDE** (à ouvrir sur un ordinateur, avec clavier et souris)
 
 ## 1. Jouer (5 à 10 minutes)
 
