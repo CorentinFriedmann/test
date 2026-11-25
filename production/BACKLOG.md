@@ -31,7 +31,7 @@
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | VALIDÉ AVEC RÉSERVES |
 | T-022 | Données de marché par région et par langue | marketing-publishing | aucune | À CORRIGER |
 | T-023 | Révision v1.1 des trois concepts | game-director | aucune | VALIDÉ |
-| T-024 | Registre des licences et règles d'usage de l'IA générative (voie web) | business-affairs | aucune | EN COURS |
+| T-024 | Registre des licences et règles d'usage de l'IA générative (voie web) | business-affairs | aucune | EN REVUE BOSS |
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
 | T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
@@ -285,7 +285,7 @@
 - **Contexte / références** : réserves de la validation de T-001, retours 1 à 11 (`production/validations/T-001.md`). À valider avant T-004. Les effectifs et les durées des sections X.10, sur lesquels T-015 s'appuie, ne changent pas, sauf erreur à signaler à `business-affairs`.
 
 ### T-024 : Registre des licences et règles d'usage de l'IA générative (voie web)
-- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : Essai · avant T-033 (prérequis de tout import d'asset tiers) · **Statut** : EN COURS
+- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : Essai · avant T-033 (prérequis de tout import d'asset tiers) · **Statut** : EN REVUE BOSS
 - **Livrables** : `docs/legal/LICENCES.md`
 - **Critères d'acceptation** :
   - [ ] Registre au format défini (asset ou outil, origine, licence et version, date de consultation, usage commercial autorisé, plateformes, attribution, obligations, preuve d'acquisition), prêt à recevoir chaque asset tiers comme l'exige `CLAUDE.md`
