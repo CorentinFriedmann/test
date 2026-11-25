@@ -126,7 +126,7 @@ const { chromium, check, results, openPage } = require('./harness.cjs');
     const g = await openPage(browser, '?q=high');
     await g.page.evaluate(() => { window.__ev = []; window.__estran.subscribe((e) => window.__ev.push(e)); window.__estran.setBot('prudent'); });
     const spawned = await g.until((s) => !!s.threat && s.threat.active);
-    check('The Laisse appears with the rising tide (t ~ 57 s)', spawned.t > 56 && spawned.t < 58.5, `t=${spawned.t.toFixed(1)}`);
+    check('The Laisse appears with the rising tide (T-037: from t ~ 40 s, first valid point at 15-35 m)', spawned.t > 39 && spawned.t < 70, `t=${spawned.t.toFixed(1)}`);
     const wind = await g.until((s) => s.lighthouse.winding > 0.4 && s.readCount >= 1);
     const ringOn = await g.page.evaluate(() => document.getElementById('ring').classList.contains('active'));
     await g.frames(2);

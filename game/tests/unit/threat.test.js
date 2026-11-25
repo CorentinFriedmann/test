@@ -117,23 +117,24 @@ test('noise events: emitted at the configured period while the radius is positiv
   assert.ok(n.every((e) => e.src === 'walk' && e.r > 0));
 });
 
-test('laisse: appears when the rising tide reaches -0.20 m (~57 s) at 45-70 m from the player, in 0.30-1.00 m of water, outside the halo; leaves at -0.30 m falling (~431 s)', () => {
+test('laisse: appears when the rising tide reaches -0.40 m (~40 s) at 15-35 m from the player, in 0.30-1.00 m of water, outside the halo; leaves at -0.30 m falling (~431 s)', () => {
   const sim = calm(newSim());
-  run(sim, 56 * HZ, NEUTRAL_INPUT);
+  run(sim, 39 * HZ, NEUTRAL_INPUT);
   assert.equal(sim.state.threat.active, false);
-  run(sim, 2 * HZ, NEUTRAL_INPUT);
+  // T-037: a player who stays on the dry platform has no water within 15-35 m yet, so the spawn can come later than 40 s (first valid point).
+  run(sim, 70 * HZ, NEUTRAL_INPUT);
   const th = sim.state.threat;
   assert.ok(th.active);
   const sp = types(sim, 'threat_spawn')[0];
-  assert.ok(sp.t > 56 && sp.t < 58);
+  assert.ok(sp.t > 39 && sp.t < 110, `spawn at ${sp.t}`);
   const p = sim.state.player, lh = sim.world.lighthouse;
-  const d = hypot(th.x - p.x, th.z - p.z);
+  const d = sp.dist; // distance at the spawn (she has moved since)
   assert.ok(d >= T('threat_spawn_dist_min') - 0.01 && d <= T('threat_spawn_dist_max') + 0.01, `spawn distance ${d}`);
   const depth = sim.env.tide.levelAt(sp.t) - sim.world.heightAt(sp.x, sp.z);
   assert.ok(depth >= T('threat_water_min_depth') - 0.05 && depth <= 1.0 + 0.05, `spawn depth ${depth}`);
   assert.ok(hypot(sp.x - lh.x, sp.z - lh.z) >= T('lighthouse_halo_radius'));
   sim.state.lighthouse.charge = 100;
-  run(sim, 360 * HZ, NEUTRAL_INPUT);
+  run(sim, Math.round((418 - sim.state.t) * HZ), NEUTRAL_INPUT);
   assert.ok(sim.state.threat.active, 'still there at t = 418 s');
   run(sim, 20 * HZ, NEUTRAL_INPUT);
   assert.equal(sim.state.threat.active, false);
@@ -201,7 +202,7 @@ test('laisse: a player standing still in the water is heard only within the pres
   assert.equal(th.heard, false);
 });
 
-test('saisie: 0.5 s of contact outside the dry zone = cold (x0.60 for 10 s), recoil 8 m for 6 s; reading and winding are interrupted', () => {
+test('saisie: 0.5 s of contact outside the dry zone = cold (x0.60 for 10 s), recoil 14 m for 10 s; reading and winding are interrupted', () => {
   const sim = arena(1);
   const st = sim.state, th = st.threat;
   st.reading = { index: 0, ticks: 40, total: 150 };
@@ -221,10 +222,10 @@ test('saisie: 0.5 s of contact outside the dry zone = cold (x0.60 for 10 s), rec
   run(sim, 30, { ...fwd(), yaw: 0 });
   const moved = hypot(st.player.x - p0.x, st.player.z - p0.z) / 1.0;
   assert.ok(moved < T('player_speed_walk') * T('threat_grab_cold_speed_mult') * 0.81 + 0.05, `cold speed ${moved}`); // ford x0.8 too
-  // recoil: she backs off 8 m from the grab point then waits for the 6 s to pass
-  run(sim, 6 * HZ, NEUTRAL_INPUT);
+  // recoil: she backs off 14 m from the grab point then waits for the 10 s to pass
+  run(sim, 10 * HZ, NEUTRAL_INPUT);
   assert.notEqual(th.mode, 'flee');
-  assert.ok(Math.abs(hypot(th.x - p0.x, th.z - p0.z) - T('threat_grab_recoil_dist')) < 4, 'recoiled about 8 m');
+  assert.ok(Math.abs(hypot(th.x - p0.x, th.z - p0.z) - T('threat_grab_recoil_dist')) < 4, 'recoiled about 14 m');
 });
 
 test('saisie: a second grab within 45 s is the defeat; after 45 s it counts as a first one (GDD 9 case 14)', () => {
@@ -319,9 +320,9 @@ test('light: the beam pushes her back for 3 s, the lamp (0.8 s in the cone) for 
   const st = sim.state, th = st.threat, lh = sim.world.lighthouse;
   st.lighthouse.charge = 100;
   const t0 = st.t;
-  // beam heading at time t: angle = 2 pi t / 8; point her 40 m along it (water or not, the beam test is geometric)
+  // beam heading at time t: angle = 2 pi t / 8; point her 30 m along it (water or not, the beam test is geometric)
   const theta = (2 * Math.PI * (t0 + 1)) / T('lighthouse_beam_period');
-  th.x = lh.x + Math.sin(theta) * 40; th.z = lh.z + Math.cos(theta) * 40; th.mode = 'roam';
+  th.x = lh.x + Math.sin(theta) * 30; th.z = lh.z + Math.cos(theta) * 30; th.mode = 'roam';
   run(sim, 2 * HZ, NEUTRAL_INPUT);
   const flee = types(sim, 'threat_state').find((e) => e.to === 'flee');
   assert.ok(flee && flee.source === 'beam', 'beam made her flee');

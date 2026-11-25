@@ -4,7 +4,8 @@ import { loadData } from '../../src/data/load.js';
 import { createSim, NEUTRAL_INPUT } from '../../src/sim/sim.js';
 import { createBot } from '../../src/sim/bot.js';
 
-export const SEEDS = Array.from({ length: 20 }, (_, i) => 101 + i); // the same 20 seeds for every player
+export const SEEDS = Array.from({ length: 20 }, (_, i) => 101 + i); // tuning seeds (T-037): the values of game/data were set on these
+export const SEEDS_VERIFY = Array.from({ length: 20 }, (_, i) => 201 + i); // verification seeds (T-037): never used for tuning
 export const FEAR_WINDOW_S = 160; // GDD gap 6: beam charge falls under 20 % at 160 s (100 - 0.5 * 160)
 export const NEAR_M = 15;         // "close to the player" threshold (T-032)
 export const AUDIBLE_M = 45;      // threat_audible_radius (menace.csv): the Laisse can be heard under this distance

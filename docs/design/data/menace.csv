@@ -10,24 +10,24 @@ player_stick_slow_threshold,joueur,0.55,ratio,A_REGLER,deflexion du stick sous l
 player_speed_smooth,joueur,0.20,s,A_REGLER,lissage du changement de multiplicateur de vitesse entre deux bandes d'eau
 noise_idle,bruit,0,m,FIXE,rayon de base immobile ou interaction nulle
 noise_slow,bruit,4,m,A_REGLER,rayon de base marche lente
-noise_walk,bruit,8,m,A_REGLER,rayon de base marche
-noise_run,bruit,18,m,A_REGLER,rayon de base course
+noise_walk,bruit,12,m,A_REGLER,rayon de base marche [T-037]
+noise_run,bruit,24,m,A_REGLER,rayon de base course [T-037]
 noise_interact,bruit,4,m,A_REGLER,rayon de base pendant un releve ou le remontage du phare
 noise_debris,bruit,30,m,A_REGLER,impulsion fixe de 1 s quand le joueur heurte un debris ; non multipliee par la bande d'eau
 debris_count,bruit,4,count,A_REGLER,nombre de debris poses sur l'estran (seaux caisses) ; rayon de collision 0.6 m
 debris_collision_radius,bruit,0.60,m,A_REGLER,rayon de collision du debris
 noise_location_error,bruit,3.0,m,A_REGLER,erreur de position percue par la Laisse (tirage dans un disque)
-threat_spawn_level,menace,-0.20,m,A_REGLER,la Laisse apparait quand la maree montante atteint ce niveau (t = 57 s)
+threat_spawn_level,menace,-0.40,m,A_REGLER,la Laisse apparait quand la maree montante atteint ce niveau (t = 40 s depuis T-037 ; 57 s avant) [T-037]
 threat_despawn_level,menace,-0.30,m,A_REGLER,la Laisse disparait quand la maree descendante passe sous ce niveau (t = 431 s)
-threat_spawn_dist_min,menace,45,m,A_REGLER,distance minimale au joueur du point d'apparition
-threat_spawn_dist_max,menace,70,m,A_REGLER,distance maximale au joueur du point d'apparition
+threat_spawn_dist_min,menace,15,m,A_REGLER,distance minimale au joueur du point d'apparition [T-037]
+threat_spawn_dist_max,menace,35,m,A_REGLER,distance maximale au joueur du point d'apparition [T-037]
 threat_water_min_depth,menace,0.30,m,A_REGLER,profondeur minimale de la case ou la Laisse peut se tenir
 threat_speed_roam,menace,2.0,m/s,A_REGLER,vitesse en etat RODE
 threat_speed_inquire,menace,3.5,m/s,A_REGLER,vitesse en etat ENQUETE
 threat_speed_hunt,menace,4.0,m/s,A_REGLER,vitesse en etat TRAQUE ; plus lente que la course du joueur en gue (4.4 m/s)
 threat_speed_flee,menace,4.5,m/s,A_REGLER,vitesse en etat REPLI
-threat_waypoint_min,menace,15,m,A_REGLER,distance minimale au joueur des points de ronde
-threat_waypoint_max,menace,45,m,A_REGLER,distance maximale au joueur des points de ronde
+threat_waypoint_min,menace,5,m,A_REGLER,distance minimale au joueur des points de ronde [T-037]
+threat_waypoint_max,menace,30,m,A_REGLER,distance maximale au joueur des points de ronde [T-037]
 threat_waypoint_period_min,menace,8,s,A_REGLER,duree minimale entre deux points de ronde
 threat_waypoint_period_max,menace,14,s,A_REGLER,duree maximale entre deux points de ronde
 threat_curiosity_after,menace,45,s,A_REGLER,si le joueur est dans l'eau (gue ou plus) sans contact depuis ce delai la ronde est tiree a 20 35 m du joueur
@@ -43,14 +43,14 @@ threat_contact_radius,menace,1.8,m,A_REGLER,distance de contact
 threat_contact_time,menace,0.5,s,A_REGLER,duree de contact continue avant saisie
 threat_grab_cold_speed_mult,menace,0.60,ratio,A_REGLER,multiplicateur de vitesse du joueur apres une premiere saisie
 threat_grab_cold_duration,menace,10,s,A_REGLER,duree de l'effet de froid
-threat_grab_recoil,menace,6,s,A_REGLER,duree du recul de la Laisse apres une saisie
-threat_grab_recoil_dist,menace,8,m,A_REGLER,distance de recul
+threat_grab_recoil,menace,10,s,A_REGLER,duree du recul de la Laisse apres une saisie [T-037]
+threat_grab_recoil_dist,menace,14,m,A_REGLER,distance de recul [T-037]
 threat_grab_defeat_window,menace,45,s,A_REGLER,une seconde saisie dans ce delai est la defaite
 threat_audible_radius,menace,45,m,A_REGLER,distance maximale a laquelle le joueur entend les remous de la Laisse
 threat_cue_roar_radius,menace,60,m,A_REGLER,distance maximale a laquelle le joueur entend le grondement quand la Laisse l'a entendu
 lighthouse_beam_period,phare,8,s,FIXE,rotation complete du faisceau (prototype)
 lighthouse_beam_half_angle,phare,6,deg,A_REGLER,demi-angle logique du faisceau
-lighthouse_beam_reach,phare,70,m,A_REGLER,portee du faisceau a charge superieure ou egale a 20 pour cent
+lighthouse_beam_reach,phare,40,m,A_REGLER,portee du faisceau a charge superieure ou egale a 20 pour cent [T-037]
 lighthouse_beam_flee,phare,3,s,A_REGLER,duree du REPLI quand le faisceau touche la Laisse
 lighthouse_halo_radius,phare,14,m,A_REGLER,rayon du halo autour du phare : la Laisse n'y entre pas
 lighthouse_charge_start,phare,100,pct,FIXE,charge au debut de la tranche

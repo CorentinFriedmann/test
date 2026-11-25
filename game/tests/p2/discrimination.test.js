@@ -1,28 +1,56 @@
-// T-032: does the rule discriminate? (GDD 13, Boss thresholds: follower wins >= 90 %, ignorer loses >= 90 %.)
-// The honest variants (win, heedless, silent) are reported but not asserted: see docs/qa/RAPPORT_P2.md.
+// P2 gate (T-032, thresholds raised by T-037): does the rule discriminate, and is there fear before 160 s?
+// Seeds 101-120 were used to tune game/data; seeds 201-220 were never used for tuning. Both sets must pass.
+// These are measures of automata: they feel nothing. Only the owner can say whether the fear is there (questions 5 and 7).
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadData } from '../../src/data/load.js';
-import { SEEDS, playAll, summarize, playGame } from './lib.js';
+import { SEEDS, SEEDS_VERIFY, playAll, summarize, playGame, isWin } from './lib.js';
 
 const data = loadData();
+const SETS = { 'tuning 101-120': SEEDS, 'verification 201-220': SEEDS_VERIFY };
 
-test('20 distinct seeds', () => { assert.equal(new Set(SEEDS).size, 20); });
-
-test('prudent (follows the rule) wins in at least 90 % of 20 games', () => {
-  const s = summarize(playAll('prudent', SEEDS, data));
-  assert.ok(s.winRate >= 0.9, `prudent wins ${s.wins}/20`);
+test('seed sets: 20 distinct seeds each, disjoint', () => {
+  assert.equal(new Set(SEEDS).size, 20);
+  assert.equal(new Set(SEEDS_VERIFY).size, 20);
+  assert.equal(new Set([...SEEDS, ...SEEDS_VERIFY]).size, 40);
 });
 
-test('noisy (ignores the rule) loses in at least 90 % of 20 games', () => {
-  const s = summarize(playAll('noisy', SEEDS, data));
-  assert.ok(s.lossRate >= 0.9, `noisy loses ${s.losses}/20`);
-});
+for (const [label, seeds] of Object.entries(SETS)) {
+  const games = {};
+  const get = (mode) => (games[mode] ??= playAll(mode, seeds, data));
+
+  test(`[${label}] prudent (follows the rule) wins at least 90 % of games`, () => {
+    const s = summarize(get('prudent'));
+    assert.ok(s.winRate >= 0.9, `prudent wins ${s.wins}/20`);
+  });
+
+  test(`[${label}] prudent suffers at least one approach (Laisse under 15 m) before 160 s in at least 50 % of games`, () => {
+    const n = get('prudent').filter((g) => g.approachesBefore160 > 0).length;
+    assert.ok(n / 20 >= 0.5, `approach before 160 s in ${n}/20 games`);
+  });
+
+  test(`[${label}] win and heedless (ignore the rule without hunting the Laisse) win at most 50 % of games`, () => {
+    for (const m of ['win', 'heedless']) { const s = summarize(get(m)); assert.ok(s.winRate <= 0.5, `${m} wins ${s.wins}/20`); }
+  });
+
+  test(`[${label}] noisy (ignores the rule and hunts the Laisse) loses at least 90 % of games`, () => {
+    const s = summarize(get('noisy'));
+    assert.ok(s.lossRate >= 0.9, `noisy loses ${s.losses}/20`);
+  });
+
+  test(`[${label}] silent (slow walk) wins at least 80 % of games`, () => {
+    const s = summarize(get('silent'));
+    assert.ok(s.winRate >= 0.8, `silent wins ${s.wins}/20`);
+  });
+
+  test(`[${label}] a game played to the end (victory) lasts between 5 and 10 minutes`, () => {
+    let wins = 0;
+    for (const m of ['prudent', 'win', 'heedless', 'silent']) for (const g of get(m)) if (isWin(g)) { wins++; assert.ok(g.durationS >= 300 && g.durationS <= 600, `${m} ${g.seed}: ${g.durationS} s`); }
+    assert.ok(wins > 0);
+    for (const g of [...get('prudent'), ...get('noisy')]) assert.ok(g.durationS > 0 && g.durationS <= 480.1, `${g.mode} ${g.seed}: ${g.durationS}`);
+  });
+}
 
 test('same seed, same game (determinism of the measures)', () => {
   assert.deepEqual(playGame(data, SEEDS[0], 'prudent'), playGame(data, SEEDS[0], 'prudent'));
-});
-
-test('game duration of the 40 reference games stays within the 480 s slice', () => {
-  for (const mode of ['prudent', 'noisy']) for (const g of playAll(mode, SEEDS, data)) assert.ok(g.durationS > 0 && g.durationS <= 480.1, `${mode} ${g.seed}: ${g.durationS}`);
 });

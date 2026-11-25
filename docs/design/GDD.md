@@ -47,7 +47,7 @@ Elles complètent `PITCH.md` (trous signalés par `production/validations/T-005.
 | Hors zone sèche à marée haute, `d ≥ 1,40 m` | Compteur de souffle : défaite par noyade | 8 s sous l'eau ; le compteur se vide en 4 s dès que `d < 1,40` |
 | Bruit entendu (rayon atteint la Laisse) | RÔDE → ENQUÊTE (elle va vers la source) | 0,4 s d'écoute cumulée |
 | Bruit renouvelé pendant ENQUÊTE | ENQUÊTE → TRAQUE (elle fonce) | 1,2 s d'écoute cumulée, ou `distance < 6 m` |
-| Contact (1,8 m) hors zone sèche | 1re saisie : froid (vitesse ×0,60 pendant 10 s), la Laisse recule 6 s | 0,5 s de contact |
+| Contact (1,8 m) hors zone sèche | 1re saisie : froid (vitesse ×0,60 pendant 10 s), la Laisse recule 10 s | 0,5 s de contact |
 | 2e saisie dans les 45 s | **Défaite** | |
 | Échelle non lue à la fin de sa fenêtre | **Défaite** (relevé manqué) | à `window_end_s` |
 | Phare à 0 % de charge | Plus de faisceau ni de halo ; les zones sèches protègent encore | |
@@ -117,14 +117,14 @@ La Laisse ne se déplace que sur des points où elle est dans l'eau (`d ≥ 0,30
 
 | État | Entrée | Comportement | Sortie |
 |---|---|---|---|
-| **DORMANTE** | Avant t = 57 s ou après t = 431 s | Absente | Niveau montant ≥ −0,20 m : apparition à 45–70 m du joueur, hors halo, sur un point où `d` est entre 0,30 et 1,00 m |
+| **DORMANTE** | Avant t = 40 s ou après t = 431 s | Absente | Niveau montant ≥ −0,40 m : apparition à 15–35 m du joueur (T-037 ; 45–70 m avant), hors halo, sur un point où `d` est entre 0,30 et 1,00 m |
 | **RÔDE** | Apparition ; fin d'ENQUÊTE ; fin de REPLI | Va de point en point à 2,0 m/s ; nouveau point toutes les 8 à 14 s, tiré à 15–45 m du joueur. **Curiosité** : si le joueur est dans l'eau depuis 45 s sans contact, les points sont tirés à 20–35 m | Écoute ≥ 0,4 s → ENQUÊTE |
 | **ENQUÊTE** | Bruit entendu | Va à la position perçue à 3,5 m/s | Écoute renouvelée ≥ 1,2 s, ou joueur à moins de 6 m → TRAQUE ; silence 6 s → RÔDE |
 | **TRAQUE** | Voir ci-dessus | Va vers le joueur à 4,0 m/s (plus lent que la course en gué : 4,4 m/s) | Contact 0,5 s → saisie ; silence 6 s → ENQUÊTE |
 | **REPLI** | Faisceau (3 s), lampe (5 s), saisie (6 s) | S'éloigne de la source de lumière à 4,5 m/s | Fin du délai → RÔDE |
 | **ATTENTE_BORD** | Joueur en zone sèche, Laisse au plus près dans l'eau | Reste à ≥ 2 m, immobile 10 s | RÔDE |
 
-- **Saisie** : contact de 1,8 m pendant 0,5 s, joueur **hors zone sèche**. 1re saisie : froid (vitesse ×0,60, 10 s) et recul de la Laisse (8 m, 6 s). 2e saisie dans les 45 s : défaite.
+- **Saisie** : contact de 1,8 m pendant 0,5 s, joueur **hors zone sèche**. 1re saisie : froid (vitesse ×0,60, 10 s) et recul de la Laisse (14 m, 10 s). 2e saisie dans les 45 s : défaite.
 - **Zone sèche** : le joueur ne peut pas être saisi. La Laisse reste au bord (ATTENTE_BORD).
 - **Halo** : la Laisse n'entre pas dans le disque de 14 m autour du phare tant que la charge est > 0 %.
 - **Hasard** : seul le générateur à graine fixe (`sim_seed = 2026`) est utilisé, avancé par le temps de simulation. Même graine et mêmes entrées = même partie (indispensable aux tests T-032).
@@ -145,11 +145,11 @@ La Laisse ne se déplace que sur des points où elle est dans l'eau (`d ≥ 0,30
 
 | Élément | Règle |
 |---|---|
-| **Faisceau** | Tourne en 8 s (prototype). Demi-angle logique 6° (le cône visible du prototype fait environ 4°). Portée 70 m à charge ≥ 20 %. |
+| **Faisceau** | Tourne en 8 s (prototype). Demi-angle logique 6° (le cône visible du prototype fait environ 4°). Portée 40 m à charge ≥ 20 % (T-037 ; 70 m avant : le faisceau couvrait presque toute l'île et supprimait la peur avant 160 s ; à 40 m il protège le phare et ses abords, pas les échelles lointaines). |
 | **Effet** | Si la Laisse est dans le faisceau (angle et portée), elle passe en REPLI pendant 3 s et sa silhouette s'éclaire 0,5 s. Le faisceau **ne la tue pas** et ne lui interdit pas de revenir : il la ralentit (gain net d'environ 1,4 m/s au lieu de 4 m/s en TRAQUE). |
 | **Halo** | Disque de 14 m autour du phare : la Laisse n'y entre pas. La plateforme (6 m) est à l'intérieur. |
 | **Ce qui l'éteint** | **L'usure** : la charge baisse de 0,5 %/s, donc 200 s de 100 % à 0 %. Dans la tranche P2, c'est la seule cause. (Le plan du jeu complet ajoute les grains de vent, §15.) |
-| **Dégradation** | Sous 20 % le faisceau clignote et sa portée diminue en proportion (`portée = 70 × charge/20`). À 0 %, plus de faisceau ni de halo. |
+| **Dégradation** | Sous 20 % le faisceau clignote et sa portée diminue en proportion (`portée = 40 × charge/20`). À 0 %, plus de faisceau ni de halo. |
 | **Rallumer** | À la manivelle (au pied du phare, sur la plateforme) : maintenir E (ou A sur manette) 5 s à moins de 2,5 m. La charge repasse à 100 %. Le geste produit un bruit de 4 m et s'interrompt si le joueur s'éloigne ou est saisi. |
 | **Durée de l'effet** | 200 s de charge pleine. Remonter à 50 % fait gagner 50 % : le coût est donc un aller-retour à la plateforme avant chaque sortie longue. |
 
@@ -170,7 +170,7 @@ La Laisse ne se déplace que sur des points où elle est dans l'eau (`d ≥ 0,30
 
 | Échelle | Altitude | Condition de lecture | Fenêtre | Ce qu'elle apprend au joueur |
 |---|---|---|---|---|
-| **S1 flot** | −0,30 m | `0,15 ≤ d ≤ 1,00` et marée montante | 61 à 110 s | Sortir tôt, l'eau commence à monter, la Laisse apparaît à t = 57 s |
+| **S1 flot** | −0,30 m | `0,15 ≤ d ≤ 1,00` et marée montante | 61 à 110 s | Sortir tôt, l'eau commence à monter, la Laisse apparaît dès t ≈ 40 s si de l'eau est à 15–35 m du joueur |
 | **S2 haute** | +1,50 m | `0,15 ≤ d ≤ 1,00` | 160 à 320 s | À l'étale haute, aller dans l'eau profonde pour 5 s |
 | **S3 jusant** | −0,40 m | `0,15 ≤ d ≤ 1,00` et marée descendante | 375 à 427 s | Ressortir à la fin, la Laisse est encore là jusqu'à t = 431 s |
 
@@ -365,4 +365,4 @@ Respecte `production/validations/T-004.md` §6, sans l'étendre. Elle n'est lanc
 - **Fenêtres** : l'échelle S2 demande une pente où `d` reste dans 0,15–1,00 pendant 160 s ; si le terrain ne s'y prête pas, ajuster l'altitude de S2 (pas la table de marée) et mettre à jour `stations.csv`.
 - **Faisceau** : le calcul d'angle ignore les obstacles ; à revoir si des intérieurs sont ajoutés.
 - **Valeurs** : tous les `A_REGLER` de `menace.csv`. Les plus sensibles : `noise_walk`, `noise_run`, `threat_hear_to_inquire`, `lighthouse_charge_decay`, `lamp_battery_seconds`.
-- **Équité** : la Laisse apparaît à t = 57 s, 4 s avant l'ouverture de S1 : si le test montre un départ trop dur, repousser l'apparition à −0,10 m (t ≈ 66 s).
+- **Équité** : la Laisse apparaît dès t ≈ 40 s (T-037), avant l'ouverture de S1 (61 s) : si le test humain montre un départ trop dur, repousser l'apparition à −0,20 m (t ≈ 57 s, réglage d'avant T-037) ; les automates ne peuvent pas en juger.

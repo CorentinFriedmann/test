@@ -44,7 +44,7 @@
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
 | T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | VALIDÉ AVEC RÉSERVES |
-| T-037 | Rééquilibrage de la peur avant P2 (BUG-002, BUG-003) | game-designer | T-032 | EN COURS |
+| T-037 | Rééquilibrage de la peur avant P2 (BUG-002, BUG-003) | game-designer | T-032 | EN REVUE BOSS |
 | T-038 | Correction audio : voix prioritaires, `npm run all` vert (BUG-001) | audio-director | T-037 | À FAIRE |
 
 ---
@@ -451,7 +451,7 @@
   - [ ] Aucune exigence d'un humain extérieur avant P3 ; cohérent avec `production/DECISIONS.md`, T-032 et T-033
 
 ### T-037 : Rééquilibrage de la peur avant P2 (BUG-002, BUG-003)
-- **Assigné à** : `game-designer` (valeurs des CSV de `game/data/`, surtout `menace.csv` et `maree_effets.csv`) ; `gameplay-programmer` seulement si une valeur ne suffit pas · **Dépend de** : T-032 · **Jalon** : Essai · P2 · **Statut** : EN COURS
+- **Assigné à** : `game-designer` (valeurs des CSV de `game/data/`, surtout `menace.csv` et `maree_effets.csv`) ; `gameplay-programmer` seulement si une valeur ne suffit pas · **Dépend de** : T-032 · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
 - **Livrables** : CSV modifiés, tests de `game/tests/p2/` complétés (seuils ci-dessous inscrits dans `discrimination.test.js`), `docs/design/EQUILIBRAGE_P2.md` (une page : valeurs avant/après, raison, mesures)
 - **Critères d'acceptation** (mesurés par les automates de `game/tests/p2/`) :
   - [ ] Réglage sur les graines 101 à 120, **vérification sur des graines non utilisées pour le réglage (201 à 220)** pour ne pas ajuster les valeurs aux seules 20 parties connues ; les deux jeux de graines doivent satisfaire les seuils
