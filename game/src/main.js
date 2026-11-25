@@ -26,7 +26,7 @@ const debugEnabled = url.get('debug') === '1';
 const moment = momentFromUrl(location.search);
 const view = createView(sim, quality, {
   showThreat: debugEnabled, flicker: param(data, 'lighthouse_charge_flicker'),
-  beamPeriod: param(data, 'lighthouse_beam_period'), beamReach: param(data, 'lighthouse_beam_reach'),
+  beamPeriod: param(data, 'lighthouse_beam_period'), beamReach: param(data, 'lighthouse_beam_reach'), beamHalfAngleDeg: param(data, 'lighthouse_beam_half_angle'),
   moment, momentFixed: url.has('moment'),
 });
 const meter = createPerfMeter(600);

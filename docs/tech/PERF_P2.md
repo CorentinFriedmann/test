@@ -55,7 +55,7 @@ Dans le jeu normal (regard vers le sable) le compte tombe à 5-11 appels (élimi
 1. **Shader d'eau plein écran** : environ 14 évaluations de bruit par pixel au niveau haut (3 octaves, normale par différences finies, reflets, écume), 6 au niveau bas. Négligeable sur un GPU de classe GTX 1660 à 1080p d'après le nombre d'opérations, mais c'est le premier suspect si P1 est « saccadé ». Premier levier : `waterOctaves` à 2 ou résolution dynamique.
 2. **Résolution** : le niveau haut accepte un `devicePixelRatio` jusqu'à 2 (4K sur écran dense) ; c'est le deuxième levier (`pixelRatioMax`).
 3. **Anticrénelage MSAA** (haut seulement) : coûteux sur APU ; décidé au chargement, car il ne peut pas être changé en cours de partie.
-4. Pas de saccade de compilation attendue en jeu : les shaders sont tous compilés dès la première image ; les lumières ne sont ni ajoutées ni retirées ; le changement de niveau en cours de partie recompile (action volontaire du joueur).
+4. Pas de saccade de compilation attendue en jeu : à la fin de `createView`, la Laisse et les anneaux d'eau (cachés au départ) sont rendus visibles de force le temps d'un `renderer.compile(scene, camera)`, puis remis dans leur état d'origine, sur les trois niveaux. Le contrôle e2e (`render.cjs`, section 3) prouve que `renderer.info.programs.length` ne change pas à la première apparition de la Laisse au niveau haut ; il ne prouve rien sur les niveaux bas et moyen (même mécanisme, non contrôlé séparément), ni sur le coût de téléversement des textures et des tampons au premier dessin, ni sur un vrai GPU (navigateur sans tête) ; les lumières ne sont ni ajoutées ni retirées ; le changement de niveau en cours de partie recompile (action volontaire du joueur).
 
 ## 5. Parité (règle du GDD §12) : ce qui est vérifié
 
@@ -72,3 +72,8 @@ Dans le jeu normal (regard vers le sable) le compte tombe à 5-11 appels (élimi
 cd game && npm run build && npm run test:render   # captures et mesures dans captures/.tmp/
 npm run captures                                   # met à jour les captures versionnées de game/captures/
 ```
+
+
+## Angle visible du faisceau
+
+Le demi-angle visible du faisceau (cône, projecteur et bande sur l'eau) vaut `lighthouse_beam_half_angle` (`menace.csv`, 6°) multiplié par `LOOK.beamVisualFactor` (`src/render/quality.js`, 1,0 aujourd'hui). Le joueur ne voit donc pas un faisceau plus large que la zone qui repousse la Laisse. Un facteur supérieur à 1 serait un halo, à documenter ici. Le cône de 70 m s'élargit à environ 7,4 m de rayon à son extrémité (il était de 5 m, soit 4°). La bande sur l'eau s'estompe vers le bord et paraît un peu plus étroite que 6°.

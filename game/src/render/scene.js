@@ -42,8 +42,8 @@ function makeGlowTexture() {
 }
 
 /** Open cone from the lantern; vertex alpha fades the beam along its length so it has no hard far end. */
-function beamGeometry(segments) {
-  const L = LOOK.beamConeLength, g = new ConeGeometry(LOOK.beamConeRadius, L, segments, 1, true).translate(0, -L / 2, 0);
+function beamGeometry(segments, halfAngleRad) {
+  const L = LOOK.beamConeLength, g = new ConeGeometry(L * Math.tan(halfAngleRad), L, segments, 1, true).translate(0, -L / 2, 0);
   const p = g.attributes.position, col = new Float32Array(p.count * 4);
   for (let i = 0; i < p.count; i++) { const u = MathUtils.clamp(-p.getY(i) / L, 0, 1); col.set([1, 1, 1, 1 - u ** 1.4], i * 4); }
   g.setAttribute('color', new Float32BufferAttribute(col, 4));
@@ -62,6 +62,8 @@ function rockGeometry(detail) {
 }
 
 export function createView(sim, qualityName, opts = {}) {
+  // Visible beam half-angle (rad): logic value from the data x the named visual factor (LOOK.beamVisualFactor). Cone, spot and water band all use it.
+  const beamHalf = MathUtils.degToRad(opts.beamHalfAngleDeg) * LOOK.beamVisualFactor;
   let q = QUALITY[qualityName];
   const { world } = sim;
   const renderer = new WebGLRenderer({ antialias: q.antialias, powerPreference: 'high-performance' });
@@ -164,11 +166,11 @@ export function createView(sim, qualityName, opts = {}) {
   const glow = new Sprite(new SpriteMaterial({ map: makeGlowTexture(), color: 0xffe9b0, blending: AdditiveBlending, transparent: true, depthWrite: false, fog: false }));
   glow.scale.setScalar(16); glow.position.y = 21.1; glow.renderOrder = 4; lighthouse.add(glow);
   const beamPivot = new Group(); beamPivot.position.y = 21.1; lighthouse.add(beamPivot);
-  const beamLight = new SpotLight(LOOK.beamColor, LOOK.beamIntensity, 140, MathUtils.degToRad(LOOK.beamAngleDeg), 0.5, 1.6);
+  const beamLight = new SpotLight(LOOK.beamColor, LOOK.beamIntensity, 140, beamHalf, 0.5, 1.6);
   beamLight.target.position.set(0, -1.5, 40);
   beamPivot.add(beamLight, beamLight.target);
   const coneMat = new MeshBasicMaterial({ color: 0xffe9b0, vertexColors: true, transparent: true, opacity: LOOK.beamOpacity, blending: AdditiveBlending, depthWrite: false, side: DoubleSide, fog: true });
-  const cone = new Mesh(beamGeometry(q.beamSegments), coneMat);
+  const cone = new Mesh(beamGeometry(q.beamSegments, beamHalf), coneMat);
   cone.rotation.x = -Math.PI / 2 - 0.04; cone.renderOrder = 3;
   beamPivot.add(cone);
 
@@ -285,7 +287,7 @@ export function createView(sim, qualityName, opts = {}) {
     curBeam = k * cur.beam;
     beamLight.intensity = LOOK.beamIntensity * curBeam; coneMat.opacity = LOOK.beamOpacity * curBeam;
     glow.material.opacity = Math.min(1, cur.glow * (0.35 + 0.65 * k));
-    wu.uBeam.value.set(curBeam, heading, opts.beamReach * (low ? Math.max(c, 0) / opts.flicker : 1), 0.2);
+    wu.uBeam.value.set(curBeam, heading, opts.beamReach * (low ? Math.max(c, 0) / opts.flicker : 1), beamHalf);
     crankArm.rotation.y = st.lighthouse.winding ? (st.lighthouse.winding.ticks / st.lighthouse.winding.total) * Math.PI * 8 : 0;
 
     // Lamp.
@@ -313,6 +315,15 @@ export function createView(sim, qualityName, opts = {}) {
     renderer.render(postScene, postCam);
   }
 
+  // ---- Precompile every program, including those of objects hidden at start (the Laisse, the water rings), so that their first
+  // appearance does not trigger a shader compilation stutter. Visibility is forced, compiled, then restored. Same on every quality level.
+  {
+    const hidden = [laisse.group, ...rings.map((r) => r.m)], was = hidden.map((o) => o.visible);
+    hidden.forEach((o) => { o.visible = true; });
+    renderer.compile(scene, camera);
+    hidden.forEach((o, i) => { o.visible = was[i]; });
+  }
+
   const readPixels = () => {
     const gl = renderer.getContext(), w = gl.drawingBufferWidth, h = gl.drawingBufferHeight, buf = new Uint8Array(w * h * 4);
     gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, buf);
@@ -333,7 +344,7 @@ export function createView(sim, qualityName, opts = {}) {
       applyPixelRatio(); renderer.setSize(window.innerWidth, window.innerHeight);
       terrainMat.bumpMap = q.terrainBump ? sandTex : null; terrainMat.needsUpdate = true;
       waterMat.defines.OCT = q.waterOctaves; waterMat.defines.GLINT = q.waterGlint ? 1 : 0; waterMat.needsUpdate = true;
-      cone.geometry.dispose(); cone.geometry = beamGeometry(q.beamSegments);
+      cone.geometry.dispose(); cone.geometry = beamGeometry(q.beamSegments, beamHalf);
       rocks.geometry.dispose(); rocks.geometry = rockGeometry(q.rockDetail);
       laisse.setQuality(q); applyMoment(cur);
     },
@@ -353,6 +364,7 @@ export function createView(sim, qualityName, opts = {}) {
     info: () => ({
       gl: renderer.capabilities.isWebGL2 ? 'webgl2' : 'webgl1', drawCalls: renderer.info.render.calls, triangles: renderer.info.render.triangles,
       geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures,
+      programs: renderer.info.programs.length,   // read only: compiled shader programs (e2e: must not grow when the Laisse first appears)
     }),
     gpuName() {
       try { const gl = renderer.getContext(), e = gl.getExtension('WEBGL_debug_renderer_info'); return e ? gl.getParameter(e.UNMASKED_RENDERER_WEBGL) : 'inconnu'; } catch { return 'inconnu'; }

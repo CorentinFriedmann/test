@@ -52,7 +52,10 @@ export function momentFromUrl(search) {
 // Fixed visual constants (kept here, not scattered in the scene code).
 export const LOOK = {
   lampColor: 0xdfe9ff, lampIntensity: 220, lampAngleDeg: 26,
-  beamColor: 0xfff0cc, beamIntensity: 9000, beamAngleDeg: 9, beamConeRadius: 5, beamConeLength: 70, beamOpacity: 0.16,
+  beamColor: 0xfff0cc, beamIntensity: 9000, beamConeLength: 70,
+  // Visible beam half-angle = lighthouse_beam_half_angle (menace.csv, logic side) x this factor. 1.0 = the player never sees a beam
+  // wider than the zone that really repels the Laisse. A value above 1 would be a documented halo (none today).
+  beamVisualFactor: 1.0, beamOpacity: 0.16,
   laisseBaseDrop: 1.1, laisseLitFadeIn: 8, laisseLitFadeOut: 0.15,
   victoryBlendSeconds: 2.5,
   wetBand: 0.55,

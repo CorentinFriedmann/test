@@ -41,12 +41,18 @@ const VIEW = { x: 8, z: -22, ground: 2.0, eye: 1.7, tx: -45, tz: -40, pitch: -0.
   // ---- 3. La Laisse: lit = readable on the three levels (switched live on the same frame), unlit = not drawn
   {
     const g = await openPage(browser, '?q=high');
+    await g.frames(3);
+    const programsBefore = (await g.st()).programs; // before the Laisse has ever been shown
     await g.page.evaluate(() => window.__estran.setBot('noisy'));
     await g.until((s) => s.threat && s.threat.active && s.threat.mode === 'hunt' && s.threat.dist < 10, 20000, 6);
     await g.page.evaluate(() => { const s = window.__estran.getState(); window.__estran.setBot(null); window.__estran.lookAt(s.threat.x, s.threat.z, -0.12); });
     await g.page.keyboard.press('KeyF');
     await g.page.evaluate(() => window.__estran.advance(4));
     const probes = {};
+    const first = await g.page.evaluate(() => window.__estran.probeLaisse()); // first appearance, quality unchanged
+    const programsAfter = (await g.st()).programs;
+    check('Shaders precompiled: program count identical before and after the first appearance of the Laisse',
+      first.visible && programsBefore > 0 && programsAfter === programsBefore, `before=${programsBefore} after=${programsAfter} visible=${first.visible}`);
     for (const q of LEVELS) {
       await g.page.evaluate((q) => window.__estran.setQuality(q), q);
       await g.frames(3);
