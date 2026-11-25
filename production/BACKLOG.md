@@ -43,7 +43,7 @@
 | T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024 | À FAIRE |
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
-| T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | EN COURS |
+| T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | EN REVUE BOSS |
 
 ---
 
@@ -440,7 +440,7 @@
 - **Contexte / références** : ADR §7.2. Non bloquante pour P2. Si la session ne suffit pas, le `producer` découpe en deux tâches.
 
 ### T-036 : Seuil de la porte P2 adapté (GDD §13)
-- **Assigné à** : `game-designer` · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : EN COURS
+- **Assigné à** : `game-designer` · **Dépend de** : T-006 · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
 - **Livrables** : `docs/design/GDD.md` §13 (paragraphe « Seuil de passage » remplacé)
 - **Critères d'acceptation** :
   - [ ] Seuil reformulé selon `production/validations/T-006.md` (arbitrage 1) : propriétaire seul répondant, plus les automates de T-032 ; testeurs extérieurs reportés à la démo P3
