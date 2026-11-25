@@ -295,7 +295,7 @@ Les valeurs de la nuit sont celles du prototype. Aube et jour gris sont des poin
 
 ## 13. Questionnaire de la porte P2
 
-À poser après une partie (ou 10 minutes de jeu), sans aide ni relecture du pitch. Le joueur répond avec ses mots. L'enquêteur note « compris » si l'idée-clé figure dans la réponse.
+À poser après une partie (ou 10 minutes de jeu), sans aide ni relecture du pitch. **Le propriétaire est le seul répondant de P2** (décision `production/DECISIONS.md`) : il répond avec ses mots, en 5 minutes au plus, 8 questions au maximum. Une réponse est « comprise » si l'idée-clé figure dans la réponse ; en l'absence d'enquêteur, le propriétaire s'auto-évalue contre la colonne de droite après avoir répondu.
 
 | # | Question | Réponse attendue (idée-clé) |
 |---|---|---|
@@ -304,8 +304,16 @@ Les valeurs de la nuit sont celles du prototype. Aube et jour gris sont des poin
 | 3 | Que fait le phare ? Que faut-il y faire, et pourquoi ? | Le faisceau **repousse** la chose, mais le phare **s'éteint** à l'usure ; il faut le **remonter** à la manivelle avant de ressortir |
 | 4 | Que faites-vous quand vous entendez un bruit dans l'eau ? Pourquoi ? | Se figer ou ralentir, écouter la direction, rejoindre une zone sèche ou la lumière, allumer la lampe de près ; **ne pas courir** |
 | 5 | À quel moment avez-vous eu le plus peur ? Qu'est-ce qui l'a causé ? Note de 1 à 5 | Moment d'écoute ou d'attente (remous, grondement, silence) plutôt qu'une apparition visible. Note ≥ 3. Notez la cause citée |
+| 6 | Avez-vous joué au **casque** ? Au premier contact, le niveau sonore était-il trop faible, correct ou trop fort ? | Réponse « casque oui/non » et « faible / correct / fort ». Information de réglage (volume maître, T-031), sans seuil |
+| 7 | Refaites 2 minutes en coupant le son (touche M) : la peur est-elle la même ? Qu'est-ce qui change ? | Le son porte **au moins la moitié** de la peur (objectif sonore de T-031) : sans son, la peur baisse nettement et l'écoute des remous manque. Réponse « moitié ou plus / moins de la moitié » |
+| 8 | Les sous-titres (descriptions des bruits) étaient-ils lisibles, utiles, et ont-ils gâché la peur ? | Lisibles et utiles sans gâcher l'ambiance. Information d'accessibilité, sans seuil |
 
-**Seuil de passage** (à valider par la Boss) : chaque testeur compte ses réponses « comprises » parmi les questions 1 à 4 ; la porte est franchie si au moins la moitié des testeurs en ont 4 sur 4 (et aucun moins de 3), avec au moins 1 testeur humain extérieur, et si la note médiane de la question 5 est ≥ 3. Les parties de test sont aussi lues par T-032 (télémétrie : nombre de bruits entendus, états de la Laisse, saisies).
+**Seuil de passage** (arbitrage 1 de `production/validations/T-006.md`) : la porte P2 est franchie si les trois conditions suivantes sont réunies.
+1. **Les automates de T-032 passent le critère de discrimination** (≥ 90 % / ≥ 90 %, seuils fixés par T-032).
+2. **Le propriétaire, seul répondant,** obtient **4/4** « compris » aux questions 1 à 4 et donne une note **≥ 3** à la question 5.
+3. **Les questions 6 à 8 sont renseignées** (réponse obligatoire, mais aucune n'est éliminatoire). Seule la question 7 est suivie : si le propriétaire répond « moins de la moitié », le son est rouvert (retour à T-031) sans bloquer P3.
+
+« P2 réussie » signifie **« prête pour P3 »**, et non « validée par le public ». **Aucun humain extérieur n'est requis avant P3** : les testeurs extérieurs sont reportés à la démo P3 et deviennent une **condition de P3**. Les parties de test sont aussi lues par T-032 (télémétrie : nombre de bruits entendus, états de la Laisse, saisies).
 
 ## 14. Estimation d'effort de la tranche P2 (pour T-029 à T-033)
 
