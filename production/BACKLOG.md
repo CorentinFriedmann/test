@@ -45,7 +45,7 @@
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
 | T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | VALIDÉ AVEC RÉSERVES |
 | T-037 | Rééquilibrage de la peur avant P2 (BUG-002, BUG-003) | game-designer | T-032 | VALIDÉ AVEC RÉSERVES |
-| T-038 | Correction audio : voix prioritaires, `npm run all` vert (BUG-001) | audio-director | T-037 | EN REVUE BOSS |
+| T-038 | Correction audio : voix prioritaires, `npm run all` vert (BUG-001) | audio-director | T-037 | VALIDÉ AVEC RÉSERVES |
 
 ---
 
@@ -464,7 +464,7 @@
 - **Contexte / références** : `docs/qa/RAPPORT_P2.md` §1 et §3, `production/BUGS.md` BUG-002 et BUG-003, écart 6 du GDD, `production/validations/T-029.md`. Transmettre `production/DECISIONS.md` : le propriétaire est le seul répondant de P2, donc la prototype doit être juste avant de lui être montré. `npm run test:p2` et `npm run p2:report` sont les outils de mesure ; `src/sim/bot.js` n'est pas modifié (sauf ajout de joueurs d'appoint dans `tests/p2/lib.js`). L'audio e2e peut rester rouge (BUG-001) pendant cette tâche.
 
 ### T-038 : Correction audio : voix prioritaires, `npm run all` vert (BUG-001)
-- **Assigné à** : `audio-director` · **Dépend de** : T-037 (le rééquilibrage change la densité des repères) · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `audio-director` · **Dépend de** : T-037 (le rééquilibrage change la densité des repères) · **Jalon** : Essai · P2 · **Statut** : VALIDÉ AVEC RÉSERVES (`production/validations/T-038.md`, 2026-11-25) ; test unitaire du vol de voix à reprendre avant la fin de la phase audio
 - **Livrables** : correctif de `game/src/audio/` (`engine.js`, `MAX_VOICES`), test `game/tests/e2e/audio.cjs` mis d'accord, `docs/audio/NOTES_AUDIO_P2.md` à jour, `production/BUGS.md` (BUG-001 fermé après vérification)
 - **Critères d'acceptation** :
   - [ ] Priorité par type : saisie, grondement, battement de coeur et remous proches ne sont **jamais refusés** (on cède la plus ancienne voix de faible priorité, pas, par exemple) ; les pas se font refuser ou couper en premier
