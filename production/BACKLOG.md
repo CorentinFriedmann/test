@@ -31,7 +31,7 @@
 | T-021 | Données de marché par concept et par genre | marketing-publishing | T-001, T-019 | VALIDÉ AVEC RÉSERVES |
 | T-022 | Données de marché par région et par langue | marketing-publishing | aucune | À CORRIGER |
 | T-023 | Révision v1.1 des trois concepts | game-director | aucune | VALIDÉ |
-| T-024 | Registre des licences et règles d'usage de l'IA générative (voie web) | business-affairs | aucune | EN REVUE BOSS |
+| T-024 | Registre des licences et règles d'usage de l'IA générative (voie web) | business-affairs | aucune | VALIDÉ AVEC RÉSERVES |
 | T-025 | Finitions de l'étude de marché v2 (scénarios, sources, étiquettes) | marketing-publishing | aucune | À FAIRE |
 | T-026 | Scénario « studio IA + petite équipe humaine » pour les 3 concepts | business-affairs | T-015 | VALIDÉ AVEC RÉSERVES |
 | T-027 | Pivot technique web : pile, pipeline autonome et prototype de faisabilité | technical-director | T-026 | VALIDÉ AVEC RÉSERVES |
@@ -285,7 +285,7 @@
 - **Contexte / références** : réserves de la validation de T-001, retours 1 à 11 (`production/validations/T-001.md`). À valider avant T-004. Les effectifs et les durées des sections X.10, sur lesquels T-015 s'appuie, ne changent pas, sauf erreur à signaler à `business-affairs`.
 
 ### T-024 : Registre des licences et règles d'usage de l'IA générative (voie web)
-- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : Essai · avant T-033 (prérequis de tout import d'asset tiers) · **Statut** : EN REVUE BOSS
+- **Assigné à** : `business-affairs` · **Dépend de** : aucune · **Jalon** : Essai · avant T-033 (prérequis de tout import d'asset tiers) · **Statut** : VALIDÉ AVEC RÉSERVES (`production/validations/T-024.md`, 2026-11-25)
 - **Livrables** : `docs/legal/LICENCES.md`
 - **Critères d'acceptation** :
   - [ ] Registre au format défini (asset ou outil, origine, licence et version, date de consultation, usage commercial autorisé, plateformes, attribution, obligations, preuve d'acquisition), prêt à recevoir chaque asset tiers comme l'exige `CLAUDE.md`
@@ -417,6 +417,7 @@
   - [ ] Tests Playwright de la version assemblée (démarrage, une partie automate, aucune erreur de console) verts depuis un dépôt propre
   - [ ] Prête à publier : la Coordination la publie via l'outil Artifact et reporte le lien dans le rapport de remise et dans `production/DECISIONS.md` (questions ouvertes) ; la tâche ne prétend pas que P2 est passée
 - **Contexte / références** : décision du propriétaire du 2026-11-23 (il ne fait rien lui-même : il joue et répond). Cette version sert aussi à répondre à la question P1 encore ouverte.
+- **Anomalie MIT à corriger ici (bloquante pour la publication, constatée par la Boss le 2026-11-25)** : `game/scripts/build.mjs` ligne 16 utilise `legalComments: 'none'` ; `dist/estran.html` ne contient ni « three.js authors » ni « Permission is hereby granted ». Appliquer `docs/legal/LICENCES.md` §5 (`legalComments: 'inline'` ou `banner` avec le texte de `game/node_modules/three/LICENSE`, plus écran Crédits et licences), et ajouter le test Playwright qui vérifie ces deux chaînes dans la version assemblée. Ajouter aussi Electron et Chromium au registre si l'empaquetage est abordé.
 
 ### T-034 : Mise à jour des documents techniques pour la voie web
 - **Assigné à** : `technical-director` · **Dépend de** : T-027 · **Jalon** : Essai · peut suivre P2 (ne la bloque pas) · **Statut** : À FAIRE
