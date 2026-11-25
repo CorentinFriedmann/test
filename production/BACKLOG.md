@@ -44,8 +44,8 @@
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
 | T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | VALIDÉ AVEC RÉSERVES |
-| T-037 | Rééquilibrage de la peur avant P2 (BUG-002, BUG-003) | game-designer | T-032 | EN REVUE BOSS |
-| T-038 | Correction audio : voix prioritaires, `npm run all` vert (BUG-001) | audio-director | T-037 | À FAIRE |
+| T-037 | Rééquilibrage de la peur avant P2 (BUG-002, BUG-003) | game-designer | T-032 | VALIDÉ AVEC RÉSERVES |
+| T-038 | Correction audio : voix prioritaires, `npm run all` vert (BUG-001) | audio-director | T-037 | EN COURS |
 
 ---
 
@@ -451,7 +451,7 @@
   - [ ] Aucune exigence d'un humain extérieur avant P3 ; cohérent avec `production/DECISIONS.md`, T-032 et T-033
 
 ### T-037 : Rééquilibrage de la peur avant P2 (BUG-002, BUG-003)
-- **Assigné à** : `game-designer` (valeurs des CSV de `game/data/`, surtout `menace.csv` et `maree_effets.csv`) ; `gameplay-programmer` seulement si une valeur ne suffit pas · **Dépend de** : T-032 · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `game-designer` (valeurs des CSV de `game/data/`, surtout `menace.csv` et `maree_effets.csv`) ; `gameplay-programmer` seulement si une valeur ne suffit pas · **Dépend de** : T-032 · **Jalon** : Essai · P2 · **Statut** : VALIDÉ AVEC RÉSERVES (`production/validations/T-037.md`, 2026-11-25)
 - **Livrables** : CSV modifiés, tests de `game/tests/p2/` complétés (seuils ci-dessous inscrits dans `discrimination.test.js`), `docs/design/EQUILIBRAGE_P2.md` (une page : valeurs avant/après, raison, mesures)
 - **Critères d'acceptation** (mesurés par les automates de `game/tests/p2/`) :
   - [ ] Réglage sur les graines 101 à 120, **vérification sur des graines non utilisées pour le réglage (201 à 220)** pour ne pas ajuster les valeurs aux seules 20 parties connues ; les deux jeux de graines doivent satisfaire les seuils
@@ -464,7 +464,7 @@
 - **Contexte / références** : `docs/qa/RAPPORT_P2.md` §1 et §3, `production/BUGS.md` BUG-002 et BUG-003, écart 6 du GDD, `production/validations/T-029.md`. Transmettre `production/DECISIONS.md` : le propriétaire est le seul répondant de P2, donc la prototype doit être juste avant de lui être montré. `npm run test:p2` et `npm run p2:report` sont les outils de mesure ; `src/sim/bot.js` n'est pas modifié (sauf ajout de joueurs d'appoint dans `tests/p2/lib.js`). L'audio e2e peut rester rouge (BUG-001) pendant cette tâche.
 
 ### T-038 : Correction audio : voix prioritaires, `npm run all` vert (BUG-001)
-- **Assigné à** : `audio-director` · **Dépend de** : T-037 (le rééquilibrage change la densité des repères) · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Assigné à** : `audio-director` · **Dépend de** : T-037 (le rééquilibrage change la densité des repères) · **Jalon** : Essai · P2 · **Statut** : EN COURS
 - **Livrables** : correctif de `game/src/audio/` (`engine.js`, `MAX_VOICES`), test `game/tests/e2e/audio.cjs` mis d'accord, `docs/audio/NOTES_AUDIO_P2.md` à jour, `production/BUGS.md` (BUG-001 fermé après vérification)
 - **Critères d'acceptation** :
   - [ ] Priorité par type : saisie, grondement, battement de coeur et remous proches ne sont **jamais refusés** (on cède la plus ancienne voix de faible priorité, pas, par exemple) ; les pas se font refuser ou couper en premier
