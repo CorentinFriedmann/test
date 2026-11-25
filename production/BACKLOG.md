@@ -39,7 +39,7 @@
 | T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | VALIDÉ AVEC RÉSERVES |
 | T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | VALIDÉ AVEC RÉSERVES |
 | T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | VALIDÉ AVEC RÉSERVES |
-| T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | À FAIRE |
+| T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | EN COURS |
 | T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024 | À FAIRE |
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
@@ -391,7 +391,7 @@
 - **Réserve reprise de T-029** : `try/catch` par écouteur dans `sim.subscribe`/`log()` (erreur journalisée hors simulation) avant de brancher l'audio. Appliquer `threat_audible_radius` et `threat_cue_roar_radius` avec `state.threat.dist`.
 
 ### T-032 : Tests automatisés et rapport de la porte P2
-- **Assigné à** : `qa-lead` · **Dépend de** : T-030, T-031 · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Assigné à** : `qa-lead` · **Dépend de** : T-030, T-031 · **Jalon** : Essai · P2 · **Statut** : EN COURS
 - **Livrables** : `game/tests/p2/`, `docs/qa/RAPPORT_P2.md`, `production/BUGS.md`
 - **Critères d'acceptation** :
   - [ ] Deux joueurs automates sur 20 graines chacun : l'un suit la règle (bruit puis lumière du phare), l'autre l'ignore ; le premier réussit dans au moins 90 % des parties, le second échoue dans au moins 90 % ; sinon la règle est signalée comme non discriminante
