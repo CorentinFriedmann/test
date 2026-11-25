@@ -39,11 +39,13 @@
 | T-029 | Noyau jouable : marée, menace, île, boucle de jeu | gameplay-programmer | T-006 | VALIDÉ AVEC RÉSERVES |
 | T-030 | Ambiance visuelle stylisée, niveaux de qualité et mesures de performance | graphics-programmer | T-029 | VALIDÉ AVEC RÉSERVES |
 | T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | VALIDÉ AVEC RÉSERVES |
-| T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | EN REVUE BOSS |
-| T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024 | À FAIRE |
+| T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | VALIDÉ AVEC RÉSERVES |
+| T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024, T-037, T-038 | À FAIRE |
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
 | T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | VALIDÉ AVEC RÉSERVES |
+| T-037 | Rééquilibrage de la peur avant P2 (BUG-002, BUG-003) | game-designer | T-032 | EN COURS |
+| T-038 | Correction audio : voix prioritaires, `npm run all` vert (BUG-001) | audio-director | T-037 | À FAIRE |
 
 ---
 
@@ -391,7 +393,7 @@
 - **Réserve reprise de T-029** : `try/catch` par écouteur dans `sim.subscribe`/`log()` (erreur journalisée hors simulation) avant de brancher l'audio. Appliquer `threat_audible_radius` et `threat_cue_roar_radius` avec `state.threat.dist`.
 
 ### T-032 : Tests automatisés et rapport de la porte P2
-- **Assigné à** : `qa-lead` · **Dépend de** : T-030, T-031 · **Jalon** : Essai · P2 · **Statut** : EN REVUE BOSS
+- **Assigné à** : `qa-lead` · **Dépend de** : T-030, T-031 · **Jalon** : Essai · P2 · **Statut** : VALIDÉ AVEC RÉSERVES (`production/validations/T-032.md`, 2026-11-25) ; critère « `npm run all` vert deux fois » reporté à T-038, bugs de conception traités en T-037
 - **Livrables** : `game/tests/p2/`, `docs/qa/RAPPORT_P2.md`, `production/BUGS.md`
 - **Critères d'acceptation** :
   - [ ] Deux joueurs automates sur 20 graines chacun : l'un suit la règle (bruit puis lumière du phare), l'autre l'ignore ; le premier réussit dans au moins 90 % des parties, le second échoue dans au moins 90 % ; sinon la règle est signalée comme non discriminante
@@ -411,11 +413,12 @@
 - **Livrables** : `game/dist/estran-p2.html`, `production/RAPPORT_P2.md`, mise à jour de `docs/legal/LICENCES.md` et de `docs/tech/PIPELINE_WEB.md` (étapes de la version P2)
 - **Critères d'acceptation** :
   - [ ] Un seul fichier HTML autonome, d'au plus 3 Mo, sans requête réseau au chargement (vérifié par Playwright) ; fonctionne au clavier et à la souris ; manette si prévue par T-006
-  - [ ] Écran de départ en français : touches et rien d'autre (la règle ne s'explique pas) ; bouton « copier le rapport de performance » (T-030) et formulaire des 5 questions de P2 avec copie du texte à renvoyer
+  - [ ] Écran de départ en français : touches et rien d'autre (la règle ne s'explique pas) ; bouton « copier le rapport de performance » (T-030) et formulaire des **8 questions** de P2 (`docs/qa/QUESTIONNAIRE_P2.md`, GDD §13, BUG-005) avec copie du texte à renvoyer
   - [ ] Textes de licences des dépendances inclus dans la version publiée (T-024) ; aucun asset tiers non enregistré
-  - [ ] `RAPPORT_P2.md` d'une page, pour le propriétaire : ce qu'il y a à jouer (5 à 10 min), quoi répondre (P1 : « fluide » ou « saccadé » ; P2 : les 5 réponses), lien de publication ; rien d'autre à faire
+  - [ ] `RAPPORT_P2.md` d'une page, pour le propriétaire : ce qu'il y a à jouer (5 à 10 min), quoi répondre (P1 : « fluide » ou « saccadé » ; P2 : les 8 réponses), lien de publication ; rien d'autre à faire
   - [ ] Tests Playwright de la version assemblée (démarrage, une partie automate, aucune erreur de console) verts depuis un dépôt propre
   - [ ] Prête à publier : la Coordination la publie via l'outil Artifact et reporte le lien dans le rapport de remise et dans `production/DECISIONS.md` (questions ouvertes) ; la tâche ne prétend pas que P2 est passée
+- **Ajouts de la Boss après T-032** : (1) le formulaire reprend les **8 questions** de `docs/qa/QUESTIONNAIRE_P2.md`, pas 5 (BUG-005), dont les questions 6 à 8 (casque, son coupé avec M, sous-titres avec K) qui portent R3 ; (2) la performance (F2, « copier le rapport de performance ») se mesure **avec le son actif**, 60 s sur un parcours bruyant, et le rapport au propriétaire le dit (BUG-004, divise la cadence par deux sous rendu logiciel, à confirmer sur un vrai PC) ; (3) T-033 ne démarre qu'après T-037 et T-038 : le prototype montré doit avoir un `npm run all` vert et une peur mesurable avant 160 s.
 - **Contexte / références** : décision du propriétaire du 2026-11-23 (il ne fait rien lui-même : il joue et répond). Cette version sert aussi à répondre à la question P1 encore ouverte.
 - **Anomalie MIT à corriger ici (bloquante pour la publication, constatée par la Boss le 2026-11-25)** : `game/scripts/build.mjs` ligne 16 utilise `legalComments: 'none'` ; `dist/estran.html` ne contient ni « three.js authors » ni « Permission is hereby granted ». Appliquer `docs/legal/LICENCES.md` §5 (`legalComments: 'inline'` ou `banner` avec le texte de `game/node_modules/three/LICENSE`, plus écran Crédits et licences), et ajouter le test Playwright qui vérifie ces deux chaînes dans la version assemblée. Ajouter aussi Electron et Chromium au registre si l'empaquetage est abordé.
 
@@ -446,3 +449,27 @@
 - **Critères d'acceptation** :
   - [ ] Seuil reformulé selon `production/validations/T-006.md` (arbitrage 1) : propriétaire seul répondant, plus les automates de T-032 ; testeurs extérieurs reportés à la démo P3
   - [ ] Aucune exigence d'un humain extérieur avant P3 ; cohérent avec `production/DECISIONS.md`, T-032 et T-033
+
+### T-037 : Rééquilibrage de la peur avant P2 (BUG-002, BUG-003)
+- **Assigné à** : `game-designer` (valeurs des CSV de `game/data/`, surtout `menace.csv` et `maree_effets.csv`) ; `gameplay-programmer` seulement si une valeur ne suffit pas · **Dépend de** : T-032 · **Jalon** : Essai · P2 · **Statut** : EN COURS
+- **Livrables** : CSV modifiés, tests de `game/tests/p2/` complétés (seuils ci-dessous inscrits dans `discrimination.test.js`), `docs/design/EQUILIBRAGE_P2.md` (une page : valeurs avant/après, raison, mesures)
+- **Critères d'acceptation** (mesurés par les automates de `game/tests/p2/`) :
+  - [ ] Réglage sur les graines 101 à 120, **vérification sur des graines non utilisées pour le réglage (201 à 220)** pour ne pas ajuster les valeurs aux seules 20 parties connues ; les deux jeux de graines doivent satisfaire les seuils
+  - [ ] `prudent` (suit la règle) gagne au moins 90 % des parties **et** subit au moins une approche (Laisse sous 15 m) avant 160 s dans au moins 50 % d'entre elles ; aucune saisie avant 160 s n'est exigée ni interdite pour lui, mais au plus 10 % de parties perdues
+  - [ ] `win` et `heedless` (ignorent la règle sans la chasser) gagnent au plus 50 % des parties (contre 70 % et 80 % aujourd'hui) ; `noisy` perd toujours au moins 90 %
+  - [ ] `silent` (marche lente) reste viable (au moins 80 % de victoires) : la discrétion récompensée ne doit pas devenir un échec
+  - [ ] Durée d'une partie menée à terme toujours entre 5 et 10 minutes ; 72 tests unitaires adaptés si une valeur testée change, tests jeu et rendu verts
+  - [ ] Pistes autorisées (la peur est le critère central de P2) : charge ou portée du phare plus faibles, Laisse apparaissant ou rôdant plus près et plus tôt, bruits ordinaires (pas dans l'eau, relevé) mieux entendus ; chaque changement est justifié par la mesure, rien n'est ajouté qui ne soit réglable en CSV sans raison
+  - [ ] Le texte du rapport dit explicitement que des automates ne ressentent rien : seul le propriétaire dira si la peur est là (questions 5 et 7)
+- **Contexte / références** : `docs/qa/RAPPORT_P2.md` §1 et §3, `production/BUGS.md` BUG-002 et BUG-003, écart 6 du GDD, `production/validations/T-029.md`. Transmettre `production/DECISIONS.md` : le propriétaire est le seul répondant de P2, donc la prototype doit être juste avant de lui être montré. `npm run test:p2` et `npm run p2:report` sont les outils de mesure ; `src/sim/bot.js` n'est pas modifié (sauf ajout de joueurs d'appoint dans `tests/p2/lib.js`). L'audio e2e peut rester rouge (BUG-001) pendant cette tâche.
+
+### T-038 : Correction audio : voix prioritaires, `npm run all` vert (BUG-001)
+- **Assigné à** : `audio-director` · **Dépend de** : T-037 (le rééquilibrage change la densité des repères) · **Jalon** : Essai · P2 · **Statut** : À FAIRE
+- **Livrables** : correctif de `game/src/audio/` (`engine.js`, `MAX_VOICES`), test `game/tests/e2e/audio.cjs` mis d'accord, `docs/audio/NOTES_AUDIO_P2.md` à jour, `production/BUGS.md` (BUG-001 fermé après vérification)
+- **Critères d'acceptation** :
+  - [ ] Priorité par type : saisie, grondement, battement de coeur et remous proches ne sont **jamais refusés** (on cède la plus ancienne voix de faible priorité, pas, par exemple) ; les pas se font refuser ou couper en premier
+  - [ ] `node tests/e2e/audio.cjs` **vert 3 fois de suite** ; la vérification de bornes porte sur les repères critiques (0 refusé) et non sur `dropped === 0` pour toutes les voix, ou la densité du test est rendue réaliste ; le test n'est pas affaibli au point de ne plus rien vérifier (justifié par écrit)
+  - [ ] `node tests/p2/audio-cpu.cjs` : 0 voix critique refusée sur un parcours bruyant
+  - [ ] `npm run all` vert depuis un dépôt propre, **deux fois de suite** (critère repris de T-032), 0 erreur et 0 avertissement de console
+  - [ ] Note audio corrigée (« premier arrivé, premier servi » remplacé par la règle de priorité réelle) ; coût CPU de l'audio relevé de nouveau et consigné (BUG-004 reste « à confirmer sur un vrai PC »)
+- **Contexte / références** : `production/BUGS.md` BUG-001 (piste de correction), `docs/qa/RAPPORT_P2.md` §4 et §5, `production/validations/T-031.md` retour 4. Fiche de l'agent : lui transmettre `docs/tech/ADR_PIVOT_WEB.md` et `production/DECISIONS.md` (Web Audio seulement). Aucune modification du rendu.
