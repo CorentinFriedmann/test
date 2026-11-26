@@ -22,7 +22,7 @@ Ces deux énoncés doivent se comprendre sans image. Ils servent de test de comp
 L'eau monte et descend selon une horloge que tu lis sur ta montre et dans la table des marées. À marée basse, des chemins et un village englouti s'ouvrent ; à marée haute, ils sont noyés et tu dois être à l'abri. Tu planifies donc chaque sortie avant que la mer ne revienne.
 
 **Règle de la menace : bruit dans l'eau, lumière du phare**
-Ce qui remonte avec l'eau ne te voit pas : il t'entend quand tu fais du bruit dans l'eau, en marchant vite, en courant ou en heurtant des objets. La lumière du phare le tient à distance, alors garde-le allumé. Tu n'as aucune arme : tu avances lentement, tu écoutes, tu restes au sec ou dans la lumière.
+Ce qui remonte avec l'eau ne te voit pas : il t'entend quand tu fais du bruit dans l'eau, en marchant vite, en courant ou en heurtant des objets. La lumière du phare le fait reculer et le tient loin du phare, alors garde-le allumé ; plus loin, seul le silence te protège. Tu n'as aucune arme : tu avances lentement, tu écoutes, tu restes au sec ou dans la lumière.
 
 ## Pitch en un paragraphe
 
@@ -43,7 +43,7 @@ La mer monte et efface le chemin. Un plan large : une île grise, un phare, un v
 - **Il lit les marées.** L'horloge de la marée décide où l'on peut aller et pendant combien de temps. La table des marées et la montre sont dans le monde, pas dans un menu.
 - **Il fouille le village englouti** à marée basse : intérieurs, photos, lettres, cassettes, radio. L'histoire se reconstitue par traces ; les personnages (2 à 3) ne sont jamais montrés en gros plan.
 - **Il fait attention au bruit.** Marcher dans l'eau, courir ou faire tomber un objet s'entend. La menace, presque invisible (remous, traces, silhouette lointaine), répond au bruit.
-- **Il garde le phare allumé.** La lumière du phare et sa lampe tiennent la menace à distance. Entretenir la lumière coûte du temps, donc des choix.
+- **Il garde le phare allumé.** La lumière du phare et sa lampe font reculer la menace, près du phare. Entretenir la lumière coûte du temps, donc des choix.
 - **Il répare le marégraphe**, ce qui donne le fil du jeu et la raison de rester sur l'île.
 
 ### Structure et durée

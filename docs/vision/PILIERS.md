@@ -35,7 +35,7 @@ La menace est presque invisible. Elle répond au bruit dans l'eau, pas à la vue
 Pas d'arme. Le phare et la lampe sont la défense, et les entretenir est un choix.
 
 **On fait**
-- Le faisceau du phare comme règle de jeu : il tient la menace à distance.
+- Le faisceau du phare comme règle de jeu : il fait reculer la menace près du phare.
 - Une lampe à main pour les intérieurs noyés, avec ses limites.
 - Un coût réel à l'entretien de la lumière (du temps pris sur l'exploration).
 

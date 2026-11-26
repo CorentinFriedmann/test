@@ -46,6 +46,7 @@
 | T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | VALIDÉ AVEC RÉSERVES |
 | T-037 | Rééquilibrage de la peur avant P2 (BUG-002, BUG-003) | game-designer | T-032 | VALIDÉ AVEC RÉSERVES |
 | T-038 | Correction audio : voix prioritaires, `npm run all` vert (BUG-001) | audio-director | T-037 | VALIDÉ AVEC RÉSERVES |
+| T-039 | Alignement de la règle du faisceau avant l'évaluation de P2 (réserve T-033) | game-designer | T-037, T-033 | VALIDÉ |
 
 ---
 
@@ -473,3 +474,17 @@
   - [ ] `npm run all` vert depuis un dépôt propre, **deux fois de suite** (critère repris de T-032), 0 erreur et 0 avertissement de console
   - [ ] Note audio corrigée (« premier arrivé, premier servi » remplacé par la règle de priorité réelle) ; coût CPU de l'audio relevé de nouveau et consigné (BUG-004 reste « à confirmer sur un vrai PC »)
 - **Contexte / références** : `production/BUGS.md` BUG-001 (piste de correction), `docs/qa/RAPPORT_P2.md` §4 et §5, `production/validations/T-031.md` retour 4. Fiche de l'agent : lui transmettre `docs/tech/ADR_PIVOT_WEB.md` et `production/DECISIONS.md` (Web Audio seulement). Aucune modification du rendu.
+
+### T-039 : Alignement de la règle du faisceau avant l'évaluation de P2 (réserve T-033)
+- **Assigné à** : `game-designer` · **Dépend de** : T-037, T-033 · **Jalon** : Essai · P2 (bloque l'évaluation des réponses du propriétaire) · **Statut** : VALIDÉ
+- **Livrables** :
+  - `docs/design/GDD.md`
+  - `docs/vision/PITCH.md`
+  - `docs/vision/PILIERS.md`
+- **Critères d'acceptation** :
+  - [ ] GDD §13 (tableau des réponses attendues, question 3) : la réponse attendue décrit l'effet réel du faisceau, tel que §7.1 et game/data/menace.csv le définissent (la Laisse recule ou ralentit dans le faisceau, portée 40 m, elle ne peut pas entrer dans le halo de 14 m, le faisceau protège le phare et ses abords, pas les échelles lointaines) ; une réponse du type « ça la ralentit » ou « ça la fait reculer » y est acceptée
+  - [ ] GDD §1 (règle de la menace, l.41) dit la même chose que §7.1, sans « repousse » trop large
+  - [ ] PITCH.md (l.25 et l.46) et PILIERS.md (l.38) : formulations compatibles avec cet effet, sans promettre que la lumière protège partout ; le ton du pitch est conservé
+  - [ ] Aucune valeur de CSV ni ligne de code modifiée ; docs/qa/QUESTIONNAIRE_P2.md n'est pas modifié (sa ligne 85 sert de référence)
+  - [ ] La remise liste chaque ligne changée, avant et après
+- **Contexte / références** : Réserve de la Boss, production/validations/T-033.md point 3 : « À aligner avant d'évaluer les réponses, sinon on juge mal une réponse « ça la ralentit » ». Le propriétaire a joué le prototype (P1 « fluide », 2026-11-26) ; ses réponses sont attendues. Mode économe : revue allégée.
