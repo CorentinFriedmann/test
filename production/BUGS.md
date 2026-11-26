@@ -63,3 +63,5 @@
 - **Étapes** : comparer `production/BACKLOG.md` (T-032 « questionnaire de T-006 (5 questions) », T-033 « formulaire des 5 questions de P2 », « les 5 réponses ») avec `docs/design/GDD.md` §13 (8 questions, validées en T-036).
 - **Attendu** : un seul nombre. **Obtenu** : 5 dans le backlog, 8 dans le GDD et dans `docs/qa/QUESTIONNAIRE_P2.md`.
 - **Conséquence** : T-033 doit prévoir un formulaire de **8** questions, sinon les questions 6 à 8 (casque, son coupé, sous-titres) ne seront pas posées et la question 7 (R3) restera sans réponse.
+
+> 2026-11-26 : le propriétaire juge le prototype P2 « fluide » sur son ordinateur (porte P1). BUG-004 n'est pas observé sur machine réelle ; à refermer par le qa-lead si aucun autre signalement.

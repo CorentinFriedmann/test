@@ -14,10 +14,11 @@
 | 2026-11-23 | Niveau visuel | **Rendu stylisé atmosphérique accepté** à la place du photoréalisme (conséquence de la voie web, validation T-027) | Objectif visuel : une ambiance forte (lumière, brouillard, grain, écume), sans viser le réalisme d'Unreal Engine. Remplace « les graphismes les plus réalistes possibles » de `CLAUDE.md` |
 | 2026-11-23 | Rythme | La Coordination **enchaîne les tâches sans demander**, et ne s'arrête qu'aux vraies décisions : choix du concept, dépense, étape légale, changement d'objectif | Remplace la règle « arrêt après chaque tâche validée » du mode économe. Les autres règles du mode économe restent : Sonnet, un agent à la fois, revue allégée |
 | 2026-11-23 | Concept | **ESTRAN, version courte « une marée », accepté à l'essai** (« oui pour essai, on verra ensuite pour évoluer ») | T-004 peut être validée. Le projet avance par étapes, avec les portes d'arrêt de `production/validations/T-004.md` ; le périmètre pourra évoluer selon les résultats du prototype et de la démo |
+| 2026-11-26 | Porte P1 (fluidité) | Le propriétaire a joué au prototype P2 sur son ordinateur : **« c'est fluide »** | Porte P1 franchie, sur son avis. BUG-004 (cadence divisée par deux avec le son sous rendu logiciel) n'est pas observé sur sa machine. Aucun rapport F2 chiffré fourni : configuration exacte inconnue |
 
 ## Questions encore ouvertes pour le propriétaire
 
-- **Porte P2 (2026-11-25)** : prototype jouable publié à https://claude.ai/artifact/R7U9ExVcv6TRw3B2fzzBDE (même lien que le premier prototype). En attente : avis de fluidité P1 (« fluide », « saccadé » ou rapport F2) et réponses aux 8 questions (`production/RAPPORT_P2.md`). P2 n'est pas passée tant qu'elles ne sont pas reçues et évaluées.
+- **Porte P2 (2026-11-25)** : prototype jouable publié à https://claude.ai/artifact/R7U9ExVcv6TRw3B2fzzBDE (même lien que le premier prototype). P1 : « fluide » (2026-11-26). En attente : réponses aux 8 questions (`production/RAPPORT_P2.md`). P2 n'est pas passée tant qu'elles ne sont pas reçues et évaluées.
 
 - Configuration de son PC : n'est plus bloquante (voie web) ; utile seulement pour savoir sur quoi il jouera aux versions d'essai.
 - Accès réseau pour vérifier les chiffres à la source (T-020) : non décidé.
