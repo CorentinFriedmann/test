@@ -18,7 +18,7 @@
 
 ## Questions encore ouvertes pour le propriétaire
 
-- **Porte P2 (2026-11-25)** : prototype jouable publié à https://claude.ai/artifact/R7U9ExVcv6TRw3B2fzzBDE (même lien que le premier prototype). P1 : « fluide » (2026-11-26). En attente : réponses aux 8 questions (`production/RAPPORT_P2.md`). P2 n'est pas passée tant qu'elles ne sont pas reçues et évaluées.
+- **Porte P2 (2026-11-25)** : prototype jouable publié à https://claude.ai/artifact/R7U9ExVcv6TRw3B2fzzBDE (même lien que le premier prototype). P1 : « fluide » (2026-11-26). Version courte reçue le 2026-11-26 (`docs/qa/REPONSES_P2.md`) : peur « pas du tout », partie arrêtée avant la fin, **jouée sans le son**, envie d'en voir plus « oui ». Évaluation de la Boss : voir `production/validations/PORTE_P2.md`.
 
 - Configuration de son PC : n'est plus bloquante (voie web) ; utile seulement pour savoir sur quoi il jouera aux versions d'essai.
 - Accès réseau pour vérifier les chiffres à la source (T-020) : non décidé.
