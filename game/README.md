@@ -65,3 +65,9 @@ npm run sync-data  # recopie docs/design/data/*.csv dans data/ (source de vérit
 - `tests/unit/sim-purity.test.js` : échoue, avec `fichier:ligne`, si `src/sim/` utilise `Math.random`, `Date.now`, `new Date`, `performance.now`, `setTimeout`, `setInterval`, `requestAnimationFrame`, `document`, `window`, `navigator` ou un import de `three`.
 - `tests/unit/audio-engine.test.js` : `src/audio/engine.js` avec un contexte audio factice (vol de voix à 28 voix, `priorityOf`, voix critique jamais refusée). Aucune modification de `engine.js`.
 - Seuil de poids unique du fichier livré : 1,5 Mio (`tests/e2e/p2.cjs`, `render.cjs`, `docs/tech/BUDGETS.md` §6, `PERF_P2.md`).
+
+## T-041 : chronométrage dans le cloud
+
+- `npm run p2:timing` : (1) coût d'un `sim.step()` sous Node, 5 automates x 20 parties à graine (101-120, Laisse active), échauffement écarté, moyenne / p50 / p95 / p99 / max, `createSim` à part (`tests/p2/timing.mjs`, argument `verify` pour les graines 201-220) ; (2) construit `dist/` puis mesure 5 chargements à froid (un navigateur neuf par essai) au niveau haut dans Chromium headless (`tests/p2/timing-load.cjs [essais] [q=low|medium|high]`). Chiffre à retenir : la 2e image ; « scène prête » est une borne supérieure ; « première peinture » est celle de la page, pas du jeu. `createSim` est mesuré à chaud sous Node. Niveaux bas et moyen : `node tests/p2/timing-load.cjs 5 q=low` (ou `q=medium`), pas `npm run p2:timing`.
+- **Hors `npm run all`** : les temps varient d'un lancement à l'autre et ne doivent pas faire échouer la CI. Le rendu logiciel (SwiftShader) n'est qu'indicatif pour un vrai GPU. Aucune modification de `src/`.
+- Résultats et limites : `docs/tech/BUDGETS.md` (§2.2, §2.4) et `docs/tech/PERF_P2.md` (§3).

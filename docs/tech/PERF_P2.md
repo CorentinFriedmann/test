@@ -42,13 +42,13 @@ Dans le jeu normal (regard vers le sable) le compte tombe à 5-11 appels (élimi
 | ≤ 300 appels de dessin | 37 (pire vue mesurée) | tenu |
 | ≤ 1 M triangles visibles | 62 000 | tenu |
 | ≤ 30 lumières dynamiques (cible réelle < 4 avec ombres) | 5 : lune, ambiante, hémisphérique, faisceau, lampe ; **0 ombre** | tenu (aucune lumière n'est retirée en jeu : intensité 0 plutôt que `visible = false`, pour éviter la recompilation d'un shader) |
-| JS (logique + préparation du rendu) ≤ 5 ms | dessin + HUD : 0,8 ms en moyenne, 1,2 ms au p95 ; la simulation à pas fixe n'est pas chronométrée à part | tenu pour le rendu ; simulation à mesurer par le propriétaire |
+| JS (logique + préparation du rendu) ≤ 5 ms | dessin + HUD : 0,8 ms en moyenne, 1,2 ms au p95 ; simulation à pas fixe **mesurée le 2026-11-26** (`npm run p2:timing`, Node v22.23.5, 4 coeurs Xeon 2,1 GHz, 100 parties à graine, Laisse active) : moyenne 0,0009 ms, p95 0,0020 ms, p99 0,0044 ms, max variable d'un lancement à l'autre : 2,65 ms (4 pas sur 844 443 > 1 ms) à ma mesure, 7,13 ms (6 pas > 1 ms) à la relance du directeur technique ; pointes isolées ; sans audio ni dessin | tenu (budget simulation ≤ 1 ms par pas) ; à confirmer sur le PC du joueur |
 | GPU ≤ 11 ms (PC 1080p) | **non mesurable ici** | **inconnu** |
 | GPU ≤ 14 ms (Steam Deck, 800p) | **non mesurable ici** | **inconnu** |
 | Mémoire GPU ≤ 1 Go | non mesurée ; textures minuscules (sable 256², hauteurs 320² en 8 bits, lueur 128²), tampons 960x540 à 1920x1080 | estimée très inférieure, à confirmer |
 | JS heap ≤ 500 Mo | 11 à 13 Mo | tenu |
 | Poids du jeu web ≤ 100 Mo | `dist/estran-p2.html` : 655 Kio (limite unique **1,5 Mio** = 1 572 864 octets, testée par `tests/e2e/p2.cjs` et `render.cjs` ; voir `BUDGETS.md` §6) | tenu |
-| Chargement ≤ 10 s, démarrage à froid ≤ 3 s | génération du terrain et de la texture des hauteurs au démarrage non chronométrée à part ; la page est prête avant la première mesure | non mesuré finement |
+| Chargement ≤ 10 s, démarrage à froid ≤ 3 s | **mesuré le 2026-11-26** (`npm run p2:timing`, 5 essais à froid, `file://`, niveau haut) : **2e image du jeu ≈ 1,2 s** (chiffre à retenir) ; scène prête **au plus ≈ 1,1 s** (borne supérieure : relevée après une attente par `requestAnimationFrame`) ; la première peinture (≈ 0,75 s) est la première peinture quelconque de la page, pas la première image du jeu ; niveau bas ≈ 0,7 s, moyen ≈ 0,9 s (lancés par `node tests/p2/timing-load.cjs 5 q=low|medium`, pas par `npm run p2:timing`). Terrain de la simulation seul : 20 ms, mesuré à chaud sous Node (le démarrage réel à froid peut être plus long, compris dans le total navigateur). Terrain + texture des hauteurs non séparables dans le navigateur sans toucher à `src/` : total seulement. Machine : 4 coeurs Xeon 2,1 GHz, Chromium 157 headless, rendu logiciel SwiftShader (**indicatif**, pas un vrai GPU) | tenu dans le cloud ; à confirmer sur un vrai PC |
 
 ## 4. Où est le risque sur un vrai GPU (estimations, non mesurées)
 

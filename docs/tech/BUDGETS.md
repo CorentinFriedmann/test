@@ -27,7 +27,7 @@ Seule donnée venant d'un vrai PC : le propriétaire a joué au prototype P2 le 
 
 | Cible | Résolution | Cadence | Temps de frame | Répartition indicative | Statut |
 |---|---|---|---|---|---|
-| **PC milieu de gamme** (classe GTX 1660 / RX 580, 4 coeurs) | 1080p | 60 i/s | 16,6 ms | JS (simulation, préparation du rendu, HUD, audio) ≤ 5 ms ; GPU ≤ 11 ms | JS : **mesuré (cloud) 0,8 ms de moyenne, 1,2 ms au p95**, hors simulation et audio ; GPU : **inconnu** ; ressenti : « fluide » (non chiffré) |
+| **PC milieu de gamme** (classe GTX 1660 / RX 580, 4 coeurs) | 1080p | 60 i/s | 16,6 ms | JS (simulation, préparation du rendu, HUD, audio) ≤ 5 ms ; GPU ≤ 11 ms | JS : **mesuré (cloud) 0,8 ms de moyenne, 1,2 ms au p95**, hors audio ; simulation par pas mesurée à part (§2.5, ≈ 0,001 ms) ; GPU : **inconnu** ; ressenti : « fluide » (non chiffré) |
 | **Steam Deck** (APU, 800p) | 1280x800 | 40 minimum, 60 visé | 25 ms (16,6 ms visé) | GPU ≤ 14 ms ; pas de résolution dynamique sous 0,6 | **Inconnu**, jamais testé |
 | **Portable sans GPU dédié** | 1080p | 30 | 33 ms | niveau `low` | **Inconnu** |
 
@@ -56,8 +56,8 @@ Critère de décision sur un rapport F2 réel : **95e centile > 20 ms au niveau 
 |---|---|---|---|
 | Fichier unique navigateur | ≤ 100 Mo (ADR) ; **limite testée 1,5 Mio** (`p2.cjs`, `render.cjs`) | `dist/estran-p2.html` ≈ **655 Kio** (three.js 0,5 Mio compris) | tenu, mesuré |
 | Version Steam (Electron) | ≤ 500 Mo (ADR) | non construite ; Electron seul pèse plus de 100 Mo | objectif |
-| Chargement avant de pouvoir jouer | ≤ 10 s | génération du terrain et de la texture de hauteurs non chronométrée à part | **non mesuré finement** |
-| Démarrage à froid du fichier unique | ≤ 3 s en local | idem | non mesuré finement |
+| Chargement avant de pouvoir jouer | ≤ 10 s | **≈ 1,2 s jusqu'à la 2e image du jeu** (chiffre à retenir, niveau haut) ; scène prête **au plus ≈ 1,1 s** (borne supérieure, 1,05 à 1,13 s : mesurée après une attente par `requestAnimationFrame`) ; ≈ 0,7 s au niveau bas, ≈ 0,9 s au moyen (5 essais à froid chacun). Terrain de la simulation (`createSim`) : **20 ms** en moyenne (max 25 ms), mesuré à chaud sous Node après échauffement (le démarrage réel à froid peut être plus long, mais il est compris dans le total navigateur). Niveaux bas et moyen : `node tests/p2/timing-load.cjs 5 q=low|medium`, pas `npm run p2:timing` (niveau haut seulement). Génération de la texture des hauteurs non isolable dans le navigateur sans modifier `src/` : comprise dans le total. Rendu logiciel : **indicatif seulement**. Mesure du 2026-11-26, `npm run p2:timing` (`game/`), cloud : 4 coeurs Intel Xeon 2,1 GHz, Node v22.23.5, Chromium 157 headless (SwiftShader) | tenu dans le cloud (≈ 8 fois sous l'objectif) ; **à confirmer sur un vrai PC** |
+| Démarrage à froid du fichier unique | ≤ 3 s en local | 2e image ≈ 1,2 s (niveau haut) ; la « première peinture » (≈ 0,75 s) est la première peinture quelconque de la page, pas la première image du jeu ; scène prête au plus ≈ 1,1 s ; navigateur neuf à chaque essai, fichier local (`file://`). Même machine et limites que la ligne précédente | tenu dans le cloud ; **à confirmer sur un vrai PC** |
 | Requêtes réseau à l'exécution | 0 | 0 (le test échoue sur toute requête autre que le fichier) | tenu, vérifié |
 
 ### 2.5 Simulation et audio
@@ -65,7 +65,7 @@ Critère de décision sur un rapport F2 réel : **95e centile > 20 ms au niveau 
 | Budget | Objectif | Statut |
 |---|---|---|
 | Pas de simulation | 30 Hz fixe, indépendant de la cadence | tenu, testé (déterminisme octet pour octet) |
-| Coût CPU de la simulation par pas | à définir une fois mesuré : **proposition ≤ 1 ms par pas** (30 pas par seconde : 3 % d'un coeur) | **non chronométré à part** ; à mesurer par F2 |
+| Coût CPU de la simulation par pas | à définir une fois mesuré : **proposition ≤ 1 ms par pas** (30 pas par seconde : 3 % d'un coeur) | **mesuré** : moyenne **0,0009 ms**, p95 0,0020 ms, p99 0,0044 ms, max **variable d'un lancement à l'autre** : 2,65 ms (4 pas sur 844 443 > 1 ms) à ma mesure, 7,13 ms (6 pas > 1 ms) à la relance du directeur technique ; pointes isolées, sous 25 % de la période de 33,3 ms, soit 0,1 % du budget en moyenne ; 100 parties (5 automates x 20 graines 101-120), Laisse active dans 82 % des pas, échauffement écarté. Mesure du 2026-11-26, `npm run p2:timing` (`game/`), cloud : 4 coeurs Intel Xeon 2,1 GHz, Node v22.23.5, Chromium 157 headless (SwiftShader). Limites : Node seul, sans audio ni dessin (les écouteurs du navigateur ne sont pas inclus), pointes à relier au ramasse-miettes ou à l'ordonnanceur, non vérifié ; **budget ≤ 1 ms tenu** (pas de 33,3 ms à 30 Hz : 0,003 % en moyenne) ; matériel du joueur à confirmer |
 | Coût CPU audio | proposition ≤ 2 ms par frame | **non mesuré sur machine réelle** (estimation par construction : faible) ; script `tests/p2/audio-cpu.cjs` disponible |
 | Niveau sonore au premier contact | environ -20 dBFS efficace, plafond à -1,4 dBFS | mesuré hors ligne ; **jamais écouté** par un humain, LUFS non mesuré |
 
@@ -123,8 +123,8 @@ Mesure par le joueur : `?perf=1` ou F2, jouer 60 s **avec le son actif**, bouton
 ## 8. Mesures encore à obtenir, par ordre de valeur
 
 1. **Rapport F2 d'un vrai PC**, son actif, 60 s, avec le GPU, le navigateur et la fréquence d'écran (déjà demandé au propriétaire ; le « c'est fluide » du 2026-11-26 n'en tient pas lieu).
-2. **Temps de simulation par pas** chronométré séparément (peut se faire dans le cloud, sans GPU).
-3. **Temps de chargement** (terrain, texture de hauteurs) chronométré dans le cloud.
+2. ~~Temps de simulation par pas chronométré séparément~~ : **fait le 2026-11-26 (T-041)**, voir §2.5 ; reste à le confirmer sur le PC du joueur.
+3. ~~Temps de chargement chronométré dans le cloud~~ : **fait le 2026-11-26 (T-041)**, voir §2.4 (total seulement : terrain et texture des hauteurs non séparés dans le navigateur) ; reste à le confirmer sur un vrai PC.
 4. **Steam Deck** : seulement par un humain ou un service tiers ; hors budget actuel.
 
 ## 9. Archive : budgets Unreal et consoles

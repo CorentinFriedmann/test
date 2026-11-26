@@ -15,6 +15,7 @@
     "test:p2": "node scripts/gen-data.mjs && node --test \"tests/p2/*.test.js\"",
     "p2:report": "node tests/p2/run.mjs",
     "p2:audio-cpu": "node tests/p2/audio-cpu.cjs",
+    "p2:timing": "node scripts/gen-data.mjs && node tests/p2/timing.mjs && node scripts/build.mjs && node tests/p2/timing-load.cjs 5",
     "test": "npm run test:unit && npm run test:p2 && npm run test:e2e",
     "all": "npm ci && npm run lint && npm run build && npm test",
     "captures": "node scripts/build.mjs && node scripts/captures.mjs",

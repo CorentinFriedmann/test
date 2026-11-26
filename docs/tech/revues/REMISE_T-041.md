@@ -29,3 +29,6 @@ Génération du terrain et texture des hauteurs non séparables dans le navigate
 
 ## Reste à mesurer sur un vrai PC
 Chargement et première image sur vrai GPU (Steam Deck, portable sans GPU dédié), coût du pas avec l'audio (F2), GPU et mémoire GPU, coût CPU de l'audio sur machine réelle.
+
+## Remise complémentaire (après la revue TD)
+Les 3 corrections de `REVUE_T-041.md` sont faites : max du pas présenté comme variable (2,65 ms à la mesure, 7,13 ms à la relance du TD) dans BUDGETS §2.5 et PERF_P2 §3 ; chargement à retenir = 2e image (≈ 1,2 s, niveau haut), « scène prête » = « au plus ≈ 1,1 s » (borne supérieure), « première peinture » = première peinture quelconque de la page (BUDGETS §2.4, PERF_P2 §3, en-tête du tableau de `timing-load.cjs`) ; `createSim` mesuré à chaud sous Node, niveaux bas et moyen par `node tests/p2/timing-load.cjs 5 q=low|medium` (BUDGETS, PERF_P2, `game/README.md`). `npm run lint` vert, `game/src/` non touché.
