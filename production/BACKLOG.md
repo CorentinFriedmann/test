@@ -41,7 +41,7 @@
 | T-031 | Audio procédural : bruit dans l'eau et ambiance | audio-director | T-029 | VALIDÉ AVEC RÉSERVES |
 | T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | VALIDÉ AVEC RÉSERVES |
 | T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024, T-037, T-038 | VALIDÉ AVEC RÉSERVES |
-| T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | À FAIRE |
+| T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | EN COURS |
 | T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
 | T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | VALIDÉ AVEC RÉSERVES |
 | T-037 | Rééquilibrage de la peur avant P2 (BUG-002, BUG-003) | game-designer | T-032 | VALIDÉ AVEC RÉSERVES |
@@ -424,7 +424,7 @@
 - **Anomalie MIT à corriger ici (bloquante pour la publication, constatée par la Boss le 2026-11-25)** : `game/scripts/build.mjs` ligne 16 utilise `legalComments: 'none'` ; `dist/estran.html` ne contient ni « three.js authors » ni « Permission is hereby granted ». Appliquer `docs/legal/LICENCES.md` §5 (`legalComments: 'inline'` ou `banner` avec le texte de `game/node_modules/three/LICENSE`, plus écran Crédits et licences), et ajouter le test Playwright qui vérifie ces deux chaînes dans la version assemblée. Ajouter aussi Electron et Chromium au registre si l'empaquetage est abordé.
 
 ### T-034 : Mise à jour des documents techniques pour la voie web
-- **Assigné à** : `technical-director` · **Dépend de** : T-027 · **Jalon** : Essai · peut suivre P2 (ne la bloque pas) · **Statut** : À FAIRE
+- **Assigné à** : `technical-director` · **Dépend de** : T-027 · **Jalon** : Essai · peut suivre P2 (ne la bloque pas) · **Statut** : EN COURS
 - **Livrables** : `docs/tech/ARCHITECTURE.md`, `docs/tech/BUDGETS.md`, `docs/tech/NORMES_CODE.md` (anciennes versions archivées sous `docs/tech/archive/`)
 - **Critères d'acceptation** :
   - [ ] Les trois documents réécrits selon `docs/tech/ADR_PIVOT_WEB.md` §7.1 : modules, pas fixe, sauvegarde, abstraction plateforme (navigateur / Electron) ; budgets web de l'ADR §4 sans Series S ni PS5, avec mesure sur GPU réel ; normes de code web (TypeScript strict si retenu, ESLint et Prettier figés, pas d'allocation dans la boucle, libération des ressources GPU, tests)
