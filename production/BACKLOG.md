@@ -42,11 +42,13 @@
 | T-032 | Tests automatisés et rapport de la porte P2 | qa-lead | T-030, T-031 | VALIDÉ AVEC RÉSERVES |
 | T-033 | Version jouable P2 en un seul fichier HTML, prête à publier | build-engineer | T-032, T-024, T-037, T-038 | VALIDÉ AVEC RÉSERVES |
 | T-034 | Mise à jour des documents techniques pour la voie web | technical-director | T-027 | VALIDÉ AVEC RÉSERVES |
-| T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | À FAIRE |
+| T-035 | Mise à jour des fiches d'agents pour la voie web | technical-director | T-034 | VALIDÉ AVEC RÉSERVES |
 | T-036 | Seuil de la porte P2 adapté (GDD §13) | game-designer | T-006 | VALIDÉ AVEC RÉSERVES |
 | T-037 | Rééquilibrage de la peur avant P2 (BUG-002, BUG-003) | game-designer | T-032 | VALIDÉ AVEC RÉSERVES |
 | T-038 | Correction audio : voix prioritaires, `npm run all` vert (BUG-001) | audio-director | T-037 | VALIDÉ AVEC RÉSERVES |
 | T-039 | Alignement de la règle du faisceau avant l'évaluation de P2 (réserve T-033) | game-designer | T-037, T-033 | VALIDÉ |
+| T-040 | Garde-fous du code : interdits de la simulation, test déterministe de l'audio, ESLint figé, seuil de poids unique | build-engineer | T-034, T-038 | EN COURS |
+| T-041 | Chronométrage dans le cloud de la simulation par pas et du chargement | qa-lead | T-040 | À FAIRE |
 
 ---
 
@@ -435,7 +437,7 @@
 - **Contexte / références** : ADR §7.1. Non bloquante pour P2 : T-029 à T-033 suivent l'ADR directement.
 
 ### T-035 : Mise à jour des fiches d'agents pour la voie web
-- **Assigné à** : `technical-director` · **Dépend de** : T-034 · **Jalon** : Essai · peut suivre P2 · **Statut** : À FAIRE
+- **Assigné à** : `technical-director` · **Dépend de** : T-034 · **Jalon** : Essai · peut suivre P2 · **Statut** : VALIDÉ AVEC RÉSERVES (`production/validations/T-035.md`, 2026-11-26)
 - **Livrables** : fiches modifiées dans `.claude/agents/`, `studio/equipe.json` si les titres changent
 - **Critères d'acceptation** :
   - [ ] Les fiches de la liste de l'ADR §7.2 (`technical-director`, `graphics-programmer`, `gameplay-programmer`, `technical-artist`, `environment-artist`, `level-designer`, `character-artist`, `animator`, `build-engineer`, `online-engineer`, `platform-engineer`, `qa-lead`, et relecture légère de `art-director`, `game-designer`, `narrative-designer`, `localization-manager`, `business-affairs`, `boss`) adaptées à la pile web et au rendu stylisé
@@ -488,3 +490,35 @@
   - [ ] Aucune valeur de CSV ni ligne de code modifiée ; docs/qa/QUESTIONNAIRE_P2.md n'est pas modifié (sa ligne 85 sert de référence)
   - [ ] La remise liste chaque ligne changée, avant et après
 - **Contexte / références** : Réserve de la Boss, production/validations/T-033.md point 3 : « À aligner avant d'évaluer les réponses, sinon on juge mal une réponse « ça la ralentit » ». Le propriétaire a joué le prototype (P1 « fluide », 2026-11-26) ; ses réponses sont attendues. Mode économe : revue allégée.
+
+### T-040 : Garde-fous du code : interdits de la simulation, test déterministe de l'audio, ESLint figé, seuil de poids unique
+- **Assigné à** : `build-engineer` · **Revue de pôle** : technical-director (code de game/) · **Dépend de** : T-034, T-038 · **Jalon** : Essai · indépendant du verdict de P2 · **Statut** : EN COURS
+- **Livrables** :
+  - `game/tests/unit/sim-purity.test.js`
+  - `game/tests/unit/audio-engine.test.js`
+  - `game/eslint.config.js`
+  - `game/.editorconfig`
+  - `game/package.json`
+  - `docs/tech/NORMES_CODE.md`
+  - `docs/tech/PERF_P2.md`
+- **Critères d'acceptation** :
+  - [ ] Test node --test qui échoue si game/src/sim/ contient Math.random, Date.now, performance.now, new Date, setTimeout, setInterval, requestAnimationFrame, document, window ou un import de three (liste dans docs/tech/NORMES_CODE.md) ; vert sur le code actuel
+  - [ ] Test unitaire déterministe de game/src/audio/engine.js avec un contexte audio factice (sans navigateur) : vol de voix quand MAX_VOICES est atteint, priorityOf, une voix critique (saisie, grondement, battement, remous proches) n'est jamais refusée et cède la plus ancienne voix de faible priorité ; solde la réserve de T-038
+  - [ ] ESLint installé en devDependency à une version exacte (pas de ^ ni ~), configuration minimale centrée sur les vraies erreurs (variables non définies, imports cassés, code inatteignable) ; script npm run lint ajouté à npm run all ; aucune règle de style pure ; .editorconfig ajouté ; Prettier non installé (décision T-034)
+  - [ ] Un seul seuil de poids du fichier livré, le même dans tests/e2e/p2.cjs et dans docs/tech/BUDGETS.md et PERF_P2.md ; PERF_P2.md ne cite plus l'ancien nom dist/estran.html
+  - [ ] npm run all vert (exécuté réellement, sortie jointe) ; le journal de parité et les résultats de npm run test:p2 sont identiques à avant (aucun changement de comportement du jeu) ; si ESLint signale une vraie erreur dans le code, correction minimale justifiée dans la remise, sinon aucune modification de game/src/
+  - [ ] Revue du technical-director avant la Boss
+- **Contexte / références** : Propositions 1, 2, 3, 5 et 6 du TD (docs/tech/revues/REMISE_T-034.md), retenues par la Boss dans production/validations/T-034.md. Mode économe. Ne pas lancer playwright install (Playwright est préinstallé).
+
+### T-041 : Chronométrage dans le cloud de la simulation par pas et du chargement
+- **Assigné à** : `qa-lead` · **Revue de pôle** : technical-director (si du code de game/ est modifié) · **Dépend de** : T-040 · **Jalon** : Essai · indépendant du verdict de P2 · **Statut** : À FAIRE
+- **Livrables** :
+  - `game/tests/p2/timing.mjs (ou équivalent)`
+  - `docs/tech/BUDGETS.md`
+  - `docs/tech/PERF_P2.md`
+- **Critères d'acceptation** :
+  - [ ] Mesure sans navigateur du coût d'un pas de simulation (moyenne, p95, max sur au moins 20 parties automatiques à graine, avec la Laisse active) et comparaison au budget proposé de 1 ms par pas
+  - [ ] Mesure en navigateur headless du temps de chargement jusqu'à la première image (génération du terrain et de la texture des hauteurs comprises), sur 5 essais, avec la mention que le rendu logiciel n'est qu'indicatif
+  - [ ] Les lignes « non mesuré » correspondantes de docs/tech/BUDGETS.md et PERF_P2.md sont remplacées par les mesures, avec la date, la commande et les limites
+  - [ ] Script reproductible lancé par une commande npm documentée ; npm run all reste vert ; aucun changement du comportement du jeu
+- **Contexte / références** : Proposition 7 du TD (REMISE_T-034.md), retenue par la Boss (validations/T-034.md). Mode économe.

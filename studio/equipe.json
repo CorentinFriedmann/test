@@ -95,19 +95,19 @@
     "gameplay-programmer": {
       "pole": "programmation",
       "emoji": "🕹️",
-      "titre": "Programmeur gameplay C++",
+      "titre": "Programmeur gameplay JavaScript",
       "modeleNormal": "sonnet"
     },
     "graphics-programmer": {
       "pole": "programmation",
       "emoji": "✨",
-      "titre": "Ingénieur rendu photoréaliste",
+      "titre": "Ingénieur rendu web stylisé",
       "modeleNormal": "opus"
     },
     "platform-engineer": {
       "pole": "programmation",
       "emoji": "🎮",
-      "titre": "Ingénieur plateformes · PS5 / Xbox / PC",
+      "titre": "Ingénieur plateformes · PC / Steam / Electron",
       "modeleNormal": "sonnet"
     },
     "online-engineer": {
@@ -143,7 +143,7 @@
     "character-artist": {
       "pole": "art",
       "emoji": "🧑‍🎤",
-      "titre": "Artiste personnages · MetaHuman",
+      "titre": "Artiste personnages · low-poly stylisé",
       "modeleNormal": "sonnet"
     },
     "technical-artist": {
