@@ -48,7 +48,7 @@
 | T-038 | Correction audio : voix prioritaires, `npm run all` vert (BUG-001) | audio-director | T-037 | VALIDÉ AVEC RÉSERVES |
 | T-039 | Alignement de la règle du faisceau avant l'évaluation de P2 (réserve T-033) | game-designer | T-037, T-033 | VALIDÉ |
 | T-040 | Garde-fous du code : interdits de la simulation, test déterministe de l'audio, ESLint figé, seuil de poids unique | build-engineer | T-034, T-038 | VALIDÉ AVEC RÉSERVES |
-| T-041 | Chronométrage dans le cloud de la simulation par pas et du chargement | qa-lead | T-040 | EN COURS |
+| T-041 | Chronométrage dans le cloud de la simulation par pas et du chargement | qa-lead | T-040 | EN REVUE BOSS |
 
 ---
 
@@ -511,7 +511,7 @@
 - **Contexte / références** : Propositions 1, 2, 3, 5 et 6 du TD (docs/tech/revues/REMISE_T-034.md), retenues par la Boss dans production/validations/T-034.md. Mode économe. Ne pas lancer playwright install (Playwright est préinstallé).
 
 ### T-041 : Chronométrage dans le cloud de la simulation par pas et du chargement
-- **Assigné à** : `qa-lead` · **Revue de pôle** : technical-director (si du code de game/ est modifié) · **Dépend de** : T-040 · **Jalon** : Essai · indépendant du verdict de P2 · **Statut** : EN COURS
+- **Assigné à** : `qa-lead` · **Revue de pôle** : technical-director (si du code de game/ est modifié) · **Dépend de** : T-040 · **Jalon** : Essai · indépendant du verdict de P2 · **Statut** : EN REVUE BOSS
 - **Livrables** :
   - `game/tests/p2/timing.mjs (ou équivalent)`
   - `docs/tech/BUDGETS.md`
