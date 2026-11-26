@@ -20,8 +20,8 @@ Légende : **[AUTO]** vérifié par un test ou un outil qui existe aujourd'hui ;
 |---|---|---|
 | Langage | **JavaScript ES2022, modules ES** (`"type": "module"`), comme le code existant. Les fichiers de test e2e restent en `.cjs` (Playwright préinstallé, CommonJS) | 5 100 lignes testées ; aucune compilation ajoutée |
 | Typage | **JSDoc + `// @ts-check`**, introduit fichier par fichier (`sim/`, `data/` d'abord) ; **TypeScript non adopté pour l'instant** (réévaluation : `ARCHITECTURE.md` §3) | Garanties de types sans réécriture ni risque sur les tests de parité |
-| Lint | **ESLint** (config « flat » minimale : `eslint:recommended`, `no-unused-vars`, `no-undef`, `eqeqeq`, `prefer-const`, plus les interdits de `sim/` du §5), **adopté mais pas encore installé** : [PROPOSÉ], version à figer exacte à l'installation | Rattrape de vraies erreurs (variable non définie, comparaison lâche) que personne ne verrait à l'écran |
-| Formatage | **Prettier non adopté.** À la place : **`.editorconfig`** (UTF-8, LF, 2 espaces, fin de ligne finale) [PROPOSÉ] et la règle d'imitation du §2 | Prettier reformaterait des milliers de lignes (le code compte des lignes denses de plus de 120 caractères), brouillant l'historique et les revues, sans gain de fiabilité. Choix à rouvrir si plusieurs agents produisent des styles divergents |
+| Lint | **ESLint 10.14.0** (version exacte, `--save-exact`), config « flat » `game/eslint.config.js`, `npm run lint` (inclus dans `npm run all`) [AUTO, T-040]. Règles : uniquement celles qui attrapent de vraies erreurs (`no-undef`, `no-unreachable`, `no-dupe-keys`, `no-redeclare`, `no-const-assign`, `no-dupe-else-if`, `no-unsafe-negation`, `use-isnan`, `valid-typeof`...) et une règle locale `local/imports-resolve` (import relatif vers un fichier existant, noms importés réellement exportés ; sans plugin). **Aucune règle de style.** Globals déclarés à la main par dossier : navigateur dans `src/`, aucun (ES seul) dans `src/sim/` et `src/data/`, Node dans `scripts/` et `tests/`. `no-unused-vars`, `eqeqeq`, `prefer-const` ne sont **pas** activés (non nécessaires pour rattraper de vraies erreurs ; à réévaluer) | Rattrape variable non définie, import cassé, code inatteignable, clé dupliquée, que personne ne verrait à l'écran |
+| Formatage | **Prettier non adopté.** À la place : **`game/.editorconfig`** (UTF-8, LF, 2 espaces, fin de ligne finale) [AUTO, T-040] et la règle d'imitation du §2 | Prettier reformaterait des milliers de lignes (le code compte des lignes denses de plus de 120 caractères), brouillant l'historique et les revues, sans gain de fiabilité. Choix à rouvrir si plusieurs agents produisent des styles divergents |
 | Dépendances | Exactes (sans `^`), `package-lock.json` versionné, `npm ci` | reproductibilité |
 
 Tout outil à installer est une **tâche future** (jamais installé par une tâche de documentation). Tant qu'ESLint n'est pas installé, les règles ci-dessous sont en [REVUE].
@@ -54,9 +54,9 @@ Tout outil à installer est une **tâche future** (jamais installé par une tâc
 
 Respecter le tableau de `ARCHITECTURE.md` §4.1. En particulier : `sim/` et `data/` ne dépendent d'aucun autre module ; `render/`, `audio/` et `ui/` **lisent** la simulation et ne l'écrivent jamais ; `main.js` est le seul à tout brancher. Pas d'import circulaire. Pas d'état global de module modifiable (singleton caché) : l'état vit dans les objets créés par les fabriques.
 
-## 5. Interdits dans la simulation (`src/sim/`) [REVUE ; AUTO proposé]
+## 5. Interdits dans la simulation (`src/sim/`) [AUTO : `tests/unit/sim-purity.test.js`]
 
-Pour garantir déterminisme, rejeu et tests sans navigateur, `src/sim/` n'utilise **jamais** : `three`, `document`, `window`, `navigator`, `Date.now`, `performance.now`, `requestAnimationFrame`, `setTimeout`/`setInterval`, `Math.random`. Aléatoire : `rng.js` (mulberry32) avec graine ; un sous-système qui a besoin d'un flux indépendant dérive sa propre graine (`seed ^ hash('nom')`) et ne l'avance que par pas de simulation. Le temps est le compteur de pas (`tick`, `t`), jamais l'horloge murale. Pas d'itération sur des objets dont l'ordre dépend de l'engine (préférer des tableaux). Pas d'état caché dans des variables de fermeture quand il devra être sauvegardé : préférer un objet d'état explicite (`ARCHITECTURE.md` §7).
+Pour garantir déterminisme, rejeu et tests sans navigateur, `src/sim/` n'utilise **jamais** : `three` (tout import), `document`, `window`, `navigator`, `Date.now`, `new Date`, `performance.now`, `requestAnimationFrame`, `setTimeout`, `setInterval`, `Math.random` (liste vérifiée par `tests/unit/sim-purity.test.js`, T-040 : lecture des fichiers de `src/sim/`, message `fichier:ligne`). Limites du test : les commentaires sont ignorés, pas les chaînes de caractères ; un accès indirect (`globalThis['Math']`, alias) n'est pas détecté ; il attrape les accidents, pas la mauvaise foi. Aléatoire : `rng.js` (mulberry32) avec graine ; un sous-système qui a besoin d'un flux indépendant dérive sa propre graine (`seed ^ hash('nom')`) et ne l'avance que par pas de simulation. Le temps est le compteur de pas (`tick`, `t`), jamais l'horloge murale. Pas d'itération sur des objets dont l'ordre dépend de l'engine (préférer des tableaux). Pas d'état caché dans des variables de fermeture quand il devra être sauvegardé : préférer un objet d'état explicite (`ARCHITECTURE.md` §7).
 
 ## 6. Règles de la boucle de rendu et de la performance
 
@@ -118,12 +118,12 @@ Messages de commit et de remise en français ; identifiants en anglais.
 
 | Proposition | Effet | Priorité |
 |---|---|---|
-| Installer **ESLint** (version exacte) avec la configuration du §1 et un script `npm run lint` dans `npm run all` | Rattrape variables non définies, imports inutilisés, `==` | moyenne |
-| Ajouter `.editorconfig` | Uniformise l'encodage, les fins de ligne et l'indentation | basse |
+| Installer **ESLint** (version exacte) avec la configuration du §1 et un script `npm run lint` dans `npm run all` | Rattrape variables non définies, imports inutilisés, `==` | **fait (T-040)** |
+| Ajouter `.editorconfig` | Uniformise l'encodage, les fins de ligne et l'indentation | **fait (T-040)** |
 | Installer **TypeScript** en devDependency pour `tsc --noEmit --checkJs`, puis `// @ts-check` sur `sim/` et `data/` | Typage sans compilation | moyenne |
-| **Test unitaire des interdits de `sim/`** (recherche de `Math.random`, `Date.now`, `document`... dans `src/sim/`) | Vérification automatique du §5 | haute (coût très faible) |
-| **Test unitaire déterministe de `engine.js`** (contexte audio factice : vol de voix, `priorityOf`) | Solde la réserve de T-038 | haute |
-| Budget de poids unique en CI (1,5 Mo ou 3 Mo) | Aligne `p2.cjs` et `PERF_P2.md` | basse |
+| **Test unitaire des interdits de `sim/`** (recherche de `Math.random`, `Date.now`, `document`... dans `src/sim/`) | Vérification automatique du §5 | **fait (T-040)** |
+| **Test unitaire déterministe de `engine.js`** (contexte audio factice : vol de voix, `priorityOf`) | Solde la réserve de T-038 | **fait (T-040)** : `tests/unit/audio-engine.test.js` |
+| Budget de poids unique (1,5 Mio) | Aligne `p2.cjs`, `render.cjs`, `BUDGETS.md` et `PERF_P2.md` | **fait (T-040)** |
 
 ## 12. Archive : normes de l'ancienne pile
 

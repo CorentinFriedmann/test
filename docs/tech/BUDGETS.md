@@ -54,7 +54,7 @@ Critère de décision sur un rapport F2 réel : **95e centile > 20 ms au niveau 
 
 | Budget | Objectif | Constaté | Statut |
 |---|---|---|---|
-| Fichier unique navigateur | ≤ 100 Mo (ADR) ; **limite testée 3 Mo** (`p2.cjs`) | `dist/estran-p2.html` ≈ **655 Kio** (three.js 0,5 Mio compris) | tenu, mesuré |
+| Fichier unique navigateur | ≤ 100 Mo (ADR) ; **limite testée 1,5 Mio** (`p2.cjs`, `render.cjs`) | `dist/estran-p2.html` ≈ **655 Kio** (three.js 0,5 Mio compris) | tenu, mesuré |
 | Version Steam (Electron) | ≤ 500 Mo (ADR) | non construite ; Electron seul pèse plus de 100 Mo | objectif |
 | Chargement avant de pouvoir jouer | ≤ 10 s | génération du terrain et de la texture de hauteurs non chronométrée à part | **non mesuré finement** |
 | Démarrage à froid du fichier unique | ≤ 3 s en local | idem | non mesuré finement |
@@ -108,7 +108,7 @@ Mesure par le joueur : `?perf=1` ou F2, jouer 60 s **avec le son actif**, bouton
 
 ## 6. Budget de poids en CI (proposé)
 
-Échec du build si `dist/estran-p2.html` dépasse **1,5 Mo** (seuil de travail fixé par la Coordination en T-030 ; le test actuel tolère 3 Mo). À aligner sur un seul chiffre par une tâche future.
+Échec des tests si `dist/estran-p2.html` dépasse **1,5 Mio (1 572 864 octets)**. **Seuil unique** (T-040), identique dans `tests/e2e/p2.cjs`, `tests/e2e/render.cjs`, `PERF_P2.md` et ce fichier. Justification : le fichier pèse 655 Kio (three.js 0,5 Mio compris), soit 2,3 fois de marge pour le contenu à venir, mais assez bas pour qu'une texture, une police ou un fichier son embarqué par erreur fasse échouer le test ; très en dessous de la limite de l'ADR (100 Mo), qui reste le plafond de principe. Toute hausse se décide ici, puis dans les deux scripts, dans la même tâche.
 
 ## 7. Objectifs de stabilité
 

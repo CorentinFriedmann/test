@@ -47,7 +47,7 @@ Dans le jeu normal (regard vers le sable) le compte tombe à 5-11 appels (élimi
 | GPU ≤ 14 ms (Steam Deck, 800p) | **non mesurable ici** | **inconnu** |
 | Mémoire GPU ≤ 1 Go | non mesurée ; textures minuscules (sable 256², hauteurs 320² en 8 bits, lueur 128²), tampons 960x540 à 1920x1080 | estimée très inférieure, à confirmer |
 | JS heap ≤ 500 Mo | 11 à 13 Mo | tenu |
-| Poids du jeu web ≤ 100 Mo | `dist/estran.html` : 623 Kio (limite fixée par la Coordination : 1,5 Mo, testée) | tenu |
+| Poids du jeu web ≤ 100 Mo | `dist/estran-p2.html` : 655 Kio (limite unique **1,5 Mio** = 1 572 864 octets, testée par `tests/e2e/p2.cjs` et `render.cjs` ; voir `BUDGETS.md` §6) | tenu |
 | Chargement ≤ 10 s, démarrage à froid ≤ 3 s | génération du terrain et de la texture des hauteurs au démarrage non chronométrée à part ; la page est prête avant la première mesure | non mesuré finement |
 
 ## 4. Où est le risque sur un vrai GPU (estimations, non mesurées)

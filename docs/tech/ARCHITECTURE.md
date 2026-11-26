@@ -32,7 +32,7 @@ Légende de l'état : **réel** = existe dans `game/` et est testé ; **prévu**
 | Build | esbuild (MIT) : bundle, minification, IIFE, inliné dans un seul HTML | **0.28.2** |
 | Tests | `node --test` (unitaires, équilibrage) ; Playwright + Chromium (scénarios navigateur) | Node 22.23.5 ; Playwright 1.63.0 préinstallé (pas dans `package.json`) |
 | Gestionnaire | npm 10.9.9, `package-lock.json` | verrouillé |
-| Sortie | `game/dist/estran-p2.html` (≈ 655 Kio, limite testée : 3 Mo) | |
+| Sortie | `game/dist/estran-p2.html` (≈ 655 Kio, limite testée : 1,5 Mio) | |
 
 WebGPU reste exclu tant qu'il n'est pas testable dans le cloud (ADR §1). Les montées de version de three.js sont **volontaires** : une tâche dédiée, les tests de parité et de rendu rejoués, jamais automatiques.
 

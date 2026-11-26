@@ -21,7 +21,7 @@ function watch(page) {
   // ---- 1. The file itself ----
   const html = fs.readFileSync(file, 'utf8');
   const size = fs.statSync(file).size;
-  check('estran-p2.html is at most 3 MB', size <= 3 * 1048576, `${(size / 1024).toFixed(0)} KiB`);
+  check('estran-p2.html is at most 1.5 MiB (single weight limit, docs/tech/BUDGETS.md)', size <= 1.5 * 1048576, `${(size / 1024).toFixed(0)} KiB`);
   check('Licence: "three.js authors" present in estran-p2.html', html.includes('three.js authors'));
   check('Licence: "Permission is hereby granted" present in estran-p2.html', html.includes('Permission is hereby granted'));
   const lic = fs.readFileSync(path.join(root, 'node_modules/three/LICENSE'), 'utf8').trim();

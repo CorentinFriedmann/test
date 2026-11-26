@@ -4,7 +4,8 @@ Jeu web 3D (three.js 0.187.0, esbuild 0.28.2, JavaScript ES2022). Dépôt autono
 
 ```
 npm install        # ou npm ci
-npm run all        # npm ci + build (dist/estran-p2.html) + tests unitaires (node --test) + scénarios Playwright
+npm run all        # npm ci + lint + build (dist/estran-p2.html) + tests unitaires (node --test) + scénarios Playwright
+npm run lint       # ESLint 10.14.0 (T-040) : vraies erreurs seulement (variable non définie, import cassé, code inatteignable...), aucune règle de style
 npm run test:unit  # tests Node (passe a, passe b, rendu, audio T-031), sans navigateur
 npm run test:e2e   # scénarios navigateur : tests/e2e/run.cjs (jeu), render.cjs (rendu, T-030) puis audio.cjs (audio, T-031), après npm run build
 npm run captures   # reconstruit puis met à jour les captures VERSIONNÉES de captures/ (sur demande seulement)
@@ -53,7 +54,14 @@ npm run sync-data  # recopie docs/design/data/*.csv dans data/ (source de vérit
 
 ## T-033 : version P2 en un seul fichier
 
-- `npm run build` écrit `dist/estran-p2.html` (fichier autonome, 3 Mo au plus, aucune requête réseau). `tests/e2e/p2.cjs` (`npm run test:p2file`) le vérifie.
+- `npm run build` écrit `dist/estran-p2.html` (fichier autonome, 1,5 Mio au plus, aucune requête réseau). `tests/e2e/p2.cjs` (`npm run test:p2file`) le vérifie.
 - Écran de départ : touches, volume, bouton « Copier le rapport de performance », formulaire des 8 questions (`src/ui/p2.js`, copie des réponses en texte), « Crédits et licences » (texte MIT de three.js inséré par le build). Les « réponses attendues » ne sont pas dans le jeu.
 - Copie : `navigator.clipboard` avec repli sur une zone de texte sélectionnée ; aucune boîte de dialogue du navigateur ; `localStorage` sous `try/catch`.
 - Détails : `docs/tech/PIPELINE_WEB.md` section 8, `docs/legal/LICENCES.md` section 5, `production/RAPPORT_P2.md`.
+
+## T-040 : garde-fous du code
+
+- `npm run lint` (`eslint.config.js`, ESLint 10.14.0 exact, sans plugin) fait partie de `npm run all`. Normes : `docs/tech/NORMES_CODE.md`. `.editorconfig` ajouté ; Prettier non installé.
+- `tests/unit/sim-purity.test.js` : échoue, avec `fichier:ligne`, si `src/sim/` utilise `Math.random`, `Date.now`, `new Date`, `performance.now`, `setTimeout`, `setInterval`, `requestAnimationFrame`, `document`, `window`, `navigator` ou un import de `three`.
+- `tests/unit/audio-engine.test.js` : `src/audio/engine.js` avec un contexte audio factice (vol de voix à 28 voix, `priorityOf`, voix critique jamais refusée). Aucune modification de `engine.js`.
+- Seuil de poids unique du fichier livré : 1,5 Mio (`tests/e2e/p2.cjs`, `render.cjs`, `docs/tech/BUDGETS.md` §6, `PERF_P2.md`).
