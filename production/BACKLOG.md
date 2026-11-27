@@ -50,7 +50,7 @@
 | T-040 | Garde-fous du code : interdits de la simulation, test déterministe de l'audio, ESLint figé, seuil de poids unique | build-engineer | T-034, T-038 | VALIDÉ AVEC RÉSERVES |
 | T-041 | Chronométrage dans le cloud de la simulation par pas et du chargement | qa-lead | T-040 | VALIDÉ AVEC RÉSERVES |
 | T-042 | Spécification des corrections du prototype avant le nouvel essai P2 (guidage, son, menace visible, partie courte) | game-designer | T-037 | VALIDÉ AVEC RÉSERVES |
-| T-043 | Réalisation des corrections du prototype P2 et nouvelle version jouable | gameplay-programmer | T-042 | EN COURS |
+| T-043 | Réalisation des corrections du prototype P2 et nouvelle version jouable | gameplay-programmer | T-042 | EN REVUE BOSS |
 
 ---
 
@@ -540,7 +540,7 @@
 - **Contexte / références** : Verdict « P2 non concluante » (production/validations/PORTE_P2.md, option 1 choisie par le propriétaire le 2026-11-27). Le principe « le jeu n'explique pas la règle » est abandonné pour ce prototype (DECISIONS.md). La règle de parité (le rendu n'influence pas la simulation) reste ; changer des valeurs CSV est permis, comme en T-037. Mode économe.
 
 ### T-043 : Réalisation des corrections du prototype P2 et nouvelle version jouable
-- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director (code de game/) · **Dépend de** : T-042 · **Jalon** : Essai · P2 (nouvel essai du propriétaire) · **Statut** : EN COURS
+- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director (code de game/) · **Dépend de** : T-042 · **Jalon** : Essai · P2 (nouvel essai du propriétaire) · **Statut** : EN REVUE BOSS
 - **Livrables** :
   - `game/src/ (ui, audio, render, data selon la spécification)`
   - `game/tests/`
