@@ -1,7 +1,7 @@
 param_id,category,value,unit,status,note
 sim_step,global,0.0333,s,FIXE,pas de simulation logique fixe (30 Hz) ; independant du rendu et des fps
 sim_seed,global,2026,int,FIXE,graine du generateur pseudo-aleatoire (mulberry32) ; meme graine = meme partie
-slice_duration,global,480,s,FIXE,duree de la tranche P2 = un cycle de maree (voir maree.csv)
+slice_duration,global,300,s,FIXE,duree de la tranche P2 = un cycle de maree de 5 minutes (voir maree.csv) [T-042 ; 480 avant]
 player_eye_height,joueur,1.70,m,FIXE,valeur du prototype
 player_speed_slow,joueur,1.50,m/s,A_REGLER,marche lente (touche C ou stick incline sous 55 pour cent)
 player_speed_walk,joueur,3.00,m/s,FIXE,valeur du prototype
@@ -17,8 +17,8 @@ noise_debris,bruit,30,m,A_REGLER,impulsion fixe de 1 s quand le joueur heurte un
 debris_count,bruit,4,count,A_REGLER,nombre de debris poses sur l'estran (seaux caisses) ; rayon de collision 0.6 m
 debris_collision_radius,bruit,0.60,m,A_REGLER,rayon de collision du debris
 noise_location_error,bruit,3.0,m,A_REGLER,erreur de position percue par la Laisse (tirage dans un disque)
-threat_spawn_level,menace,-0.40,m,A_REGLER,la Laisse apparait quand la maree montante atteint ce niveau (t = 40 s depuis T-037 ; 57 s avant) [T-037]
-threat_despawn_level,menace,-0.30,m,A_REGLER,la Laisse disparait quand la maree descendante passe sous ce niveau (t = 431 s)
+threat_spawn_level,menace,-0.40,m,A_REGLER,la Laisse apparait quand la maree montante atteint ce niveau (t = 25 s depuis T-042 ; 40 s sur le cycle de 480 s) [T-037]
+threat_despawn_level,menace,-0.30,m,A_REGLER,la Laisse disparait quand la maree descendante passe sous ce niveau (t = 269 s depuis T-042 ; 431 s sur le cycle de 480 s)
 threat_spawn_dist_min,menace,15,m,A_REGLER,distance minimale au joueur du point d'apparition [T-037]
 threat_spawn_dist_max,menace,35,m,A_REGLER,distance maximale au joueur du point d'apparition [T-037]
 threat_water_min_depth,menace,0.30,m,A_REGLER,profondeur minimale de la case ou la Laisse peut se tenir
@@ -67,6 +67,6 @@ lamp_reach,lampe,12,m,A_REGLER,portee logique de la lampe
 lamp_flee_after,lampe,0.8,s,A_REGLER,duree d'eclairage continu avant que la Laisse recule
 lamp_flee_duration,lampe,5,s,A_REGLER,duree du REPLI declenche par la lampe
 interact_reach_station,controle,2.0,m,FIXE,distance maximale du joueur a l'echelle pour lire
-defeat_time_limit,regle,480,s,FIXE,fin de la tranche : echec si les 3 releves ne sont pas faits ou si le joueur n'est pas sur la plateforme
+defeat_time_limit,regle,300,s,FIXE,fin de la tranche (T-042 ; 480 avant) : echec si les 3 releves ne sont pas faits ou si le joueur n'est pas sur la plateforme
 victory_stations_required,regle,3,count,FIXE,nombre de releves requis
 telemetry_sample_period,telemetrie,1.0,s,A_REGLER,periode d'echantillonnage de la position et du niveau

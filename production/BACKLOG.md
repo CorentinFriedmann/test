@@ -49,8 +49,8 @@
 | T-039 | Alignement de la règle du faisceau avant l'évaluation de P2 (réserve T-033) | game-designer | T-037, T-033 | VALIDÉ |
 | T-040 | Garde-fous du code : interdits de la simulation, test déterministe de l'audio, ESLint figé, seuil de poids unique | build-engineer | T-034, T-038 | VALIDÉ AVEC RÉSERVES |
 | T-041 | Chronométrage dans le cloud de la simulation par pas et du chargement | qa-lead | T-040 | VALIDÉ AVEC RÉSERVES |
-| T-042 | Spécification des corrections du prototype avant le nouvel essai P2 (guidage, son, menace visible, partie courte) | game-designer | T-037 | EN COURS |
-| T-043 | Réalisation des corrections du prototype P2 et nouvelle version jouable | gameplay-programmer | T-042 | À FAIRE |
+| T-042 | Spécification des corrections du prototype avant le nouvel essai P2 (guidage, son, menace visible, partie courte) | game-designer | T-037 | VALIDÉ AVEC RÉSERVES |
+| T-043 | Réalisation des corrections du prototype P2 et nouvelle version jouable | gameplay-programmer | T-042 | EN COURS |
 
 ---
 
@@ -526,7 +526,7 @@
 - **Contexte / références** : Proposition 7 du TD (REMISE_T-034.md), retenue par la Boss (validations/T-034.md). Mode économe.
 
 ### T-042 : Spécification des corrections du prototype avant le nouvel essai P2 (guidage, son, menace visible, partie courte)
-- **Assigné à** : `game-designer` · **Dépend de** : T-037 · **Jalon** : Essai · P2 (nouvel essai du propriétaire) · **Statut** : EN COURS
+- **Assigné à** : `game-designer` · **Dépend de** : T-037 · **Jalon** : Essai · P2 (nouvel essai du propriétaire) · **Statut** : VALIDÉ AVEC RÉSERVES
 - **Livrables** :
   - `docs/design/P2_CORRECTIONS.md`
   - `docs/design/data/*.csv (seulement si des valeurs changent)`
@@ -540,7 +540,7 @@
 - **Contexte / références** : Verdict « P2 non concluante » (production/validations/PORTE_P2.md, option 1 choisie par le propriétaire le 2026-11-27). Le principe « le jeu n'explique pas la règle » est abandonné pour ce prototype (DECISIONS.md). La règle de parité (le rendu n'influence pas la simulation) reste ; changer des valeurs CSV est permis, comme en T-037. Mode économe.
 
 ### T-043 : Réalisation des corrections du prototype P2 et nouvelle version jouable
-- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director (code de game/) · **Dépend de** : T-042 · **Jalon** : Essai · P2 (nouvel essai du propriétaire) · **Statut** : À FAIRE
+- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director (code de game/) · **Dépend de** : T-042 · **Jalon** : Essai · P2 (nouvel essai du propriétaire) · **Statut** : EN COURS
 - **Livrables** :
   - `game/src/ (ui, audio, render, data selon la spécification)`
   - `game/tests/`
@@ -552,4 +552,5 @@
   - [ ] Automates de game/tests/p2 mis à jour pour la partie courte : prudent gagne au moins 90 %, noisy perd au moins 90 %, durée d'une partie menée à terme entre 4 et 6 minutes
   - [ ] npm run all vert (exécuté réellement, sortie jointe) ; tests de parité verts ; poids du fichier sous le seuil de 1,5 Mio ; ne jamais lancer playwright install
   - [ ] Revue du technical-director avant la Boss
+  - [ ] Exigences ajoutées par la Boss (validations/T-042.md) : (a) rapport chiffré, graines 101-120 et 201-220, de `win` et `heedless` (victoires /20) sans dépasser 16/20 sur chaque lot, et de l'approche de `prudent` (< 15 m) dans au moins 14/20 parties ; (b) parcours scripté lent : départ vers l'échelle 1 à t = 30 s puis à t = 45 s, lecture réussie sur au moins 18/20 graines ; sinon élargir la fenêtre S1 dans `stations.csv` et le signaler ; (c) captures Playwright à 1280×720 du guidage, du repère et de la vignette jointes à la remise
 - **Contexte / références** : Suite de la porte P2 non concluante (production/validations/PORTE_P2.md). La Coordination publiera ensuite game/dist/estran-p2.html au même lien que le prototype. Mode économe.
