@@ -1,4 +1,4 @@
-// P2 additions of the start/pause screen: the 8-question form, the performance report copy button and the credits screen.
+// P2 additions of the start/pause screen: the 3-question form (T-043), the performance report copy button and the credits screen.
 // Pure DOM, no network, no browser dialogs (they do not show in a locked frame): every message is shown in the page.
 // The "expected answers" of docs/qa/QUESTIONNAIRE_P2.md are deliberately NOT part of this file (the owner answers blind).
 
@@ -16,36 +16,25 @@ export async function copyText(text, area, msg) {
   return ok;
 }
 
-const YN = ['oui', 'non'];
-// Each question: id, wording (same meaning as docs/qa/QUESTIONNAIRE_P2.md), and its fields.
+// T-043: the form of the new try is the short version of production/validations/PORTE_P2.md: three one-word questions
+// (same wording as docs/qa/QUESTIONNAIRE_P2.md, "version courte du nouvel essai"). The long form of the first try is gone.
 export const QUESTIONS = [
-  { id: 'Q1', title: '1. Que fait l\'eau, et qu\'est-ce que ça change pour vous ? Où êtes-vous en sécurité quand elle est haute ?', fields: [{ k: 'r', t: 'text', label: 'Réponse' }] },
-  { id: 'Q2', title: '2. Qu\'est-ce qui attire la chose dans l\'eau ?', fields: [{ k: 'r', t: 'text', label: 'Réponse' }] },
-  { id: 'Q3', title: '3. Que fait le phare ? Que faut-il y faire, et pourquoi ?', fields: [{ k: 'r', t: 'text', label: 'Réponse' }] },
-  { id: 'Q4', title: '4. Que faites-vous quand vous entendez un bruit dans l\'eau ? Pourquoi ?', fields: [{ k: 'r', t: 'text', label: 'Réponse' }] },
-  { id: 'Q5', title: '5. À quel moment avez-vous eu le plus peur ? Qu\'est-ce qui l\'a causé ? Note de 1 (pas peur) à 5 (très peur).', fields: [
-    { k: 'm', t: 'text', label: 'Moment et cause' }, { k: 'n', t: 'choice', label: 'Note (1 à 5)', opts: ['1', '2', '3', '4', '5'] }] },
-  { id: 'Q6', title: '6. Avez-vous joué au casque ? Au premier contact, le niveau sonore était-il trop faible, correct ou trop fort ?', fields: [
-    { k: 'c', t: 'choice', label: 'Casque', opts: YN }, { k: 'v', t: 'choice', label: 'Niveau au premier contact', opts: ['faible', 'correct', 'fort'] },
-    { k: 'r', t: 'text', label: 'Autre chose sur le son (facultatif) : la Laisse arrive-t-elle en silence quand elle est au bord ? l\'absence de musique vous a-t-elle gêné ? saviez-vous si un bruit venait de devant ou de derrière ?' }] },
-  { id: 'Q7', title: '7. Refaites 2 minutes en coupant le son (touche M) : la peur est-elle la même ? Qu\'est-ce qui change ?', fields: [
-    { k: 'p', t: 'choice', label: 'La peur sans le son est', opts: ['la même', 'un peu plus faible', 'nettement plus faible'] },
-    { k: 'h', t: 'choice', label: 'Le son porte', opts: ['la moitié ou plus de la peur', 'moins de la moitié de la peur'] },
-    { k: 'r', t: 'text', label: 'Ce qui change' }] },
-  { id: 'Q8', title: '8. Les sous-titres (descriptions des bruits, touche K) étaient-ils lisibles, utiles, et ont-ils gâché la peur ?', fields: [
-    { k: 'l', t: 'choice', label: 'Lisibles', opts: YN }, { k: 'u', t: 'choice', label: 'Utiles', opts: YN }, { k: 'g', t: 'choice', label: 'Ont gâché la peur', opts: YN },
-    { k: 'r', t: 'text', label: 'Remarques' }] },
+  { id: 'Q1', title: '1. Avez-vous entendu le son dès le début ?', fields: [
+    { k: 'a', t: 'choice', label: 'Une réponse', opts: ['oui', 'non', 'coupé'] }] },
+  { id: 'Q2', title: '2. Avez-vous eu peur ou été inquiété ?', fields: [
+    { k: 'a', t: 'choice', label: 'Une réponse', opts: ['pas du tout', 'un peu', 'oui'] }] },
+  { id: 'Q3', title: '3. Avez-vous joué jusqu\'à la fin ? Sinon, pourquoi ?', fields: [
+    { k: 'a', t: 'choice', label: 'Une réponse', opts: ['oui, jusqu\'à la fin', 'ennuyé', 'trop dur', 'pas compris', 'autre'] },
+    { k: 'r', t: 'text', label: 'Précisions (facultatif)' }] },
 ];
-export const P1 = { id: 'P1', title: 'Performance : fluide ou saccadé ? (une réponse suffit)', fields: [
-  { k: 'f', t: 'choice', label: 'Le jeu était', opts: ['fluide', 'saccadé'] }, { k: 'r', t: 'text', label: 'Précisions (facultatif)' }] };
 
-/** Builds the text to paste in the conversation. `values` maps "Q1.r" -> string. Empty answers are marked as pending. */
+/** Builds the text to paste in the conversation. `values` maps "Q1.a" -> string. Empty answers are marked as pending. */
 export function formatAnswers(values, meta = {}) {
   const get = (q, f) => (values[`${q.id}.${f.k}`] || '').trim() || '(sans réponse)';
-  const lines = [`ESTRAN P2 : réponses du propriétaire${meta.build ? ` (version ${meta.build})` : ''}`, ''];
-  for (const q of [P1, ...QUESTIONS]) {
+  const lines = [`ESTRAN P2 : réponses du propriétaire, nouvel essai${meta.build ? ` (version ${meta.build})` : ''}`, ''];
+  for (const q of QUESTIONS) {
     lines.push(q.title);
-    for (const f of q.fields) lines.push(q.fields.length === 1 && f.label === 'Réponse' ? `  Réponse : ${get(q, f)}` : `  ${f.label.split(' (facultatif)')[0].split(' : ')[0]} : ${get(q, f)}`);
+    for (const f of q.fields) lines.push(f.k === 'a' ? `  Réponse : ${get(q, f)}` : `  ${f.label.split(' (facultatif)')[0]} : ${get(q, f)}`);
     lines.push('');
   }
   return lines.join('\n').trimEnd() + '\n';
@@ -64,9 +53,9 @@ export function createQuestionnaire({ build, getPerfReport }) {
   const root = h('div', { id: 'qform', class: 'p2panel' });
   const inner = h('div', { class: 'p2inner' });
   root.append(inner);
-  inner.append(h('h2', {}, 'Questionnaire (8 questions)'),
-    h('p', { class: 'p2note' }, 'Répondez avec vos mots, sans relire quoi que ce soit, en 5 minutes. Une question laissée vide reste « en attente ».'));
-  for (const q of [P1, ...QUESTIONS]) {
+  inner.append(h('h2', {}, 'Questionnaire (3 questions)'),
+    h('p', { class: 'p2note' }, 'Après avoir joué jusqu\'à la fin (10 minutes au plus, avec le son), répondez en un mot. Une question laissée vide reste « en attente ».'));
+  for (const q of QUESTIONS) {
     const box = h('fieldset', { class: 'p2q' });
     box.append(h('legend', {}, q.title));
     for (const f of q.fields) {

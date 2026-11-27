@@ -196,15 +196,18 @@ export function createView(sim, qualityName, opts = {}) {
   scene.add(laisse.group);
 
   // ---- Water rings under the player's footsteps (radius proportional to the noise, capped at 8 m: GDD 11).
+  // Indices 0-7: the player's noise. 8-11: the ripples of the Laisse (T-043, own pool so that they never steal a footstep ring).
+  const PLAYER_RINGS = 8, THREAT_RINGS = 4;
   const rings = [];
   {
     const geo = new RingGeometry(0.92, 1, 40).rotateX(-Math.PI / 2);
-    for (let i = 0; i < 8; i++) {
-      const m = new Mesh(geo, new MeshBasicMaterial({ color: 0xbfe0f0, transparent: true, opacity: 0, depthWrite: false, side: DoubleSide }));
-      m.visible = false; m.renderOrder = 2; scene.add(m); rings.push({ m, age: 1e9, max: 1, life: 1 });
+    const threatGeo = new RingGeometry(0.82, 1, 48).rotateX(-Math.PI / 2); // the Laisse's ripples are a little thicker: they must read at 25 m
+    for (let i = 0; i < PLAYER_RINGS + THREAT_RINGS; i++) {
+      const m = new Mesh(i < PLAYER_RINGS ? geo : threatGeo, new MeshBasicMaterial({ color: 0xbfe0f0, transparent: true, opacity: 0, depthWrite: false, side: DoubleSide }));
+      m.visible = false; m.renderOrder = 2; scene.add(m); rings.push({ m, age: 1e9, s0: 0.3, s1: 1.3, life: 1, op: 0.5 });
     }
   }
-  let ringNext = 0;
+  let ringNext = 0, threatRingNext = 0;
 
   // ---- Ladders: a post with graduations; the colour tells read / unread.
   const ladders = world.stations.map((s) => {
@@ -236,7 +239,7 @@ export function createView(sim, qualityName, opts = {}) {
   }
 
   // ---- Lighting moments.
-  const lampPos = new Vector3(), lampDir = new Vector3();
+  const lampPos = new Vector3(), lampDir = new Vector3(), projV = new Vector3();
   const blend = { k: 0, applied: -1 };
   let momentName = baseMoment, cur = MOMENTS[baseMoment], curBeam = 1;
   function applyMoment(m) {
@@ -304,7 +307,7 @@ export function createView(sim, qualityName, opts = {}) {
       r.age += dt;
       const u = r.age / r.life;
       if (u >= 1) { r.m.visible = false; continue; }
-      r.m.scale.setScalar(0.3 + r.max * u); r.m.material.opacity = 0.5 * (1 - u);
+      r.m.scale.setScalar(r.s0 + (r.s1 - r.s0) * u); r.m.material.opacity = r.op * (1 - u);
     }
     st.stations.forEach((s, i) => ladders[i].mat.color.setHex(s.read ? 0x6fd0c4 : 0xd9c98a));
 
@@ -334,8 +337,25 @@ export function createView(sim, qualityName, opts = {}) {
     renderer, camera, dom: renderer.domElement,
     /** Spawns a ripple (render only). */
     addRing(x, z, noiseR, level) {
-      const r = rings[ringNext++ % rings.length];
-      r.age = 0; r.life = 1.2; r.max = Math.min(8, Math.max(1, noiseR)); r.m.position.set(x, level + 0.03, z); r.m.visible = true;
+      const r = rings[ringNext++ % PLAYER_RINGS];
+      r.age = 0; r.life = 1.2; r.s0 = 0.3; r.s1 = 0.3 + Math.min(8, Math.max(1, noiseR)); r.op = 0.5; r.m.position.set(x, level + 0.03, z); r.m.visible = true;
+    },
+    /** Ripple at the position of the Laisse (T-043 C3): final radius 3 m, life 1.5 s, opacity chosen by the caller from the distance. */
+    addThreatRing(x, z, level, opacity, radius = 3, life = 1.5) {
+      const r = rings[PLAYER_RINGS + (threatRingNext++ % THREAT_RINGS)];
+      r.age = 0; r.life = life; r.s0 = 0.3; r.s1 = radius; r.op = opacity; r.m.position.set(x, level + 0.03, z); r.m.visible = true;
+    },
+    /** Test hook (read only): how many of the Laisse's ripples are on screen, and the vignette uniform. */
+    threatCueInfo: () => ({ rings: rings.slice(PLAYER_RINGS).filter((r) => r.m.visible).length, vignette: overlayMat.uniforms.uThreat.value }),
+    /** Edge vignette of the Laisse's closeness, 0 to 0.45 (render only: one uniform of the existing full-screen pass). */
+    setThreatVignette(v) { overlayMat.uniforms.uThreat.value = v; },
+    /** Screen position of a world point with the camera of the last frame: out = { x, y (NDC, -1..1), behind }. Read only. */
+    project(x, y, z, out) {
+      projV.set(x, y, z).applyMatrix4(camera.matrixWorldInverse);
+      out.behind = projV.z >= 0;
+      projV.applyMatrix4(camera.projectionMatrix);
+      out.x = projV.x; out.y = projV.y;
+      return out;
     },
     /** pose: interpolated {x, z, ground, yaw, pitch, eye}; st: simulation state (read only); dt: real seconds since the last frame. */
     draw,
@@ -347,6 +367,23 @@ export function createView(sim, qualityName, opts = {}) {
       cone.geometry.dispose(); cone.geometry = beamGeometry(q.beamSegments, beamHalf);
       rocks.geometry.dispose(); rocks.geometry = rockGeometry(q.rockDetail);
       laisse.setQuality(q); applyMoment(cur);
+    },
+    /**
+     * Test hook (render only): mean brightness (0-255) of the four screen corners with the Laisse vignette off and on, same frame.
+     * Proves in a real browser that the vignette darkens the edges and by how much.
+     */
+    probeVignette() {
+      if (!last) return null;
+      const [st, pose, t] = last, u = overlayMat.uniforms.uThreat, keep = u.value;
+      const corners = () => {
+        const gl = renderer.getContext(), w = gl.drawingBufferWidth, h = gl.drawingBufferHeight, buf = readPixels(), cw = Math.floor(w * 0.1), ch = Math.floor(h * 0.1);
+        let sum = 0, n = 0;
+        for (const [x0, y0] of [[0, 0], [w - cw, 0], [0, h - ch], [w - cw, h - ch]]) for (let y = y0; y < y0 + ch; y += 2) for (let x = x0; x < x0 + cw; x += 2) { const k = (y * w + x) * 4; sum += (buf[k] + buf[k + 1] + buf[k + 2]) / 3; n++; }
+        return sum / n;
+      };
+      u.value = 0; draw(st, pose, t, 0, true); const without = corners();
+      u.value = keep; draw(st, pose, t, 0, true); const withV = corners();
+      return { without, with: withV, strength: keep };
     },
     /** Test hook: how many pixels the Laisse changes in the current frame (same frame drawn with and without her). */
     probeLaisse() {

@@ -9,7 +9,7 @@ import { panOf, distanceGain, cutoffFor, sectorLabel, sectorOf, relative } from 
 import { ambientMix, dreadLevel, towerHum, masterCutoff, swirlInterval, tideNorm, tollInterval } from '../../src/audio/mix.js';
 import { createDirector } from '../../src/audio/director.js';
 import { captionFor } from '../../src/audio/caption-text.js';
-import { loadSettings, saveSettings, sanitize, DEFAULTS } from '../../src/audio/settings.js';
+import { loadSettings, saveSettings, sanitize, DEFAULTS, STORAGE_KEY } from '../../src/audio/settings.js';
 
 const audibleR = param(data, 'threat_audible_radius'), roarR = param(data, 'threat_cue_roar_radius'), flicker = param(data, 'lighthouse_charge_flicker');
 const L0 = { x: 0, z: 0, yaw: 0 }; // yaw 0: facing -z, right = +x
@@ -173,9 +173,10 @@ test('subtitles: short French texts with the direction of the source, none for t
 });
 
 // ---- 5. Settings ----
-test('settings: subtitles off by default, values are sanitised, a broken storage never throws', () => {
-  assert.deepEqual(DEFAULTS, { volume: 0.8, muted: false, captions: false });
-  assert.deepEqual(sanitize({ volume: 7, muted: 'yes', captions: true }), { volume: 1, muted: false, captions: true });
+test('settings: subtitles ON by default (T-043), new storage key, values are sanitised, a broken storage never throws', () => {
+  assert.deepEqual(DEFAULTS, { volume: 0.8, muted: false, captions: true });
+  assert.equal(STORAGE_KEY, 'estran.audio.v2');
+  assert.deepEqual(sanitize({ volume: 7, muted: 'yes', captions: false }), { volume: 1, muted: false, captions: false });
   assert.deepEqual(sanitize(null), DEFAULTS);
   const broken = { getItem() { throw new Error('blocked'); }, setItem() { throw new Error('blocked'); } };
   assert.deepEqual(loadSettings(broken), DEFAULTS);
@@ -184,4 +185,12 @@ test('settings: subtitles off by default, values are sanitised, a broken storage
   saveSettings(ok, { volume: 0.3, muted: true, captions: true });
   assert.deepEqual(loadSettings(ok), { volume: 0.3, muted: true, captions: true });
   assert.deepEqual(loadSettings({ getItem: () => 'not json' }), DEFAULTS);
+});
+
+test('settings: an old stored v1 value ("captions off") does not override the new default (storage key v2)', () => {
+  const mem = new Map([['estran.audio.v1', JSON.stringify({ volume: 0.5, muted: false, captions: false })]]);
+  const storage = { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v) };
+  assert.deepEqual(loadSettings(storage), DEFAULTS);
+  saveSettings(storage, { ...DEFAULTS, volume: 0.3 });
+  assert.ok(mem.has('estran.audio.v2'));
 });

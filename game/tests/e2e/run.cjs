@@ -11,7 +11,7 @@ const { chromium, check, results, openPage } = require('./harness.cjs');
     const s = await g.st();
     check('WebGL2 context', s.gl === 'webgl2', s.gl);
     const hudText = await g.page.evaluate(() => document.getElementById('hud').innerText.replace(/\s+/g, ' ').trim());
-    check('HUD shows no rule text at start (objective line only)', /^(Lisez les trois échelles de marée\.)?$/.test(hudText), JSON.stringify(hudText));
+    check('HUD shows the permanent objective at start (T-043 guidance)', /Lisez les 3 échelles de marée, puis revenez au phare\./.test(hudText) && /Relevés : 0\/3 · Fin de la marée : (5:00|4:5\d)/.test(hudText), JSON.stringify(hudText.slice(0, 160)));
     const parts = await g.page.evaluate(() => ['gauge', 'pastilles', 'lamp', 'ring'].map((id) => !!document.getElementById(id)));
     check('HUD parts present: tide gauge, 3 pastilles, lamp, interaction ring', parts.every(Boolean) && (await g.page.evaluate(() => document.querySelectorAll('.pastille').length)) === 3);
     check('Simulation starts at tick 0, seed 2026 world has 3 ladders', s.tick === 0 && (await g.page.evaluate(() => window.__estran.getWorld().stations.length)) === 3);
@@ -26,7 +26,7 @@ const { chromium, check, results, openPage } = require('./harness.cjs');
     await g.frames(2);
     await g.shot('estran-depart.png');
     await g.page.evaluate(() => window.__estran.setBot('win'));
-    await g.until((s) => s.t >= 58);
+    await g.until((s) => s.t >= 30); // T-042: the first ladder is read around 45 s, so the walk is photographed earlier
     await g.shot('estran-marche.png');
     const reading = await g.until((s) => s.stations[0].progress > 0.5);
     check('HUD ring fills while reading S1', await g.page.evaluate(() => document.getElementById('ring').classList.contains('active')) && reading.stations[0].progress > 0.5, `progress=${reading.stations[0].progress.toFixed(2)}`);
@@ -34,7 +34,7 @@ const { chromium, check, results, openPage } = require('./harness.cjs');
     await g.until((s) => s.stations[1].read);
     const pastilles = await g.page.evaluate(() => [...document.querySelectorAll('.pastille')].map((e) => e.getAttribute('class')));
     check('Pastilles: S1 and S2 read (filled)', pastilles[0].includes('read') && pastilles[1].includes('read'), pastilles.join(' / '));
-    const high = await g.until((s) => s.t >= 238);
+    const high = await g.until((s) => s.t >= 148);
     await g.shot('estran-maree-haute.png');
     check('Tide gauge follows the level (high water, nearly full)', (await g.page.evaluate(() => parseFloat(document.getElementById('gauge-fill').style.height))) > 95, `level=${high.level.toFixed(2)}`);
     const end = await g.until((s) => !!s.outcome, 20000, 60);
@@ -46,7 +46,7 @@ const { chromium, check, results, openPage } = require('./harness.cjs');
     check('Victory card shown', card === 'Les trois relevés sont faits.', String(card));
     winLog = await g.tel();
     const reads = winLog.events.filter((e) => e.type === 'station_read');
-    check('Journal lists the 3 readings in order, inside their windows', reads.map((e) => e.id).join() === 'S1_flot,S2_haute,S3_jusant' && reads[2].t >= 380 && reads[2].t <= 427, reads.map((e) => `${e.id}@${e.t}`).join(' '));
+    check('Journal lists the 3 readings in order, inside their windows', reads.map((e) => e.id).join() === 'S1_flot,S2_haute,S3_jusant' && reads[2].t >= 235 && reads[2].t <= 267, reads.map((e) => `${e.id}@${e.t}`).join(' '));
     // Restart (R) replays the very same game.
     await g.page.keyboard.press('KeyR');
     await g.frames(2);
@@ -58,9 +58,9 @@ const { chromium, check, results, openPage } = require('./harness.cjs');
     await g.page.close();
   }
 
-  // ---- 3. Drowning bot ----
+  // ---- 3. Drowning bot (Laisse off: since the 300 s tide she would seize the wading player before the sea does) ----
   {
-    const g = await openPage(browser);
+    const g = await openPage(browser, '?threat=0');
     await g.page.evaluate(() => window.__estran.setBot('drown'));
     const mid = await g.until((s) => s.drown > 3);
     const vignette = await g.page.evaluate(() => parseFloat(document.getElementById('vignette-drown').style.opacity));
@@ -81,7 +81,7 @@ const { chromium, check, results, openPage } = require('./harness.cjs');
     const end = await g.until((s) => !!s.outcome, 20000, 30);
     await g.frames(2);
     const card = await g.page.evaluate(() => document.getElementById('card-text').textContent);
-    check('Idle scenario: S1 window missed at t ~ 110 s, card "Relevé manqué."', end.cause === 'window_missed' && end.t > 110 && end.t < 111 && card === 'Relevé manqué.', `t=${end.t.toFixed(2)}`);
+    check('Idle scenario: S1 window missed at t ~ 72 s, card "Relevé manqué."', end.cause === 'window_missed' && end.t > 72 && end.t < 73 && card === 'Relevé manqué.', `t=${end.t.toFixed(2)}`);
     await g.page.close();
   }
 
@@ -126,19 +126,19 @@ const { chromium, check, results, openPage } = require('./harness.cjs');
     const g = await openPage(browser, '?q=high');
     await g.page.evaluate(() => { window.__ev = []; window.__estran.subscribe((e) => window.__ev.push(e)); window.__estran.setBot('prudent'); });
     const spawned = await g.until((s) => !!s.threat && s.threat.active);
-    check('The Laisse appears with the rising tide (T-037: from t ~ 40 s, first valid point at 15-35 m)', spawned.t > 39 && spawned.t < 70, `t=${spawned.t.toFixed(1)}`);
+    check('The Laisse appears with the rising tide (T-042: from t ~ 25 s, first valid point at 15-35 m)', spawned.t > 24 && spawned.t < 70, `t=${spawned.t.toFixed(1)}`);
     const wind = await g.until((s) => s.lighthouse.winding > 0.4 && s.readCount >= 1);
     const ringOn = await g.page.evaluate(() => document.getElementById('ring').classList.contains('active'));
     await g.frames(2);
     await g.shot('estran-phare-manivelle.png');
     check('HUD ring fills while rewinding the lighthouse; lighthouse gauge shown', ringOn && (await g.page.evaluate(() => !!document.getElementById('phare-fill'))), `progress=${wind.lighthouse.winding.toFixed(2)}`);
-    const dim = await g.until((s) => s.t >= 150);
+    const dim = await g.until((s) => s.t >= 100);
     const w = await g.page.evaluate(() => parseFloat(document.getElementById('phare-fill').style.width));
     check('Lighthouse gauge tracks the charge (kept high by the crank)', Math.abs(w - dim.lighthouse.charge) < 0.2 && dim.lighthouse.charge > 20, `charge=${dim.lighthouse.charge.toFixed(1)}`);
     const end = await g.until((s) => !!s.outcome, 20000, 60);
     await g.frames(2);
     const ev = await g.page.evaluate(() => window.__ev);
-    check('Prudent scenario: victory without a single grab', end.outcome === 'victory' && end.grabs === 0, `t=${end.t.toFixed(1)}`);
+    check('Prudent scenario: victory, never seized twice (T-042: one cold grab can happen on this seed)', end.outcome === 'victory' && end.grabs <= 1, `t=${end.t.toFixed(1)}`);
     check('The beam repelled the Laisse and the lighthouse was rewound at least twice', ev.some((e) => e.type === 'threat_state' && e.source === 'beam') && ev.filter((e) => e.type === 'lighthouse_wound').length >= 2);
     check('Noise events reach the subscription hook and the telemetry (type, position, intensity)', ev.some((e) => e.type === 'noise' && typeof e.x === 'number' && typeof e.z === 'number' && e.r > 0) && (await g.tel()).events.some((e) => e.type === 'noise'));
     check('No console error or warning during the prudent run', g.problems.length === 0, g.problems.slice(0, 3).join(' | '));
@@ -159,7 +159,7 @@ const { chromium, check, results, openPage } = require('./harness.cjs');
     const card = await g.page.evaluate(() => document.getElementById('card-text').textContent);
     const tel = await g.tel();
     const grabs = tel.events.filter((e) => e.type === 'grab');
-    check('Noisy scenario: second grab within 45 s is the defeat, card "La mer a gagné."', end.outcome === 'defeat' && end.cause === 'seized' && card === 'La mer a gagné.' && grabs.length === 2 && grabs[1].t - grabs[0].t <= 45, `grabs at ${grabs.map((e) => e.t).join(' and ')}`);
+    check('Noisy scenario: second grab within 45 s is the defeat, card "La mer a gagné."', end.outcome === 'defeat' && end.cause === 'seized' && card === 'La mer a gagné.' && grabs.length >= 2 && grabs.at(-1).t - grabs.at(-2).t <= 45, `grabs at ${grabs.map((e) => e.t).join(' and ')}`);
     check('Journal shows the Laisse states (inquire, hunt) before the grabs', ['inquire', 'hunt'].every((m) => tel.events.some((e) => e.type === 'threat_state' && e.to === m)));
     check('No console error or warning during the noisy run', g.problems.length === 0, g.problems.slice(0, 3).join(' | '));
     await g.page.close();

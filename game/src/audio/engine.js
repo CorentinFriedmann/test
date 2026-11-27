@@ -9,6 +9,8 @@ import { ambientMix, masterCutoff, towerHum, tideNorm, dreadLevel } from './mix.
 
 export const CEILING = 0.85; // asymptote of the soft ceiling: -1.4 dBFS, under the -1 dBFS target
 const MAX_VOICES = 28;
+export const CHIME_PEAK = 0.25; // 20 * log10(0.25) = -12 dBFS
+export const CHIME_NOTES = [[440, 0], [330, 0.5]]; // [frequency Hz, start offset s]
 
 // Voice priorities (T-038, BUG-001). At the ceiling a new voice may take the place of the oldest voice of a strictly lower
 // priority (the stolen voice is faded out in 30 ms: no click). A CRITICAL voice is never refused: if nothing of lower priority
@@ -339,6 +341,23 @@ export function createEngine(ctx, cfg) {
       if (fn) fn(cue, L);
     },
     setGrabTime(t) { lastGrab = t; },
+    /**
+     * Start-up test sound (T-043 C2): two soft notes (440 Hz then 330 Hz, 0.5 s each, slow envelope, peak CHIME_PEAK = about -12 dBFS
+     * before the general volume). It goes through the bus, the master chain (limiter) and the volume like every other sound, so mute
+     * and volume apply to it. Scheduled slightly ahead: if the context is still suspended it plays as soon as it resumes.
+     */
+    testChime() {
+      const t0 = now() + 0.05;
+      CHIME_NOTES.forEach(([f, off]) => {
+        const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+        const g = gain(0), a = t0 + off;
+        g.gain.setValueAtTime(0, a); g.gain.linearRampToValueAtTime(CHIME_PEAK, a + 0.15); g.gain.linearRampToValueAtTime(0, a + 0.5);
+        o.connect(g); g.connect(bus);
+        o.onended = () => { o.disconnect(); g.disconnect(); };
+        o.start(a); o.stop(a + 0.55);
+      });
+      return CHIME_NOTES.length;
+    },
     setVolume(v) { set(volume.gain, v * v, 0.05); },
     close() { return ctx.close && ctx.state !== 'closed' ? ctx.close() : Promise.resolve(); },
   };

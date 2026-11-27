@@ -56,10 +56,10 @@ test('movement: speed follows the depth band (walk 3 m/s on dry ground, slower a
   run(sim2, 30, fwd({ run: true, yaw: -Math.PI / 2 }));
   const ran = Math.hypot(sim2.state.player.x - sim2.world.start.x, sim2.state.player.z - sim2.world.start.z);
   assert.ok(Math.abs(ran - 5.5) < 0.05, `ran ${ran}`);
-  // Deep water: put the player at the S1 ladder at t = 100 (level 0.51, d = 0.81): eau_profonde, x0.55, run refused.
+  // Deep water: put the player at the S1 ladder at t = 62.5 (level 0.51, d = 0.81): eau_profonde, x0.55, run refused.
   const sim3 = newSim();
   const s = sim3.world.stations[0];
-  sim3.state.tick = 100 * 30 - 1;
+  sim3.state.tick = Math.round(62.5 * 30) - 1;
   place(sim3, s.x, s.z); sim3.state.player.speedMult = 0.55;
   const x0 = s.x, z0 = s.z;
   sim3.step({ ...NEUTRAL_INPUT, yaw: 0, moveF: 1, run: true });
@@ -71,7 +71,7 @@ test('movement: speed follows the depth band (walk 3 m/s on dry ground, slower a
 test('movement: the speed multiplier is smoothed over player_speed_smooth (0.2 s), not switched instantly', () => {
   const sim = newSim();
   const s = sim.world.stations[0];
-  sim.state.tick = 100 * 30 - 1; place(sim, s.x, s.z); sim.state.player.speedMult = 1;
+  sim.state.tick = Math.round(62.5 * 30) - 1; place(sim, s.x, s.z); sim.state.player.speedMult = 1;
   sim.step({ ...NEUTRAL_INPUT, yaw: 0, moveF: 1 });
   const m1 = sim.state.player.speedMult;
   assert.ok(m1 < 1 && m1 > 0.55, `after 1 tick ${m1}`);
@@ -125,7 +125,7 @@ function atLadder(sim, i, t) {
 
 test('ladder: holding E for hold_s inside the window reads it (5 s = 150 ticks), progress is exposed for the HUD', () => {
   const sim = newSim();
-  atLadder(sim, 0, 70);
+  atLadder(sim, 0, 50);
   run(sim, 75, { ...NEUTRAL_INPUT, interact: true });
   assert.ok(Math.abs(sim.state.stations[0].progress - 0.5) < 0.02);
   assert.equal(sim.state.stations[0].read, false);
@@ -137,7 +137,7 @@ test('ladder: holding E for hold_s inside the window reads it (5 s = 150 ticks),
 
 test('ladder: releasing E, leaving the reach, or the depth leaving 0.15-1.00 m resets the progress', () => {
   const sim = newSim();
-  atLadder(sim, 0, 70);
+  atLadder(sim, 0, 50);
   run(sim, 60, { ...NEUTRAL_INPUT, interact: true });
   assert.ok(sim.state.stations[0].progress > 0.3);
   sim.step(NEUTRAL_INPUT);
@@ -157,22 +157,22 @@ test('ladder: releasing E, leaving the reach, or the depth leaving 0.15-1.00 m r
 test('ladder: the rising-tide ladder refuses a falling tide, the falling-tide ladder refuses a rising one, S2 accepts both', () => {
   const a = newSim(); atLadder(a, 2, 100); a.step({ ...NEUTRAL_INPUT, interact: true });
   assert.equal(a.state.stations[2].readable, false, 'S3 at t=100 (rising)');
-  const b = newSim(); atLadder(b, 2, 380); b.step({ ...NEUTRAL_INPUT, interact: true });
-  assert.equal(b.state.stations[2].readable, true, 'S3 at t=380 (falling)');
-  const c = newSim(); atLadder(c, 0, 380); c.step(NEUTRAL_INPUT);
-  assert.equal(c.state.stations[0].readable, false, 'S1 at t=380');
-  const d = newSim(); atLadder(d, 1, 200); d.step(NEUTRAL_INPUT);
+  const b = newSim(); atLadder(b, 2, 245); b.step({ ...NEUTRAL_INPUT, interact: true });
+  assert.equal(b.state.stations[2].readable, true, 'S3 at t=245 (falling)');
+  const c = newSim(); atLadder(c, 0, 245); c.step(NEUTRAL_INPUT);
+  assert.equal(c.state.stations[0].readable, false, 'S1 at t=245');
+  const d = newSim(); atLadder(d, 1, 125); d.step(NEUTRAL_INPUT);
   assert.equal(d.state.stations[1].readable, true, 'S2 rising side');
-  const e = newSim(); atLadder(e, 1, 300); e.step(NEUTRAL_INPUT);
+  const e = newSim(); atLadder(e, 1, 188); e.step(NEUTRAL_INPUT);
   assert.equal(e.state.stations[1].readable, true, 'S2 falling side');
 });
 
-test('defeat: a missed window ends the game right after window_end_s (110 s for S1) with the cause', () => {
+test('defeat: a missed window ends the game right after window_end_s (72 s for S1) with the cause', () => {
   const sim = newSim();
   const st = runBot(sim, 'idle');
   assert.equal(st.outcome, 'defeat');
   assert.equal(st.cause, 'window_missed');
-  assert.ok(st.t > 110 && st.t < 110.1, `t=${st.t}`);
+  assert.ok(st.t > 72 && st.t < 72.1, `t=${st.t}`);
   const ev = sim.telemetry().events.at(-1);
   assert.deepEqual([ev.type, ev.cause, ev.id], ['defeat', 'window_missed', 'S1_flot']);
 });
@@ -182,7 +182,7 @@ test('defeat: grace_s from stations.csv postpones the missed-window defeat witho
   const sim = createSimWith(graced);
   const st = runBot(sim, 'idle');
   assert.equal(st.cause, 'window_missed');
-  assert.ok(st.t > 120 && st.t < 120.1, `t=${st.t}`);
+  assert.ok(st.t > 82 && st.t < 82.1, `t=${st.t}`);
 });
 import { createSim } from '../../src/sim/sim.js';
 const createSimWith = (d) => createSim(d);
@@ -191,7 +191,7 @@ test('defeat: drowning after 8 s in submersion, the counter drains in 4 s when d
   const sim = newSim();
   const s = sim.world.stations[0];
   sim.state.stations.forEach((x) => { x.read = true; }); // test-only: no missed window
-  sim.state.tick = 150 * 30 - 1; place(sim, s.x, s.z); // t = 150, level 1.47, ladder ground -0.30: d = 1.77
+  sim.state.tick = 120 * 30 - 1; place(sim, s.x, s.z); // t = 120, level 2.11, ladder ground -0.30: d = 2.41 (submersion)
   run(sim, 4 * 30, NEUTRAL_INPUT);
   assert.ok(Math.abs(sim.state.drown - 4) < 0.1, `drown=${sim.state.drown}`);
   // back to the platform (dry): drains 8 s of counter in 4 s, i.e. 2 per second
@@ -204,30 +204,30 @@ test('defeat: drowning after 8 s in submersion, the counter drains in 4 s when d
   assert.equal(sim.state.cause, 'drowned');
 });
 
-test('defeat: reaching t = 480 s without all readings is a time_up defeat (windows forced open)', () => {
+test('defeat: reaching t = 300 s without all readings is a time_up defeat (windows forced open)', () => {
   const lax = { ...data, stations: data.stations.map((s) => ({ ...s, graceS: 1000 })) };
   const sim = createSimWith(lax);
   const st = runBot(sim, 'idle');
   assert.equal(st.cause, 'time_up');
-  assert.equal(st.t, 480);
+  assert.equal(st.t, 300);
 });
 
-test('victory: the bot reads the three ladders and returns to the platform before t = 480 s', () => {
+test('victory: the bot reads the three ladders and returns to the platform before t = 300 s', () => {
   const sim = newSim();
   const st = runBot(sim, 'win');
   assert.equal(st.outcome, 'victory');
   assert.equal(st.readCount, 3);
-  assert.ok(st.t < 480);
+  assert.ok(st.t < 300);
   const ev = sim.telemetry().events;
   assert.deepEqual(ev.filter((e) => e.type === 'station_read').map((e) => e.id), ['S1_flot', 'S2_haute', 'S3_jusant']);
   assert.equal(ev.at(-1).type, 'victory');
 });
 
-test('victory: S3 is only read in its window (~376-426 s) and the game freezes once finished', () => {
+test('victory: S3 is only read in its window (235-266 s) and the game freezes once finished', () => {
   const sim = newSim();
   runBot(sim, 'win');
   const readS3 = sim.telemetry().events.find((e) => e.id === 'S3_jusant');
-  assert.ok(readS3.t >= 376 + 5 - 0.1 && readS3.t <= 426, `S3 read at ${readS3.t}`);
+  assert.ok(readS3.t >= 235 + 5 - 0.1 && readS3.t <= 266, `S3 read at ${readS3.t}`);
   const tick = sim.state.tick;
   sim.step(fwd());
   assert.equal(sim.state.tick, tick);
@@ -242,8 +242,8 @@ test('victory needs the platform: three readings far from the lighthouse are not
   assert.ok(Math.hypot(sim.state.player.x - sim.world.lighthouse.x, sim.state.player.z - sim.world.lighthouse.z) > 6);
 });
 
-test('drown bot: reads S1 then wades out and drowns', () => {
-  const st = runBot(newSim(), 'drown');
+test('drown bot: reads S1 then wades out and drowns (Laisse off, to isolate the breath counter)', () => {
+  const st = runBot(newSim({ threat: false }), 'drown');
   assert.equal(st.outcome, 'defeat');
   assert.equal(st.cause, 'drowned');
   assert.equal(st.readCount, 1);
@@ -283,16 +283,16 @@ test('telemetry: timestamped journal, one sample per second, JSON-serialisable a
   runBot(sim, 'win');
   const tel = sim.telemetry();
   assert.equal(tel.seed, 2026); assert.equal(tel.hz, 30); assert.equal(tel.outcome, 'victory');
-  assert.ok(tel.samples.length >= 390 && tel.samples.length <= 400);
+  assert.ok(tel.samples.length >= 240 && tel.samples.length <= 300);
   assert.deepEqual(tel.samples.slice(0, 3).map((s) => s.t), [0, 1, 2]);
   assert.ok(tel.events.every((e, i, a) => typeof e.t === 'number' && (i === 0 || e.t >= a[i - 1].t)));
   assert.ok(tel.events.some((e) => e.type === 'band_change'));
   assert.deepEqual(JSON.parse(JSON.stringify(tel)), tel);
 });
 
-test('hud model: gauge, pastilles and ring carry numbers and states only (no text)', () => {
+test('hud model: gauge, pastilles and ring carry numbers and states only (no text; the end card is null while playing)', () => {
   const sim = newSim();
-  atLadder(sim, 0, 80);
+  atLadder(sim, 0, 50);
   run(sim, 60, { ...NEUTRAL_INPUT, interact: true });
   const m = hudModel(sim.state, sim.world, data);
   assert.ok(m.gauge.fill > 0 && m.gauge.fill < 0.5 && m.gauge.trend === 1);

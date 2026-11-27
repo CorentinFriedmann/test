@@ -11,6 +11,8 @@ import { createView } from './render/scene.js';
 import { createHud } from './ui/hud.js';
 import { createInput } from './ui/input.js';
 import { hudModel } from './ui/hud-model.js';
+import { guidance, createTips } from './ui/guidance.js';
+import { createThreatCues, RING_MAX_RADIUS, RING_LIFE_S } from './render/threat-cues.js';
 import { createAudioSystem } from './audio/index.js';
 import { createOfflineTools } from './audio/offline.js';
 import { createCaptions } from './ui/captions.js';
@@ -42,20 +44,31 @@ const perf = createPerfPanel({
   },
 });
 sim.subscribe((e) => { if (e.type === 'noise') view.addRing(e.x, e.z, e.r, sim.state.level); });
+// Guidance memory (UI only): when the latest reading happened; the first aids (spec C1) follow the simulation time.
+const guideMemo = { lastReadT: null };
+sim.subscribe((e) => { if (e.type === 'station_read') guideMemo.lastReadT = e.t; });
+const tips = createTips(data, sim.world);
+const threatCues = createThreatCues();
+const safeBand = (id) => !!data.bands.find((b) => b.id === id)?.safeFromThreat;
+let guideTick = -1, guide = null, tipText = null;
 const hud = createHud(document.getElementById('hud'));
 const captions = createCaptions(document.getElementById('captions'), document.getElementById('toast'));
 let storage = null;
 try { storage = window.localStorage; } catch { /* storage blocked: settings just do not persist */ }
 let syncOptions = () => {};
-const audio = createAudioSystem({ data, world: sim.world, storage, onCaption: (c) => captions.show(c), onChange: (st) => syncOptions(st) });
+const audio = createAudioSystem({
+  data, world: sim.world, storage, onCaption: (c) => captions.show(c), onChange: (st) => syncOptions(st), onCue: (c) => tips.onCue(c.kind),
+  // The start click also plays a short test sound: say so, unless the sound is muted on purpose.
+  onTestSound: () => { const s = audio.settings; if (!s.muted && s.volume > 0) captions.toast('Son de test lancé. Rien entendu ? Vérifiez le volume et le casque. M : couper ou activer le son.', 6000); },
+});
 const audioOffline = createOfflineTools(data, sim.world);
 const listenerNow = () => { const p = sim.state.player; return { x: p.x, z: p.z, yaw: bot ? p.yaw : input.yaw }; };
 sim.subscribe((e) => audio.onEvent(e, sim.state, listenerNow()));
 const stepper = createStepper(sim.env.dt, 3);
 const debugEl = document.getElementById('debug');
 const intro = document.getElementById('intro');
-syncOptions = bindAudioOptions(document.getElementById('opts'), audio, captions);
-syncOptions(audio.settings);
+syncOptions = bindAudioOptions(document.getElementById('opts'), audio, captions, { indicator: document.getElementById('sound-ind'), banner: document.getElementById('audio-banner') });
+syncOptions({ ...audio.settings, status: audio.status });
 // P2 start screen: questionnaire, performance report copy, credits (reads the meter through perf.report()).
 bindStartScreen(document.getElementById('p2bar'), { build: typeof __ESTRAN_BUILD__ === 'string' ? __ESTRAN_BUILD__ : 'dev', getPerfReport: () => perf.report() });
 const typing = (e) => { const t = e.target; return !!t && (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && t.type === 'text')); };
@@ -79,15 +92,15 @@ function tickOnce() { snapshotPrev(); sim.step(tickInput()); }
 function restart() {
   sim.reset(); audio.reset(); stepper.reset(); input.clear(); input.yaw = sim.state.player.yaw; snapshotPrev();
   if (bot) bot = createBot(sim, botMode);
-  hud.showObjective('Lisez les trois échelles de marée.', 6000);
+  guideMemo.lastReadT = null; tips.reset(); threatCues.reset(); guideTick = -1;
 }
-function pause() { if (paused) return; paused = true; input.clear(); audio.suspend(); intro.classList.remove('hidden'); }
-function resume() {
-  intro.classList.add('hidden'); input.clear(); stepper.reset(); audio.resume();
-  if (paused) hud.showObjective('Lisez les trois échelles de marée.', 6000);
-  paused = false;
-}
+const startButton = document.getElementById('start');
+function pause() { if (paused) return; paused = true; input.clear(); audio.suspend(); startButton.textContent = 'Cliquer pour reprendre'; intro.classList.remove('hidden'); document.body.classList.add('menu'); }
+function resume() { intro.classList.add('hidden'); document.body.classList.remove('menu'); input.clear(); stepper.reset(); audio.resume(); paused = false; }
+// The audio context is created and resumed INSIDE this click handler (browser rule): that is what makes the sound start.
 intro.addEventListener('click', () => { audio.start(); resume(); view.dom.requestPointerLock?.(); });
+// If the sound failed (banner shown), any click or key in the window retries it.
+for (const ev of ['pointerdown', 'keydown']) addEventListener(ev, () => { if (audio.status.failure === 'context') audio.start(); });
 document.addEventListener('pointerlockchange', () => { if (document.pointerLockElement !== view.dom && !manual && !sim.state.outcome) pause(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 addEventListener('keydown', (e) => {
@@ -113,9 +126,16 @@ function frame(now) {
     x: prev.x + (p.x - prev.x) * a, z: prev.z + (p.z - prev.z) * a, ground: prev.ground + (p.ground - prev.ground) * a,
     yaw: bot ? p.yaw : input.yaw, pitch: input.pitch, eye: p.eyeHeight,
   };
+  // Visual cues of the Laisse for a player who cannot hear (ripples at her position, edge vignette): render only, never read back.
+  const cue = threatCues.update(st.threat, safeBand(p.band), st.t, Math.min(dt, 0.1));
+  if (cue.ring) view.addThreatRing(st.threat.x, st.threat.z, st.level, cue.ringOpacity, RING_MAX_RADIUS, RING_LIFE_S);
+  view.setThreatVignette(cue.vignette);
   const t0 = performance.now();
   view.draw(st, poseOverride || pose, st.t, Math.min(dt, 0.1));
   hud.update(hudModel(st, sim.world, data));
+  // Guidance: recomputed when the simulation has ticked (30 Hz at most), the marker follows the camera every frame.
+  if (st.tick !== guideTick || !guide) { guideTick = st.tick; tipText = tips.step(st); guide = guidance(st, data, sim.world, guideMemo); hud.setGuide(guide, tipText); }
+  hud.placeMarker(guide.target, view.project, pose.x, pose.z, sim.world);
   if (!paused) audio.update(st, { x: pose.x, z: pose.z, yaw: pose.yaw });
   // Only played frames are measured: the report copied from the start screen then describes the game, not the menu.
   if (!paused) meter.record(dt * 1000, performance.now() - t0);
@@ -147,6 +167,11 @@ if (url.get('test') === '1') window.__estran = {
     };
   },
   getTelemetry: () => sim.telemetry(),
+  /** The guidance texts and marker target of the last tick (what the HUD displays). */
+  getGuide: () => ({ ...guide, tip: tipText }),
+  /** Visual cues of the Laisse as drawn now (ripples on screen, vignette strength). */
+  getCue: () => view.threatCueInfo(),
+  probeVignette: () => view.probeVignette(),
   /** Audio hooks for the tests: settings and voice counters, listener errors, offline rendering (OfflineAudioContext). */
   audioStats: () => ({ ...audio.stats(), listenerErrors: sim.listenerErrors.length }),
   audio: { start: () => audio.start(), setVolume: (v) => audio.setVolume(v), setMuted: (b) => audio.setMuted(b), setCaptions: (b) => audio.setCaptions(b) },

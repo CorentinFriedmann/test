@@ -47,9 +47,9 @@ function watch(page) {
     await page.waitForTimeout(1500);
     check('Hooks hidden by default: window.__estran is undefined without ?test=1', await page.evaluate(() => typeof window.__estran === 'undefined'));
     const intro = await page.evaluate(() => document.getElementById('intro').innerText);
-    check('Start screen is in French and lists the keys', /Cliquez pour jouer/.test(intro) && /ZQSD/.test(intro) && /F2/.test(intro) && /Maj/.test(intro) && /\bM\b/.test(intro) && /\bK\b/.test(intro), JSON.stringify(intro.slice(0, 120)));
+    check('Start screen is in French and lists the keys', /Cliquer pour commencer \(avec le son\)/.test(intro) && /ZQSD/.test(intro) && /F2/.test(intro) && /Maj/.test(intro) && /\bM\b/.test(intro) && /\bK\b/.test(intro), JSON.stringify(intro.slice(0, 120)));
     check('Start screen has the 3 buttons (questionnaire, performance report, credits)', (await page.$$('#p2-form, #p2-perf, #p2-credits')).length === 3);
-    check('Start screen does not explain the rule (no tide, noise or lighthouse wording)', !/mar[ée]e|bruit dans|phare|noy|Laisse|menace/i.test(intro.replace(/sous-titres des bruits/gi, '')), '');
+    check('Start screen gives the sound advice (headphones, volume, test sound) and never names the creature', /Casque recommandé/.test(intro) && /un court son de test va jouer/.test(intro) && !/Laisse|menace|monstre/i.test(intro), '');
 
     // Performance report button: copy blocked -> visible, selected text area with the JSON.
     await page.click('#p2-perf');
@@ -63,24 +63,29 @@ function watch(page) {
     await page.click('#p2-form');
     check('Questionnaire opens', await page.evaluate(() => document.getElementById('qform').classList.contains('on')));
     const nq = await page.evaluate(() => document.querySelectorAll('#qform fieldset').length);
-    check('Questionnaire has P1 and the 8 questions', nq === 9, `fieldsets=${nq}`);
+    check('Questionnaire has the 3 one-word questions of the new try (T-043)', nq === 3, `fieldsets=${nq}`);
     const formText = await page.evaluate(() => document.getElementById('qform').innerText);
     check('Questionnaire wording: no expected answers, no claim that the beam covers the far ladders', !/Réponses attendues|idée-clé/i.test(formText) && !/repousse la chose|protège les échelles|partout/i.test(formText));
     // Typing letters that are game shortcuts (R, M, K, F) must not trigger anything.
-    await page.click('#f-Q1-r');
+    await page.check('input[name="f-Q1-a"][value="oui"]');
+    await page.check('input[name="f-Q2-a"][value="un peu"]');
+    await page.check('input[name="f-Q3-a"][value="pas compris"]');
+    await page.click('#f-Q3-r');
     await page.keyboard.type('Rmkf mer ');
-    await page.fill('#f-Q3-r', 'Le phare éloigne la chose près de lui.');
-    await page.fill('#f-Q5-m', 'Quand les remous se sont arrêtés.');
-    await page.check('input[name="f-Q5-n"][value="4"]');
-    await page.check('input[name="f-Q6-c"][value="oui"]');
-    await page.check('input[name="f-Q7-h"][value="la moitié ou plus de la peur"]');
-    await page.check('input[name="f-P1-f"][value="fluide"]');
     await page.click('#qform-copy');
     await page.waitForTimeout(300);
     const out = await page.evaluate(() => ({ v: document.getElementById('qform-out').value, shown: getComputedStyle(document.getElementById('qform-out')).display, sel: document.getElementById('qform-out').selectionEnd - document.getElementById('qform-out').selectionStart }));
     check('Questionnaire copy (blocked clipboard): text area shown, selected, and holds the answers',
-      out.shown === 'block' && out.sel === out.v.length && /Rmkf mer/.test(out.v) && /phare éloigne/.test(out.v) && /Note \(1 à 5\) : 4/.test(out.v) && /Casque : oui/.test(out.v) && /fluide/.test(out.v) && /moitié ou plus/.test(out.v), '');
-    check('Unanswered questions are marked "(sans réponse)", all 8 questions present', /\(sans réponse\)/.test(out.v) && [1, 2, 3, 4, 5, 6, 7, 8].every((n) => out.v.includes(`${n}. `)));
+      out.shown === 'block' && out.sel === out.v.length && /Précisions : Rmkf mer/.test(out.v) && /Réponse : oui/.test(out.v) && /Réponse : un peu/.test(out.v) && /Réponse : pas compris/.test(out.v), '');
+    check('The 3 questions are the ones of PORTE_P2.md; the copy button stays', ['1. Avez-vous entendu le son dès le début ?', '2. Avez-vous eu peur ou été inquiété ?', '3. Avez-vous joué jusqu\'à la fin ? Sinon, pourquoi ?'].every((q) => out.v.includes(q)) && (await page.$$('#qform-copy')).length === 1 && /Copier mes réponses/.test(await page.textContent('#qform-copy')));
+    await page.click('#qform-copy');
+    await page.waitForTimeout(200);
+    await page.fill('#f-Q3-r', '');
+    await page.check('input[name="f-Q1-a"][value="coupé"]');
+    await page.click('#qform-copy');
+    await page.waitForTimeout(200);
+    const out2 = await page.evaluate(() => document.getElementById('qform-out').value);
+    check('Unanswered fields are marked "(sans réponse)" and a changed answer is copied', /Précisions : \(sans réponse\)/.test(out2) && /Réponse : coupé/.test(out2));
     check('Typing in the form did not touch the game (still on the start screen, sound option unchanged)', await page.evaluate(() => !document.getElementById('intro').classList.contains('hidden') && !document.getElementById('opt-mute').checked));
     await page.click('#qform-back');
     check('Questionnaire closes', await page.evaluate(() => !document.getElementById('qform').classList.contains('on')));

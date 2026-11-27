@@ -34,8 +34,8 @@ const RECORD = async (mode) => {
     await g.frames(3);
     let a = await g.page.evaluate(() => window.__estran.audioStats());
     check('A click on the intro starts the audio (AudioContext running)', a.started && a.state === 'running', `state=${a.state} sr=${a.sampleRate}`);
-    check('Defaults: volume 0.8, not muted, subtitles off', a.volume === 0.8 && a.muted === false && a.captions === false);
-    check('No captions on screen by default', (await g.page.evaluate(() => document.querySelectorAll('#captions .cap').length)) === 0);
+    check('Defaults (T-043): volume 0.8, not muted, subtitles ON', a.volume === 0.8 && a.muted === false && a.captions === true);
+    check('No caption on screen before the first noise', (await g.page.evaluate(() => document.querySelectorAll('#captions .cap').length)) === 0);
 
     // ---- 2. A noisy run triggers several water-noise variants and the Laisse cues ----
     await g.page.evaluate(() => window.__estran.setBot('noisy'));
@@ -59,7 +59,7 @@ const RECORD = async (mode) => {
     await g.page.keyboard.press('KeyM');
     a = await g.page.evaluate(() => window.__estran.audioStats());
     check('Key M mutes (setting kept, context still running)', a.muted === true && a.state === 'running');
-    const stored = await g.page.evaluate(() => JSON.parse(localStorage.getItem('estran.audio.v1') || 'null'));
+    const stored = await g.page.evaluate(() => JSON.parse(localStorage.getItem('estran.audio.v2') || 'null'));
     check('The mute setting is stored', stored && stored.muted === true);
     await g.page.keyboard.press('KeyM');
     a = await g.page.evaluate(() => window.__estran.audioStats());
@@ -67,12 +67,14 @@ const RECORD = async (mode) => {
     await g.page.close();
   }
 
-  // ---- 4. Subtitles: off by default, K or the option turns them on, text names the direction ----
+  // ---- 4. Subtitles: on by default (T-043), K turns them off and on again, text names the direction ----
   {
     const g = await openPage(browser, '?q=low', { gesture: true });
     await g.page.keyboard.press('KeyK');
+    const off = (await g.page.evaluate(() => window.__estran.audioStats())).captions;
+    await g.page.keyboard.press('KeyK');
     const on = (await g.page.evaluate(() => window.__estran.audioStats())).captions;
-    check('Key K turns the noise subtitles on', on === true);
+    check('Key K turns the noise subtitles off, then on again', off === false && on === true);
     await g.page.evaluate(() => window.__estran.setBot('noisy'));
     const seen = new Set();
     let s = await g.st();
@@ -94,12 +96,12 @@ const RECORD = async (mode) => {
     await g.page.click('#opt-cap');
     await g.page.fill('#opt-vol', '40');
     let a = await g.page.evaluate(() => window.__estran.audioStats());
-    check('Options in the overlay: subtitles checkbox and volume slider apply', a.captions === true && Math.abs(a.volume - 0.4) < 1e-9, `captions=${a.captions} volume=${a.volume}`);
+    check('Options in the overlay: subtitles checkbox and volume slider apply', a.captions === false && Math.abs(a.volume - 0.4) < 1e-9, `captions=${a.captions} volume=${a.volume}`);
     check('Clicking an option does not start the game or the audio', !a.started && (await g.page.evaluate(() => !document.getElementById('intro').classList.contains('hidden'))));
     await g.page.click('#opt-cap');
     await g.page.click('#opt-mute');
     a = await g.page.evaluate(() => window.__estran.audioStats());
-    check('Options: subtitles off again, mute checkbox applies', a.captions === false && a.muted === true);
+    check('Options: subtitles on again, mute checkbox applies', a.captions === true && a.muted === true);
     await g.page.close();
   }
 

@@ -6,7 +6,7 @@ import { createBot } from '../../src/sim/bot.js';
 
 export const SEEDS = Array.from({ length: 20 }, (_, i) => 101 + i); // tuning seeds (T-037): the values of game/data were set on these
 export const SEEDS_VERIFY = Array.from({ length: 20 }, (_, i) => 201 + i); // verification seeds (T-037): never used for tuning
-export const FEAR_WINDOW_S = 160; // GDD gap 6: beam charge falls under 20 % at 160 s (100 - 0.5 * 160)
+export const FEAR_WINDOW_S = 100; // fear window: first third of the 300 s game, before the beam gets weak (T-043; it was 160 s of 480 s)
 export const NEAR_M = 15;         // "close to the player" threshold (T-032)
 export const AUDIBLE_M = 45;      // threat_audible_radius (menace.csv): the Laisse can be heard under this distance
 export const NEAR_EXIT_M = 20;    // hysteresis: an approach ends only above this distance
@@ -40,15 +40,15 @@ export function playGame(data, seed, mode) {
   const sim = createSim(data, { seed });
   const bot = makePlayer(sim, mode);
   const m = {
-    mode, seed, outcome: null, cause: null, durationS: 0, readCount: 0, grabs: 0, grabsBefore160: 0,
-    nearS: 0, nearBefore160S: 0, approaches: 0, approachesBefore160: 0, spawnT: null, minDist: null, minDistBefore160: null,
-    grabTimes: [], endCharge: 0, audibleBefore160S: 0, roarsBefore160: 0, roars: 0,
+    mode, seed, outcome: null, cause: null, durationS: 0, readCount: 0, grabs: 0, grabsBeforeFear: 0,
+    nearS: 0, nearBeforeFearS: 0, approaches: 0, approachesBeforeFear: 0, spawnT: null, minDist: null, minDistBeforeFear: null,
+    grabTimes: [], endCharge: 0, audibleBeforeFearS: 0, roarsBeforeFear: 0, roars: 0,
   };
   const dt = sim.env.dt;
   let near = false;
   sim.subscribe((e) => {
-    if (e.type === 'grab') { m.grabs++; m.grabTimes.push(e.t); if (e.t < FEAR_WINDOW_S) m.grabsBefore160++; }
-    if (e.type === 'threat_state' && e.from === 'roam' && e.to === 'inquire') { m.roars++; if (e.t < FEAR_WINDOW_S) m.roarsBefore160++; }
+    if (e.type === 'grab') { m.grabs++; m.grabTimes.push(e.t); if (e.t < FEAR_WINDOW_S) m.grabsBeforeFear++; }
+    if (e.type === 'threat_state' && e.from === 'roam' && e.to === 'inquire') { m.roars++; if (e.t < FEAR_WINDOW_S) m.roarsBeforeFear++; }
     if (e.type === 'threat_spawn' && m.spawnT === null) m.spawnT = e.t;
   });
   for (let i = 0; i < MAX_TICKS && !sim.state.outcome; i++) {
@@ -58,17 +58,37 @@ export function playGame(data, seed, mode) {
       const d = dist(s.player, th);
       const early = s.t < FEAR_WINDOW_S;
       if (m.minDist === null || d < m.minDist) m.minDist = d;
-      if (early && (m.minDistBefore160 === null || d < m.minDistBefore160)) m.minDistBefore160 = d;
-      if (early && d < AUDIBLE_M) m.audibleBefore160S += dt;
+      if (early && (m.minDistBeforeFear === null || d < m.minDistBeforeFear)) m.minDistBeforeFear = d;
+      if (early && d < AUDIBLE_M) m.audibleBeforeFearS += dt;
       if (d < NEAR_M) {
-        m.nearS += dt; if (early) m.nearBefore160S += dt;
-        if (!near) { near = true; m.approaches++; if (early) m.approachesBefore160++; }
+        m.nearS += dt; if (early) m.nearBeforeFearS += dt;
+        if (!near) { near = true; m.approaches++; if (early) m.approachesBeforeFear++; }
       } else if (d > NEAR_EXIT_M) near = false;
     } else near = false;
   }
   const s = sim.state;
   m.outcome = s.outcome; m.cause = s.cause; m.durationS = s.t; m.readCount = s.readCount; m.endCharge = s.lighthouse.charge;
   return m;
+}
+
+/**
+ * Slow-start walk (T-043, requirement (b) of the Boss): a player who reads the start screen and leaves for ladder 1 only at
+ * t = departT (30 s, then 45 s), walking straight at the normal pace, then holds E. Returns whether ladder 1 was read.
+ * The Laisse is active, as in a real game. Nothing here touches src/sim/: it only reads sim.state and returns an input per tick.
+ */
+export function playSlowStart(data, seed, departT) {
+  const sim = createSim(data, { seed });
+  const w = sim.world.stations[0];
+  const heading = (p) => Math.atan2(-(w.x - p.x), -(w.z - p.z));
+  let readT = null;
+  for (let i = 0; i < MAX_TICKS && !sim.state.outcome; i++) {
+    const s = sim.state, p = s.player;
+    let input = NEUTRAL_INPUT;
+    if (s.t >= departT) input = Math.hypot(w.x - p.x, w.z - p.z) <= 1.0 ? { ...NEUTRAL_INPUT, yaw: p.yaw, interact: true } : { ...NEUTRAL_INPUT, yaw: heading(p), moveF: 1 };
+    sim.step(input);
+    if (sim.state.stations[0].read) { readT = sim.state.t; break; }
+  }
+  return { seed, departT, read: readT !== null, readT, cause: sim.state.cause };
 }
 
 export function playAll(mode, seeds = SEEDS, data = loadData()) { return seeds.map((seed) => playGame(data, seed, mode)); }
@@ -92,14 +112,14 @@ export function summarize(games) {
     causes: games.reduce((a, g) => { const k = g.outcome === 'victory' ? 'victory' : `defeat:${g.cause}`; a[k] = (a[k] || 0) + 1; return a; }, {}),
     duration: { min: min(dur), median: median(dur), mean: mean(dur), max: max(dur) },
     nearS: { mean: mean(games.map((g) => g.nearS)), median: median(games.map((g) => g.nearS)), max: max(games.map((g) => g.nearS)) },
-    nearBefore160S: { mean: mean(games.map((g) => g.nearBefore160S)), median: median(games.map((g) => g.nearBefore160S)), max: max(games.map((g) => g.nearBefore160S)) },
-    approachesBefore160: { mean: mean(games.map((g) => g.approachesBefore160)), min: min(games.map((g) => g.approachesBefore160)), max: max(games.map((g) => g.approachesBefore160)),
-      gamesWithAtLeastOne: games.filter((g) => g.approachesBefore160 > 0).length },
+    nearBeforeFearS: { mean: mean(games.map((g) => g.nearBeforeFearS)), median: median(games.map((g) => g.nearBeforeFearS)), max: max(games.map((g) => g.nearBeforeFearS)) },
+    approachesBeforeFear: { mean: mean(games.map((g) => g.approachesBeforeFear)), min: min(games.map((g) => g.approachesBeforeFear)), max: max(games.map((g) => g.approachesBeforeFear)),
+      gamesWithAtLeastOne: games.filter((g) => g.approachesBeforeFear > 0).length },
     approaches: { mean: mean(games.map((g) => g.approaches)) },
     grabs: { total: sum(games.map((g) => g.grabs)), gamesWithGrab: games.filter((g) => g.grabs > 0).length },
-    grabsBefore160: { total: sum(games.map((g) => g.grabsBefore160)), gamesWithGrab: games.filter((g) => g.grabsBefore160 > 0).length },
-    audibleBefore160S: { mean: mean(games.map((g) => g.audibleBefore160S)), median: median(games.map((g) => g.audibleBefore160S)) },
-    roarsBefore160: { total: sum(games.map((g) => g.roarsBefore160)), gamesWithAtLeastOne: games.filter((g) => g.roarsBefore160 > 0).length },
+    grabsBeforeFear: { total: sum(games.map((g) => g.grabsBeforeFear)), gamesWithGrab: games.filter((g) => g.grabsBeforeFear > 0).length },
+    audibleBeforeFearS: { mean: mean(games.map((g) => g.audibleBeforeFearS)), median: median(games.map((g) => g.audibleBeforeFearS)) },
+    roarsBeforeFear: { total: sum(games.map((g) => g.roarsBeforeFear)), gamesWithAtLeastOne: games.filter((g) => g.roarsBeforeFear > 0).length },
     spawnT: games[0].spawnT,
   };
 }

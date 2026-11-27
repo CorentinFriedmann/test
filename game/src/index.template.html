@@ -9,12 +9,22 @@
   html, body { margin: 0; height: 100%; background: #000; overflow: hidden; font-family: system-ui, sans-serif; color: var(--ink); }
   canvas { display: block; width: 100%; height: 100%; }
   #hud { position: fixed; inset: 0; pointer-events: none; }
+  body.menu #hud { visibility: hidden; } /* start / pause screen: only the sound indicator stays */
   #hud svg { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
   #gauge { position: absolute; left: 22px; top: 22%; bottom: 22%; width: 14px; border: 1.5px solid var(--ink); border-radius: 8px; background: rgba(5,9,13,.45); }
   #gauge-fill { position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: linear-gradient(#4f8fb8, #2b5c80); border-radius: 0 0 6px 6px; }
   #hud #gauge-chevron { position: absolute; left: 22px; width: 18px; height: 18px; fill: var(--ink); stroke: none; transition: transform .2s; }
-  #pastilles { position: absolute; right: 22px; top: 20px; display: flex; gap: 10px; }
-  .pastille { width: 34px; height: 34px; padding: 4px; border-radius: 50%; border: 1.5px solid var(--dim); background: rgba(5,9,13,.45); box-sizing: border-box; }
+  #pastilles { position: absolute; right: 22px; top: 18px; display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
+  .lrow { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,.35); border-radius: 6px; padding: 3px 10px 3px 4px; text-shadow: 0 0 5px #000; }
+  .ltxt { display: flex; flex-direction: column; font-size: 14px; line-height: 1.25; min-width: 188px; }
+  .ltxt .lstate { font-size: 13px; color: var(--ink); opacity: .85; }
+  .lrow[data-state="pending"] .ltxt { opacity: .7; }
+  .lrow[data-state="read"] .lname { opacity: .75; }
+  .lrow[data-state="open"] .lstate { font-weight: 600; color: #fff; animation: slowpulse 2.4s ease-in-out infinite; }
+  .lrow[data-state="open"] { outline: 1.5px solid rgba(207,227,238,.55); }
+  .lrow[data-state="missed"] { opacity: .45; }
+  @keyframes slowpulse { 50% { opacity: .6; } }
+  .pastille { width: 34px; height: 34px; flex: none; padding: 4px; border-radius: 50%; border: 1.5px solid var(--dim); background: rgba(5,9,13,.45); box-sizing: border-box; }
   .pastille.todo { opacity: .6; }
   .pastille.read { background: var(--accent); border-color: var(--accent); }
   .pastille.read path { stroke: var(--bg); }
@@ -40,16 +50,46 @@
   #ring.active #ring-fg { opacity: 1; }
   #ring-dot { fill: var(--ink); stroke: none; opacity: .8; }
   #vignette-drown { position: absolute; inset: 0; opacity: 0; background: radial-gradient(ellipse at center, rgba(0,5,12,0) 25%, rgba(0,5,12,.97) 100%); }
-  #objective { position: absolute; left: 0; right: 0; bottom: 12%; text-align: center; font-size: 17px; letter-spacing: .04em; opacity: 0; transition: opacity 1s; text-shadow: 0 0 6px #000; }
-  #objective.on { opacity: .9; }
-  #card { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: rgba(2,5,9,.72); gap: 18px; }
+  /* Guidance (T-043): top centre = objective, status line and first aid; bottom centre (26 % up, a little above the 22 % of the spec so that three subtitle lines never touch it) = the action line; the subtitles sit under it. */
+  .gl { background: rgba(0,0,0,.35); border-radius: 4px; padding: 3px 12px; text-shadow: 0 0 6px #000; color: #e8eef2; }
+  .gl.empty { display: none; }
+  #guide-top { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: min(720px, calc(100vw - 560px)); min-width: 300px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+  #g-objective { font-size: 17px; letter-spacing: .03em; }
+  #g-status { font-size: 14px; }
+  #g-status.warn { color: #f0c98c; }
+  #g-tip { font-size: 15px; background: rgba(0,0,0,.45); }
+  #g-action { position: absolute; left: 50%; bottom: 26%; transform: translateX(-50%); max-width: min(900px, 92vw); text-align: center; font-size: 19px; letter-spacing: .02em; }
+  #sound-ind { position: fixed; z-index: 55; pointer-events: none; left: 18px; top: 14px; font-size: 13px; letter-spacing: .08em; padding: 3px 10px; border-radius: 4px; background: rgba(0,0,0,.35); text-shadow: 0 0 5px #000; }
+  #sound-ind[data-state="active"] { color: var(--accent); }
+  #sound-ind[data-state="muted"] { color: #f0c98c; font-weight: 700; font-size: 15px; background: rgba(60,35,5,.6); outline: 1.5px solid #f0c98c; }
+  #sound-ind[data-state="unavailable"] { color: #f0b49c; font-weight: 700; font-size: 15px; background: rgba(70,20,10,.6); outline: 1.5px solid #f0b49c; }
+  #sound-ind[data-state="pending"] { color: var(--dim); }
+  #marker { position: absolute; left: 0; top: 0; display: none; width: 0; height: 0; pointer-events: none; }
+  #marker.on { display: block; }
+  #marker svg { position: absolute; left: -16px; top: -16px; width: 32px; height: 32px; fill: none; stroke: #e8eef2; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 3px #000); }
+  #marker #marker-diamond { fill: rgba(232,238,242,.18); }
+  #marker.edge #marker-diamond, #marker.face #marker-arrow { display: none; }
+  #marker.weak { opacity: .35; }
+  #marker.strong { opacity: .85; animation: mkpulse 2s ease-in-out infinite; }
+  @keyframes mkpulse { 50% { opacity: .5; } }
+  #marker-dist { position: absolute; left: -40px; width: 80px; top: 18px; text-align: center; font-size: 13px; text-shadow: 0 0 5px #000, 0 0 2px #000; color: #e8eef2; }
+  #marker.edge #marker-dist { top: 20px; }
+  #card { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: rgba(2,5,9,.72); gap: 14px; text-align: center; padding: 0 24px; }
   #card.on { display: flex; }
   #card-text { font-size: 30px; letter-spacing: .06em; }
+  #card-reason { font-size: 18px; max-width: 640px; line-height: 1.45; }
+  #card-summary { font-size: 15px; color: var(--dim); }
   #card-hint { font-size: 14px; border: 1.5px solid var(--dim); border-radius: 6px; padding: 3px 11px; color: var(--dim); }
-  #captions { position: fixed; left: 0; right: 0; bottom: 21%; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; }
-  .cap { background: rgba(5,9,13,.72); padding: 3px 12px; border-radius: 4px; font-size: 16px; letter-spacing: .02em; }
-  #toast { position: fixed; top: 18px; left: 50%; transform: translateX(-50%); font-size: 14px; opacity: 0; transition: opacity .3s; pointer-events: none; text-shadow: 0 0 6px #000; }
-  #toast.on { opacity: .9; }
+  #captions { position: fixed; left: 0; right: 0; bottom: 6%; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; }
+  .cap { background: rgba(0,0,0,.55); padding: 3px 12px; border-radius: 4px; font-size: 18px; line-height: 1.3; letter-spacing: .02em; text-shadow: 0 0 4px #000; }
+  #toast { position: fixed; top: 150px; left: 50%; transform: translateX(-50%); max-width: min(640px, 90vw); text-align: center; font-size: 15px; opacity: 0; transition: opacity .3s; pointer-events: none; background: rgba(0,0,0,.45); border-radius: 4px; padding: 3px 12px; text-shadow: 0 0 6px #000; }
+  #toast.on { opacity: .95; }
+  #audio-banner { position: fixed; left: 50%; top: 42%; transform: translateX(-50%); z-index: 60; display: none; max-width: min(560px, 90vw); text-align: center; font-size: 18px; line-height: 1.5; padding: 14px 22px; border-radius: 8px; background: rgba(70,20,10,.92); color: #fff; outline: 2px solid #f0b49c; pointer-events: none; }
+  #audio-banner.on { display: block; }
+  #start { display: block; width: min(760px, 92vw); margin: 18px auto 6px; padding: 34px 20px; font-size: 26px; font-weight: 600; letter-spacing: .04em; color: #fff; background: #16404a; border: 2px solid var(--accent); border-radius: 12px; cursor: pointer; }
+  #start:hover, #start:focus-visible { background: #1d5260; }
+  #intro .tip { margin: 4px auto; max-width: 720px; font-size: 16px; }
+  #intro .keys { color: var(--dim); font-size: 13px; line-height: 1.6; }
   #opts { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; color: var(--dim); cursor: default; }
   #opts label { cursor: pointer; display: flex; align-items: center; gap: 8px; }
   #debug { position: fixed; left: 12px; bottom: 10px; font: 12px/1.4 monospace; white-space: pre; text-shadow: 0 0 4px #000; pointer-events: none; display: none; }
@@ -80,17 +120,22 @@
   #credits pre { white-space: pre-wrap; font: 12px/1.45 ui-monospace, monospace; color: var(--dim); }
 </style>
 </head>
-<body>
+<body class="menu">
 <div id="hud"></div>
+<div id="sound-ind" data-state="pending" role="status">SON EN ATTENTE</div>
 <div id="debug"></div>
 <div id="captions" aria-live="polite"></div>
+<div id="audio-banner" role="alert"></div>
 <div id="toast" role="status"></div>
-<div id="intro"><div><b style="font-size:28px;letter-spacing:.2em">ESTRAN</b><br><br>Cliquez pour jouer<br>
-<small>ZQSD / WASD : se déplacer · souris : regarder · Maj : courir · C : marcher lentement · F : lampe · E (maintenir) : interagir<br>R : recommencer · M : couper le son · K : sous-titres des bruits · F2 : mesure de performance · Échap : pause</small>
+<div id="intro"><div><b style="font-size:28px;letter-spacing:.2em">ESTRAN</b>
+<button id="start" type="button">Cliquer pour commencer (avec le son)</button>
+<div class="tip">Casque recommandé. Montez le volume de l'ordinateur : un court son de test va jouer.</div>
+<div class="keys">ZQSD ou flèches : marcher · Souris : regarder · Maj : courir · C : marcher lentement · M : son<br>
+F : lampe · E (maintenir) : interagir · K : sous-titres des bruits · R : recommencer · F2 : mesure de performance · Échap : pause</div>
 <div id="opts"><label>Volume <input id="opt-vol" type="range" min="0" max="100" value="80"></label>
 <label><input id="opt-mute" type="checkbox"> Son coupé</label>
 <label><input id="opt-cap" type="checkbox"> Sous-titres des bruits</label></div>
-<div id="p2bar"><div class="p2btns"><button id="p2-form" type="button">Questionnaire (8 questions)</button>
+<div id="p2bar"><div class="p2btns"><button id="p2-form" type="button">Questionnaire (3 questions)</button>
 <button id="p2-perf" type="button">Copier le rapport de performance</button>
 <button id="p2-credits" type="button">Crédits et licences</button></div>
 <div id="p2-msg" class="p2msg" role="status"></div><textarea id="p2-out" readonly rows="8" style="display:none"></textarea></div></div></div>

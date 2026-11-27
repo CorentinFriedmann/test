@@ -1,6 +1,9 @@
 // Player audio settings: volume, mute, subtitles of the noises. Stored in localStorage when it is available (never required).
-export const DEFAULTS = Object.freeze({ volume: 0.8, muted: false, captions: false });
-const KEY = 'estran.audio.v1';
+// T-043: subtitles of the noises are ON by default (the threat must be readable without sound). The storage key changed from v1 to v2
+// so that an old stored "captions off" never overrides the new default.
+export const DEFAULTS = Object.freeze({ volume: 0.8, muted: false, captions: true });
+export const STORAGE_KEY = 'estran.audio.v2';
+const KEY = STORAGE_KEY;
 
 export function sanitize(o) {
   const s = { ...DEFAULTS };

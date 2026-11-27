@@ -57,12 +57,12 @@ test('island: ladders respect altitude (+-0.10 m), distance rings and separation
   }
 });
 
-test('island: reading windows match the GDD (S1 ~61-110 s, S2 160-320 s, S3 ~376-426 s)', () => {
+test('island: reading windows match the GDD (S1 38-72 s, S2 100-200 s, S3 235-266 s, T-042)', () => {
   const { world } = newSim();
   const [s1, s2, s3] = world.stations.map((s) => s.interval);
-  assert.ok(s1.from >= 60 && s1.from <= 62 && s1.to >= 109 && s1.to <= 110.1);
-  assert.ok(s2.from >= 159.5 && s2.from <= 160.5 && s2.to >= 319.5 && s2.to <= 320.5);
-  assert.ok(s3.from >= 374.5 && s3.from <= 377 && s3.to >= 426 && s3.to <= 427.5);
+  assert.ok(s1.from >= 37 && s1.from <= 38.5 && s1.to >= 71 && s1.to <= 72.1);
+  assert.ok(s2.from >= 99.5 && s2.from <= 100.5 && s2.to >= 199.5 && s2.to <= 200.5);
+  assert.ok(s3.from >= 234.5 && s3.from <= 236 && s3.to >= 265.5 && s3.to <= 267.5);
 });
 
 test('reachability: every ladder can be reached and read inside its window, then the platform regained', () => {
@@ -85,8 +85,8 @@ test('reachability: every ladder can be reached and read inside its window, then
   }
 });
 
-test('reachability: the first ladder is reachable well before its window closes (fairness of the 110 s defeat)', () => {
+test('reachability: the first ladder is reachable well before its window closes (fairness of the 72 s defeat)', () => {
   const sim = newSim();
   const arrive = earliestArrival(sim.env, sim.world.heightAt, sim.world.start, sim.world.stations[0], 0, 2.0);
-  assert.ok(arrive < 61, `arrives at ${arrive}`); // the walker can already be there when the window opens
+  assert.ok(arrive < 38, `arrives at ${arrive}`); // the walker can already be there when the window opens
 });

@@ -15,10 +15,10 @@ export function createCaptions(root, toastEl) {
     },
     drop(key) { const l = lines.get(key); if (!l) return; clearTimeout(l.timer); l.el.remove(); lines.delete(key); },
     clear() { for (const k of [...lines.keys()]) this.drop(k); },
-    toast(text) {
+    toast(text, ms = 1600) {
       if (!toastEl) return;
       toastEl.textContent = text; toastEl.classList.add('on');
-      clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('on'), 1600);
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('on'), ms);
     },
   };
 }

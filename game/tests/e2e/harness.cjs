@@ -18,17 +18,18 @@ function check(name, ok, detail = '') {
 }
 
 async function openPage(browser, query = '', opts = {}) {
-  const page = await browser.newPage({ viewport: { width: 960, height: 540 } });
+  const page = await browser.newPage({ viewport: opts.viewport || { width: 960, height: 540 } });
   const problems = [];
   // Chromium's software GL driver (SwiftShader) emits this performance notice by itself; it is not produced by the game.
   const driverNoise = /GL Driver Message .*GPU stall due to ReadPixels/;
-  page.on('console', (m) => { if ((m.type() === 'error' || m.type() === 'warning') && !driverNoise.test(m.text())) problems.push(`${m.type()}: ${m.text()}`); });
+  page.on('console', (m) => { if ((m.type() === 'error' || m.type() === 'warning') && !driverNoise.test(m.text()) && !opts.allowWarnings) problems.push(`${m.type()}: ${m.text()}`); });
   page.on('pageerror', (e) => problems.push(`pageerror: ${e}`));
+  if (opts.init) await page.addInitScript(opts.init);
   // ?test=1 exposes window.__estran, which the published P2 build hides by default.
   await page.goto(base + (query ? `${query}&test=1` : '?test=1'));
   await page.waitForFunction(() => window.__estran, null, { timeout: 20000 });
   // opts.gesture: a real click on the intro (user activation, as a player would), so that the audio can start.
-  if (opts.gesture) { await page.click('#intro'); await page.evaluate(() => window.__estran.setManual(true)); } else await page.evaluate(() => { window.__estran.hideIntro(); window.__estran.setManual(true); });
+  if (opts.keepIntro) { /* the test drives the intro itself */ } else if (opts.gesture) { await page.click('#start'); await page.evaluate(() => window.__estran.setManual(true)); } else await page.evaluate(() => { window.__estran.hideIntro(); window.__estran.setManual(true); });
   const api = {
     page, problems,
     st: () => page.evaluate(() => window.__estran.getState()),

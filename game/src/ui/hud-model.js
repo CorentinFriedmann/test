@@ -1,6 +1,8 @@
 import { param } from '../data/load.js';
+import { endCard } from './guidance.js';
 
-// Pure HUD model (GDD 11): numbers and states only, never explanatory text.
+// Pure HUD model (GDD 11): numbers and states for the gauges. The texts of the guidance and of the end card (T-043) come from
+// guidance.js, which is pure too; hudModel only passes the end card through.
 const KIND = { 1: 'rise', 0: 'peak', '-1': 'fall' };
 
 const ring = (state) => {
@@ -21,6 +23,6 @@ export function hudModel(state, world, data) {
     lighthouse: { frac: state.lighthouse.charge / param(data, 'lighthouse_charge_start'), low: state.lighthouse.charge < param(data, 'lighthouse_charge_flicker') },
     cold: state.cold / param(data, 'threat_grab_cold_duration'),
     drown: state.drownLimit > 0 ? state.drown / state.drownLimit : 0,
-    card: state.outcome === null ? null : state.outcome === 'victory' ? 'victory' : state.cause === 'window_missed' ? 'missed' : 'sea',
+    card: endCard(state, data),
   };
 }

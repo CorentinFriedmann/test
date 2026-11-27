@@ -160,18 +160,22 @@ export function createDisturbanceMaterial() {
 // ---------------------------------------------------------------- grain + vignette
 export function createOverlayMaterial() {
   return new ShaderMaterial({
-    uniforms: { uSeed: { value: 0 }, uGrain: { value: 0.1 }, uVig: { value: 0.5 }, uVigCol: { value: new Color(0x02060a) }, uAspect: { value: 1.6 } },
+    uniforms: { uSeed: { value: 0 }, uGrain: { value: 0.1 }, uVig: { value: 0.5 }, uVigCol: { value: new Color(0x02060a) }, uAspect: { value: 1.6 },
+      uThreat: { value: 0 }, uThreatCol: { value: new Color(0x02060c) } }, // uThreat: the Laisse-near edge vignette (T-043), added to the existing one
     transparent: true, depthTest: false, depthWrite: false,
     vertexShader: `varying vec2 vUv; void main(){ vUv = position.xy * 0.5 + 0.5; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
     fragmentShader: /* glsl */`
-      uniform float uSeed, uGrain, uVig, uAspect; uniform vec3 uVigCol; varying vec2 vUv;
+      uniform float uSeed, uGrain, uVig, uAspect, uThreat; uniform vec3 uVigCol, uThreatCol; varying vec2 vUv;
       float hash(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
       void main() {
         vec2 c = (vUv - 0.5) * vec2(uAspect, 1.0);
-        float vig = uVig * smoothstep(0.35, 1.05, length(c));
+        float edge = smoothstep(0.35, 1.05, length(c));
+        float vig0 = uVig * edge, tv = uThreat * edge;
+        float vig = vig0 + tv - vig0 * tv;                // the two vignettes add up without exceeding 1
+        vec3 vigCol = mix(uVigCol, uThreatCol, tv / (vig0 + tv + 1e-4));
         float n = hash(gl_FragCoord.xy + uSeed * 17.31);
         float g = uGrain * abs(n - 0.5) * 2.0;           // strength of the grain at this pixel
-        vec3 col = mix(vec3(step(0.5, n)), uVigCol, vig / (vig + g + 1e-4));
+        vec3 col = mix(vec3(step(0.5, n)), vigCol, vig / (vig + g + 1e-4));
         float a = 1.0 - (1.0 - vig) * (1.0 - g);
         gl_FragColor = vec4(col, a);
         #include <colorspace_fragment>

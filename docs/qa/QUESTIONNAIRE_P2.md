@@ -1,5 +1,34 @@
 # Questionnaire de la porte P2 (version à remplir)
 
+## Version courte du nouvel essai (à utiliser en premier)
+
+> Décision du propriétaire du 2026-11-27 (`production/DECISIONS.md`) : après les corrections de T-043, **un seul nouvel essai** (10 minutes au plus). Source des 3 questions : `production/validations/PORTE_P2.md`, reprises telles quelles.
+> Dans le jeu (`game/dist/estran-p2.html`), le bouton « Questionnaire (3 questions) » de l'écran de départ remplace le formulaire long par ces 3 questions ; le bouton « Copier mes réponses » donne un texte à coller dans la conversation.
+
+**Avant de jouer.** Au casque si possible, son activé, volume de l'ordinateur monté. Le jeu affiche lui-même son objectif et sa prochaine action : **aucune explication préalable** n'est donnée en dehors de l'écran d'accueil. Un court son de test se joue au démarrage ; l'indicateur « SON ACTIF » doit rester visible en haut à gauche. Jouez **jusqu'à la fin** (victoire ou défaite, environ 5 minutes par partie, 10 minutes au plus en tout).
+
+**Vos réponses, en un mot chacune.**
+
+1. Avez-vous entendu le son dès le début ? (oui / non / coupé)
+
+   Réponse :
+
+2. Avez-vous eu peur ou été inquiété ? (pas du tout / un peu / oui)
+
+   Réponse :
+
+3. Avez-vous joué jusqu'à la fin ? Sinon, pourquoi ? (ennuyé / trop dur / pas compris / autre)
+
+   Réponse :
+
+**Lecture (pour la Boss et la Coordination, pas pour le propriétaire).** Peur « un peu » ou « oui » avec le son : P2 franchie (réserve : compréhension non mesurée sans aide, à couvrir par la démo P3). Peur « pas du tout » avec le son entendu et la partie finie : P2 échouée. Partie arrêtée par ennui : même conclusion. Détail : `production/validations/PORTE_P2.md`.
+
+---
+
+# Questionnaire long de la première porte P2 (conservé pour mémoire)
+
+> Ce questionnaire de 8 questions (T-036) correspond au premier essai. Il n'est plus dans le jeu depuis T-043 ; il reste ici comme référence.
+
 > Source : `docs/design/GDD.md` §13, 8 questions validées en T-036. Mise en forme : `qa-lead`, T-032.
 > **Répondant : le propriétaire, seul.** Réponses avec vos mots, sans relire le pitch ni le GDD, en 5 minutes au plus.
 > **Ne lisez pas la dernière section (« Réponses attendues ») avant d'avoir répondu à tout.**

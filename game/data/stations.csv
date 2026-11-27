@@ -1,4 +1,4 @@
 station_id,altitude_m,read_depth_min_m,read_depth_max_m,required_trend,window_start_s,window_end_s,hold_s,reach_m,grace_s,label
-S1_flot,-0.30,0.15,1.00,1,61,110,5,2.0,0,echelle du bas de l'estran : lisible a maree montante
-S2_haute,1.50,0.15,1.00,0,160,320,5,2.0,0,echelle de mi-pente : lisible autour de l'etale haute
-S3_jusant,-0.40,0.15,1.00,-1,375,427,5,2.0,0,echelle du bas de l'estran : lisible a maree descendante
+S1_flot,-0.30,0.15,1.10,1,38,72,5,2.0,0,echelle du bas de l'estran : lisible a maree montante
+S2_haute,1.50,0.15,1.00,0,100,200,5,2.0,0,echelle de mi-pente : lisible autour de l'etale haute
+S3_jusant,-0.40,0.15,1.00,-1,235,266,5,2.0,0,echelle du bas de l'estran : lisible a maree descendante

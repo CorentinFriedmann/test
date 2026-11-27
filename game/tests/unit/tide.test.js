@@ -7,22 +7,22 @@ const tide = createTide(data.tide);
 const bands = createBands(data.bands);
 
 test('tide: values come from maree.csv (no hard-coded level)', () => {
-  assert.equal(tide.duration, 480);
+  assert.equal(tide.duration, 300);
   assert.equal(tide.levelAt(0), -0.6);
-  assert.equal(tide.levelAt(240), 2.4);
-  assert.equal(tide.levelAt(480), -0.6);
+  assert.equal(tide.levelAt(150), 2.4);
+  assert.equal(tide.levelAt(300), -0.6);
   assert.equal(tide.levelAt(-5), -0.6);
   assert.equal(tide.levelAt(900), -0.6);
 });
 
 test('tide: linear interpolation between rows', () => {
-  assert.ok(Math.abs(tide.levelAt(65) - (-0.085)) < 1e-9);
-  assert.ok(Math.abs(tide.levelAt(235) - 2.395) < 1e-9);
+  assert.ok(Math.abs(tide.levelAt(62.5) - 0.515) < 1e-9);
+  assert.ok(Math.abs(tide.levelAt(152.5) - 2.395) < 1e-9);
 });
 
 test('tide: stays within [-0.60, 2.40] and matches the control formula within 1 cm', () => {
-  for (let t = 0; t <= 480; t += 0.5) {
-    const l = tide.levelAt(t), f = 0.9 - 1.5 * Math.cos((2 * Math.PI * t) / 480);
+  for (let t = 0; t <= 300; t += 0.5) {
+    const l = tide.levelAt(t), f = 0.9 - 1.5 * Math.cos((2 * Math.PI * t) / 300);
     assert.ok(l >= -0.6 - 1e-9 && l <= 2.4 + 1e-9);
     assert.ok(Math.abs(l - f) <= 0.011, `t=${t} table=${l} formula=${f}`);
   }
@@ -30,8 +30,8 @@ test('tide: stays within [-0.60, 2.40] and matches the control formula within 1 
 
 test('tide: trend rises, slackens at high water, then falls', () => {
   assert.equal(tide.trendAt(30), 1);
-  assert.equal(tide.trendAt(240), 0);
-  assert.equal(tide.trendAt(300), -1);
+  assert.equal(tide.trendAt(150), 0);
+  assert.equal(tide.trendAt(180), -1);
   assert.equal(tide.phaseAt(100), 'flot');
 });
 
