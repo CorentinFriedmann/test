@@ -49,6 +49,8 @@
 | T-039 | Alignement de la règle du faisceau avant l'évaluation de P2 (réserve T-033) | game-designer | T-037, T-033 | VALIDÉ |
 | T-040 | Garde-fous du code : interdits de la simulation, test déterministe de l'audio, ESLint figé, seuil de poids unique | build-engineer | T-034, T-038 | VALIDÉ AVEC RÉSERVES |
 | T-041 | Chronométrage dans le cloud de la simulation par pas et du chargement | qa-lead | T-040 | VALIDÉ AVEC RÉSERVES |
+| T-042 | Spécification des corrections du prototype avant le nouvel essai P2 (guidage, son, menace visible, partie courte) | game-designer | T-037 | EN COURS |
+| T-043 | Réalisation des corrections du prototype P2 et nouvelle version jouable | gameplay-programmer | T-042 | À FAIRE |
 
 ---
 
@@ -522,3 +524,32 @@
   - [ ] Les lignes « non mesuré » correspondantes de docs/tech/BUDGETS.md et PERF_P2.md sont remplacées par les mesures, avec la date, la commande et les limites
   - [ ] Script reproductible lancé par une commande npm documentée ; npm run all reste vert ; aucun changement du comportement du jeu
 - **Contexte / références** : Proposition 7 du TD (REMISE_T-034.md), retenue par la Boss (validations/T-034.md). Mode économe.
+
+### T-042 : Spécification des corrections du prototype avant le nouvel essai P2 (guidage, son, menace visible, partie courte)
+- **Assigné à** : `game-designer` · **Dépend de** : T-037 · **Jalon** : Essai · P2 (nouvel essai du propriétaire) · **Statut** : EN COURS
+- **Livrables** :
+  - `docs/design/P2_CORRECTIONS.md`
+  - `docs/design/data/*.csv (seulement si des valeurs changent)`
+- **Critères d'acceptation** :
+  - [ ] Guidage (priorité n°1, le propriétaire s'est arrêté car il n'a « pas compris quoi faire », même après une explication) : le jeu montre en permanence l'objectif et la prochaine action, avec les textes exacts à afficher (français, courts) : liste des 3 échelles avec leur état, repère vers l'échelle dont la fenêtre est ouverte ou va s'ouvrir, invite contextuelle près d'une échelle (« Maintiens E »), rappel du retour au phare avant la fin avec le temps restant, première aide pour la lampe et la manivelle, écran de fin qui dit pourquoi on a gagné ou perdu
+  - [ ] Son impossible à manquer : écran de démarrage « Cliquer pour commencer (avec le son) », indicateur visible SON ACTIF / SON COUPÉ, son de test audible au démarrage, conseil « au casque » ; si le contexte audio ne démarre pas, un message visible le dit
+  - [ ] Menace visible sans le son : sous-titres des bruits activés par défaut, et au moins un indice visuel quand la Laisse s'approche (remous, vignette, brume), décrit avec ses seuils de distance
+  - [ ] Partie plus courte, environ 5 minutes, avec une fin claire : nouvelle chronologie de la marée et des fenêtres des 3 échelles (ou réduction à 2 échelles si c'est plus juste), avec les valeurs CSV avant/après ; les automates de game/tests/p2 doivent rester discriminants (prudent gagne, noisy perd), seuils à recalculer par le programmeur
+  - [ ] Chaque correction est rattachée à une réponse du propriétaire (docs/qa/REPONSES_P2.md, production/DECISIONS.md du 2026-11-27) ; rien d'autre n'est ajouté (pas de nouvelle mécanique) ; liste des fichiers de game/src probablement touchés, pour le programmeur
+  - [ ] Les 3 questions en un mot du nouvel essai (production/validations/PORTE_P2.md) sont reprises telles quelles
+- **Contexte / références** : Verdict « P2 non concluante » (production/validations/PORTE_P2.md, option 1 choisie par le propriétaire le 2026-11-27). Le principe « le jeu n'explique pas la règle » est abandonné pour ce prototype (DECISIONS.md). La règle de parité (le rendu n'influence pas la simulation) reste ; changer des valeurs CSV est permis, comme en T-037. Mode économe.
+
+### T-043 : Réalisation des corrections du prototype P2 et nouvelle version jouable
+- **Assigné à** : `gameplay-programmer` · **Revue de pôle** : technical-director (code de game/) · **Dépend de** : T-042 · **Jalon** : Essai · P2 (nouvel essai du propriétaire) · **Statut** : À FAIRE
+- **Livrables** :
+  - `game/src/ (ui, audio, render, data selon la spécification)`
+  - `game/tests/`
+  - `game/dist/estran-p2.html (construit, non versionné)`
+  - `docs/qa/QUESTIONNAIRE_P2.md (version courte, 3 questions)`
+- **Critères d'acceptation** :
+  - [ ] Toutes les corrections de docs/design/P2_CORRECTIONS.md réalisées, avec les textes exacts de la spécification
+  - [ ] Tests e2e Playwright ajoutés : l'objectif et l'invite près d'une échelle s'affichent, l'écran de démarrage active l'audio (état du contexte audio « running » après le clic), l'indicateur SON ACTIF / SON COUPÉ suit la touche M, les sous-titres sont actifs par défaut, l'écran de fin s'affiche avec sa raison
+  - [ ] Automates de game/tests/p2 mis à jour pour la partie courte : prudent gagne au moins 90 %, noisy perd au moins 90 %, durée d'une partie menée à terme entre 4 et 6 minutes
+  - [ ] npm run all vert (exécuté réellement, sortie jointe) ; tests de parité verts ; poids du fichier sous le seuil de 1,5 Mio ; ne jamais lancer playwright install
+  - [ ] Revue du technical-director avant la Boss
+- **Contexte / références** : Suite de la porte P2 non concluante (production/validations/PORTE_P2.md). La Coordination publiera ensuite game/dist/estran-p2.html au même lien que le prototype. Mode économe.
